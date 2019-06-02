@@ -1,4 +1,4 @@
-package com.haroldadmin.vector
+package com.haroldadmin.sampleapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
