@@ -1,4 +1,4 @@
-package com.haroldadmin.vector
+package com.haroldadmin.vector.fragmentTest
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory

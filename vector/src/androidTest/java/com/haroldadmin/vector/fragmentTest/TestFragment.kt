@@ -1,5 +1,6 @@
-package com.haroldadmin.vector
+package com.haroldadmin.vector.fragmentTest
 
+import com.haroldadmin.vector.VectorFragment
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
@@ -21,5 +22,8 @@ internal class TestFragment : VectorFragment() {
             println("Count = $it")
             delay(100)
         }
+    }
+
+    override fun invalidate() {
     }
 }

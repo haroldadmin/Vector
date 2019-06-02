@@ -1,4 +1,4 @@
-package com.haroldadmin.vector
+package com.haroldadmin.vector.fragmentTest
 
 import androidx.fragment.app.testing.launchFragment
 import androidx.lifecycle.Lifecycle
