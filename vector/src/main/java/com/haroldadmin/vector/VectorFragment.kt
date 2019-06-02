@@ -13,6 +13,8 @@ abstract class VectorFragment : Fragment(), CoroutineScope {
 
     protected val fragmentScope = CoroutineScope(coroutineContext)
 
+    protected abstract fun invalidate()
+
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
