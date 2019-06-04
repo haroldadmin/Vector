@@ -47,7 +47,7 @@ class MyFragment: VectorFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        myViewModel.state.observer(viewLifecycleOwner, Observer { renderState() })
+        myViewModel.state.observe(viewLifecycleOwner, Observer { renderState() })
     }
 
     override fun renderState = withState(myViewModel) { state -> 
