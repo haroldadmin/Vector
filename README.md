@@ -1,5 +1,7 @@
 # Vector
 
+[![Build Status](https://travis-ci.com/haroldadmin/Vector.svg?branch=master)](https://travis-ci.com/haroldadmin/Vector)
+
 Vector is an Android library to help implement the MVI architecture pattern. 
 
 It is inspired from [MvRx](https://www.github.com/airbnb/mvrx) and [Roxie](https://github.com/ww-tech/roxie), but unlike them it is **built completely using Kotlin Coroutines** instead of RxJava. As such, it internally only uses Coroutine primitives, and has extensive support for Suspending functions.
@@ -100,7 +102,7 @@ And then add the following dependency in your module's `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation "com.github.haroldadmin:Vector:0.0.1"
+  implementation "com.github.haroldadmin:Vector:0.0.3"
 }
 ```
 
