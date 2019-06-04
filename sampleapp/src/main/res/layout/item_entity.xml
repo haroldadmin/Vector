@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.graphics.Color"/>
+        <variable
+            name="entity"
+            type="com.haroldadmin.sampleapp.repository.CountingEntity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{Color.parseColor(entity.colour.toString())}"
+        android:orientation="horizontal"
+        tools:background="#42a5f5"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@{entity.name}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+            android:textSize="48sp"
+            tools:text="Books" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@{Integer.toString(entity.counter)}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textSize="36sp"
+            android:gravity="center"
+            tools:text="12"/>
+
+    </LinearLayout>
+
+</layout>

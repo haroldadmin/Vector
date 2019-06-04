@@ -30,6 +30,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation project(path: ':vector')
+
     implementation libs.kotlinStdLib
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
@@ -39,6 +41,12 @@ dependencies {
     implementation libs.ktxCore
     implementation libs.fragmentKtx
     implementation libs.constraintLayout
+    implementation libs.recyclerView
+    implementation libs.materialComponents
+
+    implementation libs.room
+    implementation libs.roomKtx
+    kapt libs.roomCompiler
 
     testImplementation libs.junit
 

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Vector</string>
+    <string name="app_name">Entity Counter</string>
+    <string name="entityNameHint">Name</string>
+    <string name="increaseButtonText">Increase</string>
+    <string name="decreaseButtonText">Decrease</string>
+    <string name="entitySavedMessage">Entity Saved!</string>
 </resources>
