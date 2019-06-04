@@ -6,7 +6,7 @@ Vector is an Android library to help implement the MVI architecture pattern.
 
 It is inspired from [MvRx](https://www.github.com/airbnb/mvrx) and [Roxie](https://github.com/ww-tech/roxie), but unlike them it is **built completely using Kotlin Coroutines** instead of RxJava. As such, it internally only uses Coroutine primitives, and has extensive support for Suspending functions.
 
-Vector is small, fast, and works well with Android Architecture Components. It is 100% Kotlin, and is inteded for use with Kotlin only.
+Vector is small, fast, and works well with Android Architecture Components. It is 100% Kotlin, and is intended for use with Kotlin only.
 
 
 ### Building Blocks
