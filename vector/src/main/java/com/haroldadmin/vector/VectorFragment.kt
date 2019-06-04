@@ -14,12 +14,12 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class VectorFragment : Fragment(), CoroutineScope {
 
-    private val job = Job()
-    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
+    private val job by lazy { Job() }
+    override val coroutineContext: CoroutineContext by lazy { Dispatchers.Main + job }
 
-    protected val fragmentScope = CoroutineScope(coroutineContext)
+    protected val fragmentScope by lazy { CoroutineScope(coroutineContext) }
 
-    protected abstract fun invalidate()
+    protected abstract fun renderState()
 
     override fun onDestroy() {
         super.onDestroy()
