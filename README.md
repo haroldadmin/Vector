@@ -33,11 +33,13 @@ Vector provides an abstract `VectorFragment` class extending from AndroidX's Fra
 Here's a contrived example to show how an app written in Vector looks like.
 
 > VectorState
+
 ```kotlin
 data class MyState(val message: String): VectorState
 ```
 
 > VectorFragment
+
 ```kotlin
 class MyFragment: VectorFragment() {
 
@@ -57,8 +59,15 @@ class MyFragment: VectorFragment() {
 ```
 
 > VectorViewModel
+
 ```kotlin
 class MyViewModel<MyState>(initState: MyState): VectorViewModel(initState) {
+
+    init {
+        viewModelScope.launch {
+            getMessage()
+        }
+    }
 
     suspend fun getMessage() {
         val newMessage = MessageProvider.getMessage()
@@ -95,4 +104,4 @@ dependencies {
 }
 ```
 
-Constributions from the community are very welcome.
+Contributions from the community are very welcome.
