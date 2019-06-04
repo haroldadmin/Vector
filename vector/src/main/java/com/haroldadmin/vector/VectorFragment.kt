@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -12,17 +13,14 @@ import kotlin.coroutines.CoroutineContext
  *
  * Users are not required to extend their fragments from this class.
  */
-abstract class VectorFragment : Fragment(), CoroutineScope {
+abstract class VectorFragment : Fragment() {
 
-    private val job by lazy { Job() }
-    override val coroutineContext: CoroutineContext by lazy { Dispatchers.Main + job }
-
-    protected val fragmentScope by lazy { CoroutineScope(coroutineContext) }
+    protected val fragmentScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
 
     protected abstract fun renderState()
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        fragmentScope.cancel()
     }
 }
