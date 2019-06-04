@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.commit
-import androidx.fragment.app.transaction
 import com.haroldadmin.sampleapp.databinding.ActivityMainBinding
 import com.haroldadmin.sampleapp.entities.EntitiesFragment
 

@@ -6,4 +6,4 @@ data class AddEntityState(
     val temporaryEntity: TemporaryEntity = TemporaryEntity(),
     val isSaving: Boolean = false,
     val isSaved: Boolean = false
-): VectorState
+) : VectorState

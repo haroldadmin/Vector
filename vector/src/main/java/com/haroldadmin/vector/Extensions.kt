@@ -31,4 +31,3 @@ inline fun <S : VectorState> withState(
 ) {
     block(viewModel.currentState)
 }
-

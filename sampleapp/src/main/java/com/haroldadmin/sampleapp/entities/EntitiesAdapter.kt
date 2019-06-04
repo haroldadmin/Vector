@@ -12,7 +12,6 @@ class EntitiesDiffCallback : DiffUtil.ItemCallback<CountingEntity>() {
     override fun areItemsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean = oldItem.name == newItem.name
 
     override fun areContentsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean = oldItem == newItem
-
 }
 
 class EntityViewHolder(val binding: ItemEntityBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -12,7 +12,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
  *
  * @param S The subclass of [VectorState] on which this class is based. For convenience, use a Kotlin data class
  */
-interface StateStore <S: VectorState> {
+interface StateStore <S : VectorState> {
 
     /**
      * A convenient way to access the current state value in the [stateChannel]
@@ -35,7 +35,6 @@ interface StateStore <S: VectorState> {
      * even if there are other state mutation blocks in the queue
      */
     suspend fun get(block: suspend (S) -> Unit)
-
 
     /**
      * A [ConflatedBroadcastChannel] to expose the state as an observable entity.

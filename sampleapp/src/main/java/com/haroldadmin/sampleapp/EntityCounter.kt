@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-class EntityCounter: Application(), CoroutineScope {
+class EntityCounter : Application(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext = Dispatchers.Main
@@ -19,5 +19,4 @@ class EntityCounter: Application(), CoroutineScope {
         super.onCreate()
         provider = Provider(this, applicationScope)
     }
-
 }

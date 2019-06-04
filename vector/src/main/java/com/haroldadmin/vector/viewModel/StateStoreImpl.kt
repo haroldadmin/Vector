@@ -46,7 +46,7 @@ class StateStoreImpl<S : VectorState>(
     private val setStateQueue: Channel<suspend S.() -> S> = Channel(capacity = Channel.UNLIMITED)
     private val getStateQueue: Channel<suspend (S) -> Any> = Channel(capacity = Channel.UNLIMITED)
 
-    private suspend fun flushQueues(): Unit = withContext(stateStoreContext){
+    private suspend fun flushQueues(): Unit = withContext(stateStoreContext) {
         flushSetStateQueue()
         getStateQueue.poll()?.invoke(state) ?: return@withContext
         flushQueues()

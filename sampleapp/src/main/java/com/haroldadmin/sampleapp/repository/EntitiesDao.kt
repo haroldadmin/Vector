@@ -22,5 +22,4 @@ interface EntitiesDao {
 
     @Delete
     suspend fun deleteEntity(entity: CountingEntity)
-
 }

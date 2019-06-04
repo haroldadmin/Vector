@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 
-class EntitiesViewModelFactory(private val entitiesRepository: EntitiesRepository, private val initialState: EntitiesState? = null): ViewModelProvider.Factory {
+class EntitiesViewModelFactory(private val entitiesRepository: EntitiesRepository, private val initialState: EntitiesState? = null) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -14,5 +14,4 @@ class EntitiesViewModelFactory(private val entitiesRepository: EntitiesRepositor
             throw IllegalArgumentException("Unknown ViewModel $modelClass requested")
         }
     }
-
 }

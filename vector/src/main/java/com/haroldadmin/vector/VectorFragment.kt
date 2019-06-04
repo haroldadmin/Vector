@@ -25,5 +25,4 @@ abstract class VectorFragment : Fragment(), CoroutineScope {
         super.onDestroy()
         job.cancel()
     }
-
 }

@@ -2,7 +2,6 @@ package com.haroldadmin.vector
 
 import com.haroldadmin.vector.viewModel.StateStoreImpl
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.consumeEachIndexed
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.takeWhile
@@ -11,7 +10,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.concurrent.Executors
-
 
 data class CountingState(val count: Int = 0) : VectorState
 
@@ -53,13 +51,13 @@ class StateStoreTest {
             }
         }
 
-       stateStore.stateChannel.asFlow()
-           .takeWhile { state -> state.count < 1000 }
-           .fold(0) { acc, state ->
-               assertTrue(acc <= state.count)
+        stateStore.stateChannel.asFlow()
+            .takeWhile { state -> state.count < 1000 }
+            .fold(0) { acc, state ->
+                assertTrue(acc <= state.count)
 
-               state.count
-           }
+                state.count
+            }
     }
 
     @Test

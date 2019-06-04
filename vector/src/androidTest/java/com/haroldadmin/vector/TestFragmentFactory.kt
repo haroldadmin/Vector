@@ -14,5 +14,4 @@ internal class TestFragmentFactory(private val vmFactory: TestViewModelFactory) 
             super.instantiate(classLoader, className)
         }
     }
-
 }

@@ -1,7 +1,6 @@
 package com.haroldadmin.sampleapp.addEntity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.withState
 
-class AddEntityFragment: VectorFragment() {
+class AddEntityFragment : VectorFragment() {
 
     private lateinit var binding: FragmentAddEntityBinding
     private val viewModel by viewModels<AddEntityViewModel> {
@@ -44,8 +43,7 @@ class AddEntityFragment: VectorFragment() {
         if (state.isSaved) {
             Snackbar.make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT).show()
         }
-        
+
         binding.count.text = state.temporaryEntity.count.toString()
     }
-
 }

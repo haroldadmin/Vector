@@ -33,7 +33,6 @@ import kotlinx.coroutines.launch
  */
 abstract class VectorViewModel<S : VectorState>(private val initialState: S) : ViewModel() {
 
-
     /**
      * The state store associated with this view model.
      * The state store manages synchronized accesses and mutations to state
@@ -42,12 +41,10 @@ abstract class VectorViewModel<S : VectorState>(private val initialState: S) : V
      */
     protected val stateStore: StateStore<S> by lazy { StateStoreImpl(initialState) }
 
-
     /**
      * Internal backing field for the [LiveData] based state observable exposed to View objects
      */
     private val _state = MutableLiveData<S>()
-
 
     /**
      * The observable live data class to provide current state to views.
@@ -57,7 +54,6 @@ abstract class VectorViewModel<S : VectorState>(private val initialState: S) : V
         addSource(_state, this::setValue)
     }
 
-
     /**
      * A convenience property to access the current state without having to observe it
      *
@@ -66,7 +62,6 @@ abstract class VectorViewModel<S : VectorState>(private val initialState: S) : V
      */
     val currentState: S
         get() = stateStore.state
-
 
     /**
      * The only method through which state mutation is allowed in subclasses.
