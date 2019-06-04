@@ -6,7 +6,7 @@ buildscript {
             "kotlin"     : "1.3.31",
             "agp"        : "3.5.0-beta03",
             "versionCode": 1,
-            "versionName": "1.0"
+            "versionName": "0.0.1"
     ]
 
     ext.versions = [
