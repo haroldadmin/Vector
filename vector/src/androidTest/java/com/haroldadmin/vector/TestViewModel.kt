@@ -1,31 +1,29 @@
 package com.haroldadmin.vector
 
-import android.util.Log
 import com.haroldadmin.vector.viewModel.VectorViewModel
-import kotlinx.coroutines.runBlocking
 
-data class TestState(val count: Int = 0) : VectorState
+internal data class TestState(val count: Int = 0) : VectorState
 
-class TestViewModel(initState: TestState?) : VectorViewModel<TestState>(initState ?: TestState()) {
+internal class TestViewModel(
+    initState: TestState
+) : VectorViewModel<TestState>(initState) {
 
-    // Exposed publicly to test resource cleanup
+    // Exposed publicly for testing
     val stateChannel = stateStore.stateChannel
 
-    suspend fun add(times: Int = 10) {
+    // Exposed publicly for testing
+    fun publicWithState(block: suspend (TestState) -> Unit) = withState(block)
+
+    fun add(times: Int = 10) {
         repeat(times) {
             setState { copy(count = (currentState.count + 1)) }
         }
     }
 
-    suspend fun subtract(times: Int = 10) {
+    fun subtract(times: Int = 10) {
         repeat(times) {
             setState { copy(count = (currentState.count - 1)) }
         }
-    }
-
-    fun addBlocking() = runBlocking {
-        Log.d("TestViewModel", "Setting state")
-        setState { copy(count = currentState.count + 1) }
     }
 
     // Exposed publicly to test resource cleanup

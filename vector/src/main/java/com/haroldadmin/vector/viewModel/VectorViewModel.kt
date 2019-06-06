@@ -1,7 +1,11 @@
 package com.haroldadmin.vector.viewModel
 
 import androidx.annotation.CallSuper
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -72,20 +76,17 @@ abstract class VectorViewModel<S : VectorState>(private val initialState: S) : V
      * @param reducer The state reducer to create a new state from the current state
      */
 
-    protected suspend fun setState(reducer: suspend S.() -> S) {
+    protected fun setState(reducer: suspend S.() -> S) {
         stateStore.set(reducer)
     }
 
-    protected suspend fun withState(block: suspend (S) -> Unit) {
+    protected fun withState(block: suspend (S) -> Unit) {
         stateStore.get(block)
     }
 
     init {
         viewModelScope.launch {
-            stateStore.stateChannel.openSubscription()
-                .consumeEach { state ->
-                    _state.value = state
-                }
+            stateStore.stateChannel.consumeEach { state -> _state.value = state }
         }
     }
 

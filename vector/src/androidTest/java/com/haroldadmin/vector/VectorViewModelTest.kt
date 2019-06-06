@@ -1,5 +1,6 @@
 package com.haroldadmin.vector
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
@@ -12,46 +13,36 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.Executors
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
 @RunWith(AndroidJUnit4::class)
-class VectorViewModelTest {
+internal class VectorViewModelTest {
 
     private val initialState = TestState(0)
     private val viewModel = TestViewModel(initialState)
-    private val testJob = Job()
-    private val testScope = CoroutineScope(Dispatchers.Default + testJob)
+    private val testContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher() + Job()
+    private val testScope = CoroutineScope(testContext)
 
     @Test
-    fun simpleSetStateTest() = runBlocking {
-        val count = 1000
+    fun simpleSetStateTest() = runBlocking(context = testContext) {
+        val count = 1
         viewModel.add(times = count)
+        delay(100)
         withState(viewModel) { state ->
             assertEquals(count, state.count)
         }
     }
 
     @Test
-    fun multipleSetStateTest() = runBlocking {
-        val count = 1000
+    fun multipleSetStateTest() = runBlocking(context = testContext) {
+        val count = 1
         viewModel.add(times = count)
         viewModel.subtract(times = count)
-
+        delay(100)
         withState(viewModel) { state ->
             assertEquals(0, state.count)
-        }
-    }
-
-    @Test
-    fun multiThreadedDispatcherSetStateTest() = runBlocking {
-        val count = 1000
-
-        withContext(Dispatchers.Unconfined) {
-            viewModel.add(times = count)
-            viewModel.subtract(times = count)
-
-            withState(viewModel) { state ->
-                assertEquals(0, state.count)
-            }
         }
     }
 
@@ -62,7 +53,7 @@ class VectorViewModelTest {
     }
 
     @Test
-    fun stateChannelTest() = runBlocking<Unit> {
+    fun stateChannelTest() = runBlocking(context = testContext) {
         val count = 1000
 
         var lastState: TestState = initialState
@@ -81,7 +72,7 @@ class VectorViewModelTest {
     }
 
     @Test
-    fun stateChannelAsFlowTest() = runBlocking<Unit> {
+    fun stateChannelAsFlowTest() = runBlocking(context = testContext) {
         val count = 1000
         var lastState = initialState
 
@@ -101,6 +92,6 @@ class VectorViewModelTest {
     @After
     fun tearDown() {
         viewModel.clear()
-        testJob.cancel()
+        testScope.cancel()
     }
 }

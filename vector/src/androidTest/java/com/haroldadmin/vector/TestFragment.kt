@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 
-class TestFragment(vmFactory: TestViewModelFactory) : VectorFragment() {
+internal class TestFragment(vmFactory: TestViewModelFactory) : VectorFragment() {
 
     // Exposed publicly for testing
     val viewModel by viewModels<TestViewModel> { vmFactory }

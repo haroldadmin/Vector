@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 
 @Ignore("Possible bug in Fragment Scenario component. Tests fails because fragment crashes while launching")
 @RunWith(AndroidJUnit4::class)
-class VectorViewModelWithFragmentTest {
+internal class VectorViewModelWithFragmentTest {
 
     private val vmFactory = TestViewModelFactory()
     private val fragmentFactory = TestFragmentFactory(vmFactory)
@@ -22,7 +22,7 @@ class VectorViewModelWithFragmentTest {
         val scenario = launchFragmentInContainer<TestFragment>(factory = fragmentFactory)
 
         scenario.onFragment { testFragment ->
-            testFragment.viewModel.addBlocking()
+            testFragment.viewModel.add()
             assertEquals(testFragment.viewModel.currentState, testFragment.state)
         }
 
