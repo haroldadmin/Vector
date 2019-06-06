@@ -1,21 +1,24 @@
 package com.haroldadmin.vector
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.takeWhile
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.Executors
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 @RunWith(AndroidJUnit4::class)
 internal class VectorViewModelTest {
