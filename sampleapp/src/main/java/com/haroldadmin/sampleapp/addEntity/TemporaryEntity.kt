@@ -7,4 +7,4 @@ import kotlinx.android.parcel.Parcelize
 data class TemporaryEntity(
     val count: Int = 0,
     val name: String = ""
-): Parcelable
+) : Parcelable
