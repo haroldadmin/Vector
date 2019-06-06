@@ -105,7 +105,7 @@ dependencies {
   implementation "com.github.haroldadmin:Vector:(latest-version)"
 }
 ```
-[![Release](https://jitpack.io/v/haroldadmin/Vector.svg)]
-(https://jitpack.io/#haroldadmin/Vector)
+
+[![Release](https://jitpack.io/v/haroldadmin/Vector.svg)](https://jitpack.io/#haroldadmin/Vector)
 
 Contributions from the community are very welcome.
