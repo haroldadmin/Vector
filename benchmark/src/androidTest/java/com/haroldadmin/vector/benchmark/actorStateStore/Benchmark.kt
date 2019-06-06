@@ -4,12 +4,14 @@ import androidx.benchmark.BenchmarkRule
 import androidx.benchmark.measureRepeated
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.haroldadmin.vector.VectorState
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 data class TestState(val count: Int = 0) : VectorState
 
+@Ignore("We don't want benchmarks to run with regular builds")
 @RunWith(AndroidJUnit4::class)
 class StateStoreBenchmark {
 
