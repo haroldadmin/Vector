@@ -88,3 +88,7 @@ app/release
 .kotlintest
 .DS_Store
 
+# VS Code
+.settings
+.project
+.classpath

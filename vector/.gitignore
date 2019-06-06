@@ -1,1 +1,5 @@
 /build
+# VS Code
+.settings
+.project
+.classpath

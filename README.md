@@ -102,8 +102,10 @@ And then add the following dependency in your module's `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation "com.github.haroldadmin:Vector:0.0.3"
+  implementation "com.github.haroldadmin:Vector:(latest-version)"
 }
 ```
+[![Release](https://jitpack.io/v/haroldadmin/Vector.svg)]
+(https://jitpack.io/#haroldadmin/Vector)
 
 Contributions from the community are very welcome.
