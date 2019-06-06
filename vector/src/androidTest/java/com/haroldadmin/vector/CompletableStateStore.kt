@@ -48,7 +48,6 @@ internal class CompletableStateStore<S : VectorState>(
                     action.status.complete(Unit)
                 }
         }
-
     }
 
     fun completableGet(block: suspend (S) -> Unit): CompletableDeferred<Unit> {

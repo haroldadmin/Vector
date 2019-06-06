@@ -11,9 +11,9 @@ import kotlinx.coroutines.channels.consumeEach
 import java.util.ArrayDeque
 import kotlin.coroutines.CoroutineContext
 
-private interface Action<S: VectorState>
-private inline class SetStateAction<S: VectorState>(val reducer: suspend S.() -> S): Action<S>
-private inline class GetStateAction<S: VectorState>(val block: suspend (S) -> Unit): Action<S>
+private interface Action<S : VectorState>
+private inline class SetStateAction<S : VectorState>(val reducer: suspend S.() -> S) : Action<S>
+private inline class GetStateAction<S : VectorState>(val block: suspend (S) -> Unit) : Action<S>
 
 /**
  * An Implementation of [StateStore] interface. This class is expected to be owned by a
@@ -34,7 +34,6 @@ internal class ActorsStateStoreImpl<S : VectorState>(
 
     override val state: S
         get() = stateChannel.value
-
 
     private val actionsActor = actor<Action<S>>(capacity = Channel.UNLIMITED) {
 

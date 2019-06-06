@@ -9,7 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-data class TestState(val count: Int = 0): VectorState
+data class TestState(val count: Int = 0) : VectorState
 
 @RunWith(AndroidJUnit4::class)
 class StateStoreBenchmark {

@@ -39,7 +39,6 @@ internal class StateStoreImpl<S : VectorState>(
     override val state: S
         get() = stateChannel.value
 
-
     /**
      * An actor that processes each incoming [Action].
      *
