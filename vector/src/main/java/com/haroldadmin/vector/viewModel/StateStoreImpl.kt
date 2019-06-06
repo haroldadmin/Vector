@@ -69,6 +69,7 @@ internal class StateStoreImpl<S : VectorState>(
                 .takeWhile { channel.isEmpty }
                 .map { block ->
                     block(state)
+                    getStateQueue.removeFirst()
                 }
         }
     }
