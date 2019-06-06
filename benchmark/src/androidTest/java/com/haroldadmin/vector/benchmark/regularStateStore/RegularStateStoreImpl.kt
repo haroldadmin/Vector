@@ -1,7 +1,6 @@
-package com.haroldadmin.vector.benchmark
+package com.haroldadmin.vector.benchmark.regularStateStore
 
 import com.haroldadmin.vector.VectorState
-import com.haroldadmin.vector.viewModel.StateStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -18,7 +17,7 @@ import java.util.concurrent.Executors
  */
 internal class StateStoreImpl<S : VectorState>(
     initialState: S
-) : StateStore<S> {
+) : RegularStateStore<S> {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val job = Job()

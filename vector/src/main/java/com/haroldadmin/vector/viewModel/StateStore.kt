@@ -26,7 +26,7 @@ interface StateStore <S : VectorState> {
      * Example:
      * stateStore.set { copy(count = counter + 1) }
      */
-    suspend fun set(action: suspend S.() -> S)
+    fun set(action: suspend S.() -> S)
 
     /**
      * Takes in a block that needs to access state and perform some action with it
@@ -34,7 +34,7 @@ interface StateStore <S : VectorState> {
      * The supplied state parameter is guaranteed to always be the latest state,
      * even if there are other state mutation blocks in the queue
      */
-    suspend fun get(block: suspend (S) -> Unit)
+    fun get(block: suspend (S) -> Unit)
 
     /**
      * A [ConflatedBroadcastChannel] to expose the state as an observable entity.

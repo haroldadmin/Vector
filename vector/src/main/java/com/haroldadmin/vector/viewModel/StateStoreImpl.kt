@@ -2,12 +2,19 @@ package com.haroldadmin.vector.viewModel
 
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.withContext
-import java.util.concurrent.Executors
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.channels.consumeEach
+import java.util.ArrayDeque
+import kotlin.coroutines.CoroutineContext
+
+internal interface Action<S : VectorState>
+internal inline class SetStateAction<S : VectorState>(val reducer: suspend S.() -> S) : Action<S>
+internal inline class GetStateAction<S : VectorState>(val block: suspend (S) -> Unit) : Action<S>
 
 /**
  * An Implementation of [StateStore] interface. This class is expected to be owned by a
@@ -16,13 +23,9 @@ import java.util.concurrent.Executors
  * @param initialState The initial state object with which the owning ViewModel was created
  */
 internal class StateStoreImpl<S : VectorState>(
-    initialState: S
-) : StateStore<S> {
-
-    private val executor = Executors.newSingleThreadExecutor()
-    private val job = Job()
-    private val stateStoreContext = executor.asCoroutineDispatcher() + job
-    private val stateStoreScope = CoroutineScope(stateStoreContext)
+    initialState: S,
+    override val coroutineContext: CoroutineContext = Dispatchers.Default + Job()
+) : StateStore<S>, CoroutineScope {
 
     /**
      * A [ConflatedBroadcastChannel] to expose the latest value of state to its
@@ -30,44 +33,72 @@ internal class StateStoreImpl<S : VectorState>(
      */
     override val stateChannel = ConflatedBroadcastChannel(initialState)
 
+    /**
+     * A convenience property to access the current value of state without using the state channel
+     */
     override val state: S
         get() = stateChannel.value
 
-    override suspend fun set(action: suspend S.() -> S) = withContext(stateStoreContext) {
-        setStateQueue.offer(action)
-        flushQueues()
-    }
 
-    override suspend fun get(block: suspend (S) -> Unit) = withContext(stateStoreContext) {
-        getStateQueue.offer(block)
-        flushQueues()
-    }
+    /**
+     * An actor that processes each incoming [Action].
+     *
+     * All [SetStateAction] messages are processed immediately
+     * All [GetStateAction] messages are enqueued and processed when the channel is empty
+     *
+     * This means that before any GetStateAction can be processed, the channel must be free of any
+     * SetStateActions. Therefore, the block inside the GetStateAction is always guaranteed to receive
+     * the latest state.
+     */
+    private val actionsActor = actor<Action<S>>(capacity = Channel.UNLIMITED) {
 
-    private val setStateQueue: Channel<suspend S.() -> S> = Channel(capacity = Channel.UNLIMITED)
-    private val getStateQueue: Channel<suspend (S) -> Any> = Channel(capacity = Channel.UNLIMITED)
+        val getStateQueue = ArrayDeque<suspend (S) -> Unit>()
 
-    private suspend fun flushQueues(): Unit = withContext(stateStoreContext) {
-        flushSetStateQueue()
-        getStateQueue.poll()?.invoke(state) ?: return@withContext
-        flushQueues()
-    }
+        consumeEach { action ->
+            when (action) {
+                is SetStateAction -> {
+                    val newState = action.reducer(state)
+                    stateChannel.offer(newState)
+                }
+                is GetStateAction -> {
+                    getStateQueue.offer(action.block)
+                }
+            }
 
-    private suspend fun flushSetStateQueue(): Unit = withContext(stateStoreContext) {
-        val stateReducer = setStateQueue.poll()
-        if (stateReducer != null) {
-            val newState = state.stateReducer()
-            stateChannel.offer(newState)
-        } else {
-            return@withContext
+            getStateQueue
+                .takeWhile { channel.isEmpty }
+                .map { block ->
+                    block(state)
+                }
         }
-        flushSetStateQueue()
     }
 
+    /**
+     * Send a [SetStateAction] to [actionsActor] to be processed immediately if the channel is empty,
+     * or after all preceeding [SetStateAction] objects in it.
+     *
+     * @param reducer The reducer to produce a new state from the given state.
+     */
+    override fun set(reducer: suspend S.() -> S) {
+        actionsActor.offer(SetStateAction(reducer))
+    }
+
+    /**
+     * Send a [GetStateAction] to [actionsActor] to be processed after all preceeding [SetStateAction]
+     * objects. This ensures that the state parameter passed to [block] is always the latest.
+     *
+     * @param block The action to be executed using the given state
+     */
+    override fun get(block: suspend (S) -> Unit) {
+        actionsActor.offer(GetStateAction(block))
+    }
+
+    /**
+     * Cleanup all resources of this state store.
+     */
     override fun cleanup() {
-        job.cancel()
+        actionsActor.close()
         stateChannel.close()
-        setStateQueue.close()
-        getStateQueue.close()
-        executor.shutdownNow()
+        this.cancel() // Cancel coroutine scope
     }
 }
