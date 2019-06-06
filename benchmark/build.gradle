@@ -1,0 +1,35 @@
+apply plugin: 'com.android.library'
+apply plugin: 'androidx.benchmark'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion buildConfig.compileSdk
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        versionCode buildConfig.versionCode
+        versionName buildConfig.versionName
+        testInstrumentationRunner 'androidx.benchmark.AndroidBenchmarkRunner'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'benchmark-proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(path: ':vector')
+
+    implementation libs.kotlinStdLib
+    implementation libs.coroutinesCore
+    implementation libs.coroutinesAndroid
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.benchmark:benchmark:1.0.0-alpha01'
+}

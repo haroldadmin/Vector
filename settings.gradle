@@ -1,2 +1,2 @@
-include ':sampleapp', ':vector'
+include ':sampleapp', ':vector', ':benchmark'
 rootProject.name='Vector'
