@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
  *
  * @param initialState The initial state object with which the owning ViewModel was created
  */
-internal class StateStoreImpl<S : VectorState>(
+internal class RegularStateStoreImpl<S : VectorState>(
     initialState: S
 ) : RegularStateStore<S> {
 

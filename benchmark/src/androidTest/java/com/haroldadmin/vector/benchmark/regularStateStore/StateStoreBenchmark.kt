@@ -1,4 +1,4 @@
-package com.haroldadmin.vector.benchmark
+package com.haroldadmin.vector.benchmark.regularStateStore
 
 import androidx.benchmark.BenchmarkRule
 import androidx.benchmark.measureRepeated
@@ -17,7 +17,8 @@ class StateStoreBenchmark {
     @get:Rule
     val benchmarkRule = BenchmarkRule()
 
-    private val stateStore = StateStoreImpl(TestState())
+    private val stateStore =
+        RegularStateStoreImpl(TestState())
 
     @Test
     fun setStateTest() {
