@@ -29,6 +29,9 @@ Vector provides an abstract `VectorFragment` class extending from AndroidX's Fra
 
 *It is not necessary to use Fragments as Views in your projects. Subclassing VectorFragment is completely optional. While the provided sample app is built with Fragments, Vector does not assume the usage of Fragments as views.*
 
+### Wiki
+Please refer to the Wiki for more extensive documentation on the library.
+[Vector Wiki](https://github.com/haroldadmin/Vector/wiki)
 
 ### Example
 
