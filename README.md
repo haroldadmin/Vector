@@ -66,7 +66,7 @@ class MyFragment: VectorFragment() {
 > VectorViewModel
 
 ```kotlin
-class MyViewModel<MyState>(initState: MyState): VectorViewModel(initState) {
+class MyViewModel(initState: MyState): VectorViewModel<MyState>(initState) {
 
     init {
         viewModelScope.launch {
@@ -84,9 +84,11 @@ class MyViewModel<MyState>(initState: MyState): VectorViewModel(initState) {
 
 When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Channel`. The reducers passed to this channel are internally processed on a single background thread to avoid race conditions.
 
+### Projects using Vector
+* You can find a sample app along with the library in this repository. 
+* [MoonShot](https://www.github.com/haroldadmin/MoonShot) is another project of mine. It's an app to help you keep up with SpaceX launches, and is built with Vector.
 
-You can find a sample app along with the library in this repository.
-If you like this project, or are using it in your app, consider starring the repository to show your support.
+If you would like your project using Vector to be featured here, please open an Issue on the repository. I shall take a look at it and add your project to the list.
 
 
 ### Installation Instructions
@@ -111,4 +113,6 @@ dependencies {
 
 [![Release](https://jitpack.io/v/haroldadmin/Vector.svg)](https://jitpack.io/#haroldadmin/Vector)
 
+### Contributing
+If you like this project, or are using it in your app, consider starring the repository to show your support.
 Contributions from the community are very welcome.
