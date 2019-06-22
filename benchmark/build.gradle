@@ -28,8 +28,8 @@ dependencies {
     implementation libs.kotlinStdLib
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation libs.androidxTestRunner
+    androidTestImplementation libs.androidxTestExt
+    androidTestImplementation libs.junit
     androidTestImplementation 'androidx.benchmark:benchmark:1.0.0-alpha01'
 }
