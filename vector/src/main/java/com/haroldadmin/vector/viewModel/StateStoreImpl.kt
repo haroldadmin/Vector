@@ -1,5 +1,6 @@
 package com.haroldadmin.vector.viewModel
 
+import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,10 +57,13 @@ internal class StateStoreImpl<S : VectorState>(
         consumeEach { action ->
             when (action) {
                 is SetStateAction -> {
+                    Vector.log("Processing set-state block")
                     val newState = action.reducer(state)
+                    Vector.log("Sending new state to channel: $newState")
                     stateChannel.offer(newState)
                 }
                 is GetStateAction -> {
+                    Vector.log("Processing get-state block")
                     getStateQueue.offer(action.block)
                 }
             }

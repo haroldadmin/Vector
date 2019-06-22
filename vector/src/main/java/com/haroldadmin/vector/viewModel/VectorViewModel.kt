@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
  *
  * @param S The state class for this ViewModel implementing [VectorState]
  * @param initialState The initial state for this ViewModel
+ * @param enableLogging Flag to enable/disable debug logs on state updates
  *
  * Initial State can be used in conjunction with fragment provided state to
  * recover from process deaths.
@@ -35,7 +37,7 @@ import kotlinx.coroutines.launch
  *      }
  * }
  */
-abstract class VectorViewModel<S : VectorState>(private val initialState: S) : ViewModel() {
+abstract class VectorViewModel<S : VectorState>(private val initialState: S, private val enableLogging: Boolean = false) : ViewModel() {
 
     /**
      * The state store associated with this view model.
@@ -86,12 +88,14 @@ abstract class VectorViewModel<S : VectorState>(private val initialState: S) : V
 
     init {
         viewModelScope.launch {
+            Vector.log("Connecting StateChannel to LiveData")
             stateStore.stateChannel.consumeEach { state -> _state.value = state }
         }
     }
 
     @CallSuper
     override fun onCleared() {
+        Vector.log("Clearing ViewModel")
         super.onCleared()
         stateStore.cleanup()
     }

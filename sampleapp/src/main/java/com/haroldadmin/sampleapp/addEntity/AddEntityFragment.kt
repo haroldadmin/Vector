@@ -1,7 +1,6 @@
 package com.haroldadmin.sampleapp.addEntity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,6 @@ class AddEntityFragment : VectorFragment() {
     }
 
     override fun renderState() = withState(viewModel) { state ->
-        Log.d("AddEntityFragment", "State: $state")
         if (state.isSaved) {
             Snackbar.make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT).show()
         }

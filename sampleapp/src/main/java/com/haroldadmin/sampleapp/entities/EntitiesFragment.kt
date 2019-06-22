@@ -1,7 +1,6 @@
 package com.haroldadmin.sampleapp.entities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +61,6 @@ class EntitiesFragment : VectorFragment() {
     }
 
     override fun renderState() = withState(viewModel) { state ->
-        Log.d("EntitiesFragment", "State: $state")
         entitiesAdapter.submitList(state.entities)
         if (state.isLoading) {
             binding.pbLoading.show()
