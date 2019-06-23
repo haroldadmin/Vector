@@ -63,11 +63,17 @@ class EntitiesFragment : VectorFragment() {
     }
 
     override fun renderState() = withState(viewModel) { state ->
-        entitiesAdapter.submitList(state.entities)
-        if (state.isLoading) {
-            binding.pbLoading.show()
-        } else {
+        if (state.entities.isNullOrEmpty()) {
+            binding.emptyListMessage.show()
             binding.pbLoading.hide()
+        } else {
+            binding.emptyListMessage.hide()
+            entitiesAdapter.submitList(state.entities)
+            if (state.isLoading) {
+                binding.pbLoading.show()
+            } else {
+                binding.pbLoading.hide()
+            }
         }
     }
 }

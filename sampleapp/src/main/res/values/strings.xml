@@ -4,4 +4,6 @@
     <string name="increaseButtonText">Increase</string>
     <string name="decreaseButtonText">Decrease</string>
     <string name="entitySavedMessage">Entity Saved!</string>
+    <string name="entitiesFragmentEmptyListMessage">This list is empty.\nAdd some entities by tapping the button below!
+    </string>
 </resources>

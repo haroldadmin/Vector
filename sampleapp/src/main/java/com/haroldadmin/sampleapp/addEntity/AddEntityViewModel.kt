@@ -1,9 +1,10 @@
 package com.haroldadmin.sampleapp.addEntity
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.CountingEntity
-import com.haroldadmin.sampleapp.repository.Colour
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
+import com.haroldadmin.sampleapp.repository.getRandomColour
 import com.haroldadmin.vector.viewModel.VectorViewModel
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,7 @@ class AddEntityViewModel(
     }
 
     private fun TemporaryEntity.toEntity(): CountingEntity {
-        return CountingEntity.Impl(name = this.name, counter = this.count, colour = Colour.RED)
+        val colour = getRandomColour()
+        return CountingEntity.Impl(name = this.name, counter = this.count, colour = colour)
     }
 }

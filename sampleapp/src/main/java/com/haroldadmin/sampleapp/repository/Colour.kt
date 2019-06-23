@@ -1,5 +1,8 @@
 package com.haroldadmin.sampleapp.repository
 
+import kotlin.random.Random
+import kotlin.random.nextInt
+
 enum class Colour {
     RED {
         override fun toString(): String = "#ff1744"
@@ -16,4 +19,12 @@ enum class Colour {
     PINK {
         override fun toString(): String = "#ec407a"
     }
+}
+
+fun getRandomColour() = when (Random(System.currentTimeMillis()).nextInt(1..5)) {
+    1 -> Colour.RED
+    2 -> Colour.BLUE
+    3 -> Colour.GREEN
+    4 -> Colour.YELLOW
+    else -> Colour.PINK
 }
