@@ -1,6 +1,6 @@
 package com.haroldadmin.sampleapp.entities
 
-import com.haroldadmin.sampleapp.repository.CountingEntity
+import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.vector.VectorState
 
 data class EntitiesState(

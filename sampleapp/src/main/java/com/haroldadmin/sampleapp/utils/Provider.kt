@@ -1,32 +1,36 @@
 package com.haroldadmin.sampleapp.utils
 
 import android.content.Context
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.haroldadmin.sampleapp.repository.EntitiesDb
-import com.haroldadmin.sampleapp.repository.EntitiesRepository
-import com.haroldadmin.sampleapp.repository.prepopulationData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.haroldadmin.sampleapp.CountingEntity
+import com.haroldadmin.sampleapp.Database
+import com.haroldadmin.sampleapp.repository.Colour
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
 
-class Provider(context: Context, coroutineScope: CoroutineScope) {
+class Provider(context: Context) {
 
-    val db = Room.databaseBuilder(context, EntitiesDb::class.java, "entities-db")
-        .fallbackToDestructiveMigration()
-        .addCallback(object : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                coroutineScope.launch {
-                    database.entityDao().addEntities(prepopulationData)
-                }
+    private val sqlDelightDriver: SqlDriver = AndroidSqliteDriver(Database.Schema, context, "countingEntities.db")
+
+    private val colourAdapter = object : ColumnAdapter<Colour, String> {
+        override fun decode(databaseValue: String): Colour {
+            return when (databaseValue) {
+                Colour.BLUE.toString() -> Colour.BLUE
+                Colour.RED.toString() -> Colour.RED
+                Colour.GREEN.toString() -> Colour.GREEN
+                Colour.PINK.toString() -> Colour.PINK
+                Colour.YELLOW.toString() -> Colour.YELLOW
+                else -> throw IllegalArgumentException("Unknown colour value requested")
             }
-        })
-        .build()
+        }
 
-    // To get access to the db inside the prepopulation callback
-    private val database: EntitiesDb
-        get() = db
+        override fun encode(value: Colour): String = value.toString()
+    }
 
-    val entitiesRepository = EntitiesRepository(db.entityDao())
+    val database: Database by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        Database(
+            driver = sqlDelightDriver,
+            countingEntityAdapter = CountingEntity.Adapter(colourAdapter)
+        )
+    }
 }

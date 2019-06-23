@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAddEntityBinding
+import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.withState
@@ -70,7 +71,8 @@ class AddEntityFragment : VectorFragment() {
             AddEntityState()
         }
 
-        val factory = AddEntityViewModelFactory(provider().entitiesRepository, initialState)
+        val repository = EntitiesRepository(provider().database.countingEntityQueries)
+        val factory = AddEntityViewModelFactory(repository, initialState)
 
         viewModel = ViewModelProviders.of(this, factory).get(AddEntityViewModel::class.java)
     }

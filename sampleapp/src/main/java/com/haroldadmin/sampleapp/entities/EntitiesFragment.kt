@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.addEntity.AddEntityFragment
 import com.haroldadmin.sampleapp.databinding.FragmentEntitiesBinding
+import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.utils.hide
 import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.sampleapp.utils.show
@@ -23,7 +24,8 @@ class EntitiesFragment : VectorFragment() {
     private lateinit var binding: FragmentEntitiesBinding
 
     private val viewModel by viewModels<EntitiesViewModel> {
-        EntitiesViewModelFactory(provider().entitiesRepository, EntitiesState(
+        val repository = EntitiesRepository(provider().database.countingEntityQueries)
+        EntitiesViewModelFactory(repository, EntitiesState(
             entities = null,
             isLoading = true
         ))

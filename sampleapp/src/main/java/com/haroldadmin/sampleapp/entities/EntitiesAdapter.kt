@@ -5,16 +5,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.databinding.ItemEntityBinding
-import com.haroldadmin.sampleapp.repository.CountingEntity
 
 class EntitiesDiffCallback : DiffUtil.ItemCallback<CountingEntity>() {
-    override fun areItemsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean = oldItem.name == newItem.name
+    override fun areItemsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean =
+        oldItem.name == newItem.name
 
-    override fun areContentsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean {
+        return oldItem.name == newItem.name
+                && oldItem.counter == newItem.counter
+                && oldItem.colour == newItem.colour
+    }
 }
 
-class EntityViewHolder(val binding: ItemEntityBinding) : RecyclerView.ViewHolder(binding.root) {
+class EntityViewHolder(private val binding: ItemEntityBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(entity: CountingEntity) {
         binding.entity = entity
         binding.executePendingBindings()

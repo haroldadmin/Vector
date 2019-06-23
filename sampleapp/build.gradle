@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.squareup.sqldelight'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -48,9 +49,7 @@ dependencies {
     implementation libs.recyclerView
     implementation libs.materialComponents
 
-    implementation libs.room
-    implementation libs.roomKtx
-    kapt libs.roomCompiler
+    implementation libs.sqldelightDriver
 
     testImplementation libs.junit
 

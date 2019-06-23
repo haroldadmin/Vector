@@ -1,8 +1,8 @@
 package com.haroldadmin.sampleapp.addEntity
 
 import androidx.lifecycle.viewModelScope
+import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.repository.Colour
-import com.haroldadmin.sampleapp.repository.CountingEntity
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.vector.viewModel.VectorViewModel
 import kotlinx.coroutines.launch
@@ -30,6 +30,6 @@ class AddEntityViewModel(
     }
 
     private fun TemporaryEntity.toEntity(): CountingEntity {
-        return CountingEntity(name = this.name, counter = this.count, colour = Colour.RED)
+        return CountingEntity.Impl(name = this.name, counter = this.count, colour = Colour.RED)
     }
 }

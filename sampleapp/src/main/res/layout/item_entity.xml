@@ -6,7 +6,7 @@
         <import type="android.graphics.Color"/>
         <variable
             name="entity"
-            type="com.haroldadmin.sampleapp.repository.CountingEntity" />
+            type="com.haroldadmin.sampleapp.CountingEntity" />
     </data>
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@{Integer.toString(entity.counter)}"
+            android:text="@{Long.toString(entity.counter)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             android:textSize="36sp"
             android:gravity="center"

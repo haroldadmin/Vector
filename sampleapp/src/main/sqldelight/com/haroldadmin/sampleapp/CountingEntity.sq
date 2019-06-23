@@ -1,0 +1,31 @@
+import com.haroldadmin.sampleapp.repository.Colour;
+
+CREATE TABLE countingEntity (
+    name TEXT NOT NULL,
+    counter INTEGER NOT NULL,
+    colour TEXT AS Colour NOT NULL,
+    PRIMARY KEY(name)
+);
+
+getCounterForEntity:
+SELECT counter
+FROM countingEntity
+WHERE name = :name;
+
+getAll:
+SELECT *
+FROM countingEntity;
+
+insert:
+INSERT OR REPLACE
+INTO countingEntity(name, counter, colour)
+VALUES(:name, :counter, :colour);
+
+update:
+UPDATE countingEntity
+SET counter = :counter
+WHERE name = :name;
+
+delete:
+DELETE FROM countingEntity
+WHERE name = :name;

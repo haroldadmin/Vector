@@ -1,24 +1,29 @@
 package com.haroldadmin.sampleapp.repository
 
-class EntitiesRepository(private val dao: EntitiesDao) {
+import com.haroldadmin.sampleapp.CountingEntity
+import com.haroldadmin.sampleapp.CountingEntityQueries
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-    suspend fun getAllEntities(): List<CountingEntity> {
-        return dao.getAllEntities()
+class EntitiesRepository(private val dao: CountingEntityQueries) {
+
+    suspend fun getAllEntities(): List<CountingEntity> = withContext(Dispatchers.IO) {
+        dao.getAll().executeAsList()
     }
 
-    suspend fun getCounterForEntity(name: String): Int? {
-        return dao.getCounterForEntity(name)
+    suspend fun getCounterForEntity(name: String): Long = withContext(Dispatchers.IO) {
+        dao.getCounterForEntity(name).executeAsOne()
     }
 
-    suspend fun saveNewEntity(entity: CountingEntity) {
-        dao.addEntity(entity)
+    suspend fun saveNewEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+        dao.insert(entity.name, entity.counter, entity.colour)
     }
 
-    suspend fun deleteEntity(entity: CountingEntity) {
-        dao.deleteEntity(entity)
+    suspend fun deleteEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+        dao.delete(entity.name)
     }
 
-    suspend fun updateEntity(entity: CountingEntity) {
-        dao.updateEntity(entity)
+    suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+        dao.update(entity.counter, entity.name)
     }
 }

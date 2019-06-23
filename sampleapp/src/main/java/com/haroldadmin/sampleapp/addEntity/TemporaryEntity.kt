@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TemporaryEntity(
-    val count: Int = 0,
+    val count: Long = 0,
     val name: String = ""
 ) : Parcelable
