@@ -1,6 +1,7 @@
 package com.haroldadmin.vector.viewModel
 
 import com.haroldadmin.vector.VectorState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
@@ -12,7 +13,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
  *
  * @param S The subclass of [VectorState] on which this class is based. For convenience, use a Kotlin data class
  */
-interface StateStore <S : VectorState> {
+interface StateStore <S : VectorState>: CoroutineScope {
 
     /**
      * A convenient way to access the current state value in the [stateChannel]

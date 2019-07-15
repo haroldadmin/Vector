@@ -2,9 +2,6 @@ package com.haroldadmin.vector.viewModel
 
 import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.VectorState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -25,8 +22,8 @@ internal inline class GetStateAction<S : VectorState>(val block: suspend (S) -> 
  */
 internal class StateStoreImpl<S : VectorState>(
     initialState: S,
-    override val coroutineContext: CoroutineContext = Dispatchers.Default + Job()
-) : StateStore<S>, CoroutineScope {
+    override val coroutineContext: CoroutineContext
+) : StateStore<S> {
 
     /**
      * A [ConflatedBroadcastChannel] to expose the latest value of state to its

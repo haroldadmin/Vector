@@ -8,8 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.VectorState
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+
 
 /**
  * The Base ViewModel class your ViewModel should inherit from
@@ -17,6 +22,8 @@ import kotlinx.coroutines.launch
  * @param S The state class for this ViewModel implementing [VectorState]
  * @param initialState The initial state for this ViewModel
  * @param enableLogging Flag to enable/disable debug logs on state updates
+ * @param stateStoreContext The [CoroutineContext] to be used with the state store
+ * This parameter provides the ability to add your own [CoroutineExceptionHandler]
  *
  * Initial State can be used in conjunction with fragment provided state to
  * recover from process deaths.
@@ -41,7 +48,8 @@ import kotlinx.coroutines.launch
  */
 abstract class VectorViewModel<S : VectorState>(
     private val initialState: S,
-    private val enableLogging: Boolean = false
+    private val enableLogging: Boolean = false,
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job()
 ) : ViewModel() {
 
     /**
@@ -50,7 +58,7 @@ abstract class VectorViewModel<S : VectorState>(
      *
      * Initialized lazily because the initialState needs to be initialized by the subclass
      */
-    protected val stateStore: StateStore<S> by lazy { StateStoreImpl(initialState) }
+    protected val stateStore: StateStore<S> by lazy { StateStoreImpl(initialState, stateStoreContext) }
 
     /**
      * Internal backing field for the [LiveData] based state observable exposed to View objects

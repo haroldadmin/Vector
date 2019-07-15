@@ -5,9 +5,6 @@ import com.haroldadmin.vector.viewModel.Action
 import com.haroldadmin.vector.viewModel.StateStore
 import com.haroldadmin.vector.viewModel.StateStoreImpl
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.consumeEach
 import java.util.ArrayDeque
@@ -24,10 +21,10 @@ internal data class CompletableSetStateAction<S : VectorState>(
 ) : Action<S>
 
 internal class CompletableStateStore<S : VectorState>(
-    override val coroutineContext: CoroutineContext = Dispatchers.Default + Job(),
+    override val coroutineContext: CoroutineContext,
     initialState: S,
     stateStore: StateStore<S> = StateStoreImpl(initialState, coroutineContext)
-) : StateStore<S> by stateStore, CoroutineScope {
+) : StateStore<S> by stateStore {
 
     val actor = actor<Action<S>> {
         val getStateQueue = ArrayDeque<CompletableGetStateAction<S>>()
