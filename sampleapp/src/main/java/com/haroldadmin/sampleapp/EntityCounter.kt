@@ -3,9 +3,7 @@ package com.haroldadmin.sampleapp
 import android.app.Application
 import com.haroldadmin.sampleapp.utils.Provider
 import com.haroldadmin.vector.Vector
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
+import com.haroldadmin.vector.loggers.androidLogger
 
 class EntityCounter : Application() {
 
@@ -13,7 +11,7 @@ class EntityCounter : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Vector.enableLogging()
+        Vector.enableLogging(androidLogger())
         provider = Provider(context = this)
     }
 }

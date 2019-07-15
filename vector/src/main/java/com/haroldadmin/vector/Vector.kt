@@ -1,17 +1,15 @@
 package com.haroldadmin.vector
 
-import android.util.Log
-
 object Vector {
 
     private const val TAG = "Vector"
-    private var loggingEnabled = false
+    private var logger: Logger? = null
 
-    fun enableLogging() { loggingEnabled = true }
+    fun enableLogging(logger: Logger) { this.logger = logger }
 
-    fun disableLogging() { loggingEnabled = false }
+    fun disableLogging() { logger = null }
 
     internal fun log(message: String) {
-        if (loggingEnabled) Log.d(TAG, message)
+        logger?.log(message)
     }
 }
