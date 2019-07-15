@@ -52,7 +52,7 @@ internal class StateStoreImpl<S : VectorState>(
      */
     private val actionsActor = actor<Action<S>>(capacity = Channel.UNLIMITED) {
 
-        val getStateQueue = ArrayDeque<suspend (S) -> Unit>()
+        val getStateQueue = ArrayDeque<GetStateAction<S>>()
 
         consumeEach { action ->
             when (action) {
@@ -64,15 +64,15 @@ internal class StateStoreImpl<S : VectorState>(
                 }
                 is GetStateAction -> {
                     Vector.log("Processing get-state block")
-                    getStateQueue.offer(action.block)
+                    getStateQueue.offer(action)
                 }
             }
 
             getStateQueue
                 .takeWhile { channel.isEmpty }
-                .map { block ->
-                    block(state)
-                    getStateQueue.removeFirst()
+                .map { getStateAction ->
+                    getStateAction.block(state)
+                    getStateQueue.remove()
                 }
         }
     }

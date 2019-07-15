@@ -33,11 +33,16 @@ import kotlinx.coroutines.launch
  *          if (savedInstanceState != null) {
  *              initialState = MyState(bundle.getString("USER_ID")
  *          }
- *          val viewModel = ViewModelProviders.of(this, MyVMFactory(initialState)).get(MyViewModel::class.java)
+ *          val viewModel = ViewModelProviders
+ *                  .of(this, MyVMFactory(initialState))
+ *                  .get(MyViewModel::class.java)
  *      }
  * }
  */
-abstract class VectorViewModel<S : VectorState>(private val initialState: S, private val enableLogging: Boolean = false) : ViewModel() {
+abstract class VectorViewModel<S : VectorState>(
+    private val initialState: S,
+    private val enableLogging: Boolean = false
+) : ViewModel() {
 
     /**
      * The state store associated with this view model.

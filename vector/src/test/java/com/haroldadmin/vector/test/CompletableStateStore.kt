@@ -2,7 +2,6 @@ package com.haroldadmin.vector.test
 
 import com.haroldadmin.vector.VectorState
 import com.haroldadmin.vector.viewModel.Action
-import com.haroldadmin.vector.viewModel.SetStateAction
 import com.haroldadmin.vector.viewModel.StateStore
 import com.haroldadmin.vector.viewModel.StateStoreImpl
 import kotlinx.coroutines.CompletableDeferred
@@ -16,7 +15,12 @@ import kotlin.coroutines.CoroutineContext
 
 internal data class CompletableGetStateAction<S : VectorState>(
     val block: suspend (S) -> Unit,
-    val status: CompletableDeferred<Boolean> = CompletableDeferred()
+    val status: CompletableDeferred<Unit> = CompletableDeferred()
+) : Action<S>
+
+internal data class CompletableSetStateAction<S : VectorState>(
+    val reducer: suspend S.() -> S,
+    val status: CompletableDeferred<Unit> = CompletableDeferred()
 ) : Action<S>
 
 internal class CompletableStateStore<S : VectorState>(
@@ -25,15 +29,14 @@ internal class CompletableStateStore<S : VectorState>(
     stateStore: StateStore<S> = StateStoreImpl(initialState, coroutineContext)
 ) : StateStore<S> by stateStore, CoroutineScope {
 
-    val stateStoreScope = CoroutineScope(coroutineContext)
-
-    val actor = stateStoreScope.actor<Action<S>> {
+    val actor = actor<Action<S>> {
         val getStateQueue = ArrayDeque<CompletableGetStateAction<S>>()
 
         consumeEach { action ->
             when (action) {
-                is SetStateAction<S> -> {
+                is CompletableSetStateAction<S> -> {
                     val newState = action.reducer(state)
+                    action.status.complete(Unit)
                     stateChannel.offer(newState)
                 }
 
@@ -44,15 +47,29 @@ internal class CompletableStateStore<S : VectorState>(
 
             getStateQueue
                 .takeWhile { channel.isEmpty }
-                .map { action ->
-                    action.block(state)
-                    action.status.complete(true)
+                .map { getStateAction ->
+                    getStateAction.block(state)
+                    getStateAction.status.complete(Unit)
                 }
         }
     }
 
-    fun completableGet(block: suspend (S) -> Unit): CompletableDeferred<Boolean> {
+    override fun get(block: suspend (S) -> Unit) {
+        throw UnsupportedOperationException("Completable state store should only be used with completable get/set operations")
+    }
+
+    override fun set(action: suspend S.() -> S) {
+        throw UnsupportedOperationException("Completable state store should only be used with completable get/set operations")
+    }
+
+    fun completableGet(block: suspend (S) -> Unit): CompletableDeferred<Unit> {
         val action = CompletableGetStateAction(block)
+        actor.offer(action)
+        return action.status
+    }
+
+    fun completableSet(block: suspend S.() -> S): CompletableDeferred<Unit> {
+        val action = CompletableSetStateAction(block)
         actor.offer(action)
         return action.status
     }

@@ -39,6 +39,7 @@ dependencies {
     implementation libs.fragmentKtx
 
     testImplementation libs.junit
+    testImplementation libs.coroutinesTest
 
     androidTestImplementation libs.fragmentTesting
     androidTestImplementation libs.androidxTestCore
