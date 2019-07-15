@@ -1,6 +1,5 @@
 package com.haroldadmin.sampleapp.addEntity
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.repository.EntitiesRepository

@@ -5,7 +5,7 @@ import com.haroldadmin.vector.Vector
 import org.junit.Test
 import java.lang.StringBuilder
 
-private class StringLogger: Logger {
+private class StringLogger : Logger {
 
     private var logBuilder = StringBuilder()
 

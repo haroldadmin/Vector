@@ -13,7 +13,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
  *
  * @param S The subclass of [VectorState] on which this class is based. For convenience, use a Kotlin data class
  */
-interface StateStore <S : VectorState>: CoroutineScope {
+interface StateStore <S : VectorState> : CoroutineScope {
 
     /**
      * A convenient way to access the current state value in the [stateChannel]

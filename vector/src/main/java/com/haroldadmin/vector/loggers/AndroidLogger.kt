@@ -3,7 +3,7 @@ package com.haroldadmin.vector.loggers
 import android.util.Log
 import com.haroldadmin.vector.Logger
 
-internal class AndroidLogger: Logger {
+internal class AndroidLogger : Logger {
 
     override val tag: String = "Vector"
 

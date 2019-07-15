@@ -15,7 +15,6 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-
 /**
  * The Base ViewModel class your ViewModel should inherit from
  *

@@ -13,9 +13,9 @@ class EntitiesDiffCallback : DiffUtil.ItemCallback<CountingEntity>() {
         oldItem.name == newItem.name
 
     override fun areContentsTheSame(oldItem: CountingEntity, newItem: CountingEntity): Boolean {
-        return oldItem.name == newItem.name
-                && oldItem.counter == newItem.counter
-                && oldItem.colour == newItem.colour
+        return oldItem.name == newItem.name &&
+                oldItem.counter == newItem.counter &&
+                oldItem.colour == newItem.colour
     }
 }
 

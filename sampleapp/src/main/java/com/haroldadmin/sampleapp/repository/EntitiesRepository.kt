@@ -15,15 +15,15 @@ class EntitiesRepository(private val dao: CountingEntityQueries) {
         dao.getCounterForEntity(name).executeAsOne()
     }
 
-    suspend fun saveNewEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+    suspend fun saveNewEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
         dao.insert(entity.name, entity.counter, entity.colour)
     }
 
-    suspend fun deleteEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+    suspend fun deleteEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
         dao.delete(entity.name)
     }
 
-    suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO){
+    suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
         dao.update(entity.counter, entity.name)
     }
 }

@@ -5,7 +5,6 @@ import com.haroldadmin.vector.viewModel.VectorViewModel
 import com.haroldadmin.vector.withState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
@@ -60,5 +59,4 @@ class ExtensionsTest {
         Dispatchers.resetMain()
         mainThreadDispatcher.close()
     }
-
 }
