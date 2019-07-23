@@ -14,7 +14,6 @@ android:
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-21
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -29,11 +28,6 @@ cache:
 before_script:
   - "echo $JAVA_OPTS"
   - "export JAVA_OPTS=-Xmx1536m"
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a -c 100M
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
 
 script:
-  - android list target
-  - ./gradlew connectedAndroidTest --parallel
+  - ./gradlew build test --parallel
