@@ -2,7 +2,7 @@ package com.haroldadmin.sampleapp.entities
 
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
-import com.haroldadmin.vector.viewModel.VectorViewModel
+import com.haroldadmin.vector.VectorViewModel
 import kotlinx.coroutines.launch
 
 class EntitiesViewModel(

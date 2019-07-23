@@ -11,7 +11,7 @@ class EntityCounter : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Vector.enableLogging(androidLogger())
+        Vector.enableLogging = true
         provider = Provider(context = this)
     }
 }

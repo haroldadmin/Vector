@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.repository.getRandomColour
-import com.haroldadmin.vector.viewModel.VectorViewModel
+import com.haroldadmin.vector.VectorViewModel
 import kotlinx.coroutines.launch
 
 class AddEntityViewModel(
