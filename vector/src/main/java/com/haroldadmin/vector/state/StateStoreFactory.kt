@@ -2,7 +2,6 @@ package com.haroldadmin.vector.state
 
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
-import java.util.prefs.PreferencesFactory
 import kotlin.coroutines.CoroutineContext
 
 internal object StateStoreFactory {
@@ -17,7 +16,7 @@ internal object StateStoreFactory {
         return create(stateHolder, stateProcessor, logger)
     }
 
-    fun <S: VectorState> create(
+    fun <S : VectorState> create(
         stateHolder: StateHolder<S>,
         stateProcessor: StateProcessor<S>,
         logger: Logger
@@ -25,7 +24,7 @@ internal object StateStoreFactory {
         return StateStoreImpl(stateHolder, stateProcessor, logger)
     }
 
-    fun <S: VectorState> create(
+    fun <S : VectorState> create(
         initialState: S,
         logger: Logger,
         stateHolderFactory: StateHolderFactory,

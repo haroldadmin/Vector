@@ -21,10 +21,10 @@ internal data class CompletableSetStateAction<S : VectorState>(
     val status: CompletableDeferred<Unit> = CompletableDeferred()
 ) : Action<S>
 
-class CompletableStateProcessor<S: VectorState>(
+class CompletableStateProcessor<S : VectorState>(
     val stateHolder: StateHolder<S>,
     override val coroutineContext: CoroutineContext
-): StateProcessor<S>, CoroutineScope {
+) : StateProcessor<S>, CoroutineScope {
 
     val stateChannel: ConflatedBroadcastChannel<S>
         get() = stateHolder.stateObservable
@@ -85,5 +85,4 @@ class CompletableStateProcessor<S: VectorState>(
         stateProcessingActor.close()
         this.cancel()
     }
-
 }

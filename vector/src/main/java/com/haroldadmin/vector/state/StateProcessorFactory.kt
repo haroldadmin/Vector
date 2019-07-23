@@ -6,7 +6,7 @@ import kotlin.coroutines.CoroutineContext
 
 internal object StateProcessorFactory {
 
-    fun <S: VectorState> create(
+    fun <S : VectorState> create(
         stateHolder: StateHolder<S>,
         logger: Logger,
         coroutineContext: CoroutineContext

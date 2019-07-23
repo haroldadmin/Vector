@@ -25,5 +25,4 @@ class StateHolderTest {
 
         assert(stateHolder.stateObservable.isClosedForSend)
     }
-
 }

@@ -1,7 +1,6 @@
 package com.haroldadmin.vector.loggers
 
 import com.haroldadmin.vector.Vector
-import com.haroldadmin.vector.loggers.Logger
 import java.lang.StringBuilder
 
 internal class StringLogger : Logger {
