@@ -1,10 +1,12 @@
-package com.haroldadmin.vector.test
+package com.haroldadmin.vector.extensions
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.haroldadmin.vector.viewModel.VectorViewModel
+import com.haroldadmin.vector.VectorViewModel
+import com.haroldadmin.vector.loggers.StringLogger
+import com.haroldadmin.vector.state.CountingState
 import com.haroldadmin.vector.withState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
@@ -15,9 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ExtensionsTest {
 
-    @get:Rule val rule = InstantTaskExecutorRule()
+class WithStateExtensionTest {
 
     private val testScope = TestCoroutineScope()
     private val mainThreadDispatcher = newSingleThreadContext("Main thread")
@@ -33,7 +34,11 @@ class ExtensionsTest {
         val deferred = CompletableDeferred<Unit>()
         val initState = CountingState()
 
-        val viewModel = object : VectorViewModel<CountingState>(initialState = initState) {
+        val viewModel = object : VectorViewModel<CountingState>(
+            initialState = initState,
+            logger = StringLogger(),
+            stateStoreContext = testScope.coroutineContext + Job()
+        ) {
             fun incrementCount() = setState {
                 val newState = copy(count = this.count + 1)
                 deferred.complete(Unit)

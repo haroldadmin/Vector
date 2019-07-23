@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'kotlin-kapt'
 
 group = "com.github.haroldadmin"
 
@@ -40,9 +41,8 @@ dependencies {
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
-    testImplementation libs.lifecycleTest
+    testImplementation libs.mockk
 
-    androidTestImplementation libs.fragmentTesting
     androidTestImplementation libs.androidxTestCore
     androidTestImplementation libs.androidxTestExt
     androidTestImplementation libs.espressoCore
