@@ -14,7 +14,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class VectorFragment : Fragment() {
 
-    protected val fragmentScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
+    protected open val fragmentScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
 
     protected abstract fun renderState()
 

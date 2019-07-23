@@ -1,4 +1,4 @@
-package com.haroldadmin.vector.viewModel
+package com.haroldadmin.vector
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
@@ -6,12 +6,14 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haroldadmin.vector.Vector
-import com.haroldadmin.vector.VectorState
+import com.haroldadmin.vector.loggers.Logger
+import com.haroldadmin.vector.loggers.androidLogger
+import com.haroldadmin.vector.state.StateStoreFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -46,40 +48,31 @@ import kotlin.coroutines.CoroutineContext
  * }
  */
 abstract class VectorViewModel<S : VectorState>(
-    private val initialState: S,
-    private val enableLogging: Boolean = false,
-    stateStoreContext: CoroutineContext = Dispatchers.Default + Job()
+    initialState: S,
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+    private val logger: Logger = androidLogger()
 ) : ViewModel() {
 
-    /**
-     * The state store associated with this view model.
-     * The state store manages synchronized accesses and mutations to state
-     *
-     * Initialized lazily because the initialState needs to be initialized by the subclass
-     */
-    protected val stateStore: StateStore<S> by lazy { StateStoreImpl(initialState, stateStoreContext) }
+    protected open val stateStore =
+        StateStoreFactory.create(initialState, logger, stateStoreContext)
 
-    /**
-     * Internal backing field for the [LiveData] based state observable exposed to View objects
-     */
-    private val _state = MutableLiveData<S>()
+    private val _stateLiveData = MutableLiveData(initialState)
 
-    /**
-     * The observable live data class to provide current state to views.
-     * Activities and Fragments may subscribe to it to get notified of state updates.
-     */
     val state: LiveData<S> = MediatorLiveData<S>().apply {
-        addSource(_state, this::setValue)
+        addSource(_stateLiveData, this::setValue)
     }
 
-    /**
-     * A convenience property to access the current state without having to observe it
-     *
-     * This state is not guaranteed to be the latest, because there might be other state mutation
-     * blocks in queue in the state store.
-     */
     val currentState: S
         get() = stateStore.state
+
+    init {
+        viewModelScope.launch {
+            stateStore
+                .stateObservable
+                .asFlow()
+                .collect { newState -> _stateLiveData.value = newState }
+        }
+    }
 
     /**
      * The only method through which state mutation is allowed in subclasses.
@@ -89,26 +82,18 @@ abstract class VectorViewModel<S : VectorState>(
      *
      * @param reducer The state reducer to create a new state from the current state
      */
-
-    protected fun setState(reducer: suspend S.() -> S) {
-        stateStore.set(reducer)
+    protected fun setState(action: suspend S.() -> S) {
+        stateStore.offerSetAction(action)
     }
 
-    protected fun withState(block: suspend (S) -> Unit) {
-        stateStore.get(block)
-    }
-
-    init {
-        viewModelScope.launch {
-            Vector.log("Connecting StateChannel to LiveData")
-            stateStore.stateChannel.consumeEach { state -> _state.value = state }
-        }
+    protected fun withState(action: suspend (S) -> Unit) {
+        stateStore.offerGetAction(action)
     }
 
     @CallSuper
     override fun onCleared() {
-        Vector.log("Clearing ViewModel")
+        logger.log("Clearing ViewModel")
         super.onCleared()
-        stateStore.cleanup()
+        stateStore.clear()
     }
 }
