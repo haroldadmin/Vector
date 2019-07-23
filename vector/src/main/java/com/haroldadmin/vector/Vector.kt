@@ -2,14 +2,6 @@ package com.haroldadmin.vector
 
 object Vector {
 
-    private const val TAG = "Vector"
-    private var logger: Logger? = null
+    var enableLogging: Boolean = false
 
-    fun enableLogging(logger: Logger) { this.logger = logger }
-
-    fun disableLogging() { logger = null }
-
-    internal fun log(message: String) {
-        logger?.log(message)
-    }
 }

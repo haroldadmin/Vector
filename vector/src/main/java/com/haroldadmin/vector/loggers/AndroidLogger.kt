@@ -1,14 +1,16 @@
 package com.haroldadmin.vector.loggers
 
 import android.util.Log
-import com.haroldadmin.vector.Logger
+import com.haroldadmin.vector.Vector
 
 internal class AndroidLogger : Logger {
 
     override val tag: String = "Vector"
 
     override fun log(message: String) {
-        Log.d(tag, message)
+        if (Vector.enableLogging) {
+            Log.d(tag, message)
+        }
     }
 }
 
