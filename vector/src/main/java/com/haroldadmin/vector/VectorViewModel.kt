@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
 import com.haroldadmin.vector.state.StateStoreFactory
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asFlow
@@ -22,9 +21,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @param S The state class for this ViewModel implementing [VectorState]
  * @param initialState The initial state for this ViewModel
- * @param enableLogging Flag to enable/disable debug logs on state updates
  * @param stateStoreContext The [CoroutineContext] to be used with the state store
- * This parameter provides the ability to add your own [CoroutineExceptionHandler]
  *
  * Initial State can be used in conjunction with fragment provided state to
  * recover from process deaths.
@@ -77,15 +74,22 @@ abstract class VectorViewModel<S : VectorState>(
     /**
      * The only method through which state mutation is allowed in subclasses.
      *
-     * Dispatches an action to the actions channel. The channel reduces the action
-     * and current state to a new state and sets the new value on [_state]
+     * Dispatches an action the [stateStore]. This action shall be processed as soon as possible in
+     * the state store, but not necessarily immediately
      *
-     * @param reducer The state reducer to create a new state from the current state
+     * @param action The state reducer to create a new state from the current state
      */
     protected fun setState(action: suspend S.() -> S) {
         stateStore.offerSetAction(action)
     }
 
+    /**
+     * Dispatch the given action the [stateStore]. This action shall be processed as soon as all existing
+     * state reducers have been processed. The state parameter supplied to this action should be the
+     * latest value at the time of processing of this action
+     *
+     * @param action The action to be performed with the current state
+     */
     protected fun withState(action: suspend (S) -> Unit) {
         stateStore.offerGetAction(action)
     }
