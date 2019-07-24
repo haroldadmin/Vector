@@ -6,7 +6,7 @@ import com.haroldadmin.vector.VectorState
 /**
  * A factory class to create instances of [StateHolder]
  */
-object StateHolderFactory {
+internal object StateHolderFactory {
 
     /**
      * Creates and returns a [StateHolder].
