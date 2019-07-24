@@ -3,7 +3,10 @@ package com.haroldadmin.vector.state
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
 
-class StateStoreImpl<S : VectorState> (
+/**
+ * The default implementation of [StateStore]
+ */
+internal class StateStoreImpl<S : VectorState> (
     holder: StateHolder<S>,
     processor: StateProcessor<S>,
     private val logger: Logger

@@ -4,6 +4,9 @@ import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * A factory to create instances of [StateStore]
+ */
 internal object StateStoreFactory {
 
     fun <S : VectorState> create(
