@@ -4,20 +4,16 @@ import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
- * Manages synchronized accesses and mutations to state, so that functions trying to access state
- * always receive the latest state, and functions trying to set state execute only after all previous
- * state mutations have been processed.
+ * Holds the current state value and provides access to it. A [ConflatedBroadcastChannel] is used
+ * to hold the current state value. [clear] should be called when this state holder is no longer
+ * in use.
  *
- * This class is expected to be owned by a [VectorViewModel] which calls [clear] when it is cleared.
- *
- * @param S The subclass of [VectorState] on which this class is based. For convenience, use a Kotlin data class
+ * @param S The state type implementating [VectorState]
  */
 interface StateHolder <S : VectorState> {
 
     /**
      * A [ConflatedBroadcastChannel] to expose the state as an observable entity.
-     * Any new state produced by the reducers given to [set] is passed to this channel.
-     *
      * This channel is conflated, so only the latest state value is present in it
      */
     val stateObservable: ConflatedBroadcastChannel<S>
@@ -29,8 +25,7 @@ interface StateHolder <S : VectorState> {
         get() = stateObservable.value
 
     /**
-     * This method is expected to be called by the owning ViewModel of this class
-     * to clear the resources, and close all channels in this State Store
+     * This method is expected to be called when this state holder is no longer being used
      */
     fun clearHolder()
 }
