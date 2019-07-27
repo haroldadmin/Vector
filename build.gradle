@@ -15,12 +15,11 @@ buildscript {
             "lifecycle"         : "2.2.0-alpha02",
             "lifecycleTest"     : "2.0.0",
             "ktxCore"           : "1.0.2",
-            "recyclerView"      : "1.1.0-alpha06",
-            "materialComponents": "1.1.0-alpha06",
-            "fragmentKtx"       : "1.1.0-beta01",
+            "recyclerView"      : "1.1.0-beta01",
+            "materialComponents": "1.1.0-alpha08",
+            "fragmentKtx"       : "1.1.0-rc03",
             "constraintLayout"  : "1.1.3",
-            "sqldelight"        : "1.1.3",
-            "room"              : "2.1.0",
+            "sqldelight"        : "1.1.4",
             "junit"             : "4.12",
             "fragmentTesting"   : "1.1.0-alpha09",
             "androidxTestCore"  : "1.2.0",
@@ -31,7 +30,7 @@ buildscript {
     ]
 
     ext.libs = [
-            "kotlinStdLib"      : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${buildConfig.kotlin}",
+            "kotlinStdLib"      : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${buildConfig.kotlin}",
             "coroutinesCore"    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
             "coroutinesAndroid" : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
             "coroutinesTest"    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
@@ -44,9 +43,6 @@ buildscript {
             "materialComponents": "com.google.android.material:material:${versions.materialComponents}",
 
             "sqldelightDriver"  : "com.squareup.sqldelight:android-driver:${versions.sqldelight}",
-            "room"              : "androidx.room:room-runtime:${versions.room}",
-            "roomCompiler"      : "androidx.room:room-compiler:${versions.room}",
-            "roomKtx"           : "androidx.room:room-ktx:${versions.room}",
 
             "constraintLayout"  : "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
             "fragmentKtx"       : "androidx.fragment:fragment-ktx:${versions.fragmentKtx}",
