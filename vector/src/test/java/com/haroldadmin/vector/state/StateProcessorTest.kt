@@ -1,9 +1,8 @@
 package com.haroldadmin.vector.state
 
-import com.haroldadmin.vector.loggers.StringLogger
-import kotlinx.coroutines.Deferred
+import com.haroldadmin.vector.loggers.systemOutLogger
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
@@ -12,95 +11,99 @@ class StateProcessorTest {
 
     private val testScope = TestCoroutineScope()
 
-    private val initState = CountingState()
-
-    private val stateHolder = StateHolderFactory.create(initState, StringLogger())
-
-    private val stateProcessor = CompletableStateProcessor(stateHolder, testScope.coroutineContext + Job())
-
-    @Test
-    fun `State Processor factory should create correctly configured instance`() {
-        val job = Job()
-        val processor = StateProcessorFactory.create(
-            stateHolder,
-            StringLogger(),
-            testScope.coroutineContext + job
-        )
-
-        processor.clearProcessor()
-        assert(job.isCancelled)
-    }
+    private val initialState = CountingState()
+    private val stateHolder = StateHolderFactory.create(initialState, systemOutLogger())
+    val job = Job()
+    private val stateProcessor =
+        StateProcessorFactory.create(stateHolder, systemOutLogger(), testScope.coroutineContext + job)
 
     @Test
-    fun `Setting new state should produce new state`() = testScope.runBlockingTest {
-        stateProcessor.completableSetAction {
-            copy(count = initState.count + 1)
-        }.await()
-
-        var currentState: CountingState? = null
-        stateProcessor.completableGetAction { state ->
-            currentState = state
-        }.await()
-
-        assert(currentState!!.count == initState.count + 1)
-    }
-
-    @Test
-    fun `Set-State blocks should run before Get-State blocks`() = testScope.runBlockingTest {
-        val deferredSet = stateProcessor.completableSetAction {
-            copy(count = initState.count + 1)
+    fun givenStateProcessor_whenCleared_shouldCancelCoroutineContextJob() =
+        testScope.runBlockingTest {
+            stateProcessor.clearProcessor()
+            assert(job.isCancelled)
         }
 
-        var currentState: CountingState? = null
-        val deferredGet = stateProcessor.completableGetAction { state ->
-            currentState = state
+    @Test
+    fun givenStateProcessor_whenNewStateIsSet_thenItShouldBeSendToStateHolder() =
+        testScope.runBlockingTest {
+            val deferred = CompletableDeferred<Unit>()
+            stateProcessor.offerSetAction {
+                deferred.complete(Unit)
+                copy(count = this.count + 1)
+            }
+
+            deferred.await()
+            assert(stateHolder.state.count == initialState.count + 1)
         }
 
-        deferredGet.await()
-        deferredSet.await()
+    @Test
+    fun givenStateProcessor_whenSetStateAndGetStateBlocksAreBothEnqueued_thenSetStateBlockPrioritized() =
+        testScope.runBlockingTest {
+            val setStateDeferred = CompletableDeferred<Unit>()
+            val getStateDeferred = CompletableDeferred<Unit>()
+            // Whichever block completes second will have no effect on the value of this deferred
+            val completedFirstValueDeferred = CompletableDeferred<String>()
 
-        assert(currentState!!.count == initState.count + 1)
-    }
+            pauseDispatcher()
+
+            stateProcessor.offerGetAction {
+                getStateDeferred.complete(Unit)
+                completedFirstValueDeferred.complete("Get-State-Block")
+            }
+            stateProcessor.offerSetAction {
+                setStateDeferred.complete(Unit)
+                completedFirstValueDeferred.complete("Set-State-Block")
+                this
+            }
+
+            runCurrent()
+
+            setStateDeferred.await()
+            getStateDeferred.await()
+            val completedFirstValue = completedFirstValueDeferred.await()
+
+            assert(completedFirstValue == "Set-State-Block")
+        }
 
     @Test
     fun stateConsistencyTest() = testScope.runBlockingTest {
-        val deferreds = mutableListOf<Deferred<Unit>>()
+        val mutationActions = 10
+        val deferreds =
+            Array<CompletableDeferred<Unit>>(2 * mutationActions) { CompletableDeferred() }
 
-        repeat(10) {
-            deferreds += stateProcessor.completableSetAction {
+        repeat(mutationActions) { position ->
+            stateProcessor.offerSetAction {
+                deferreds[position].complete(Unit)
                 copy(count = this.count + 1)
             }
         }
 
-        repeat(10) {
-            deferreds += stateProcessor.completableSetAction {
+        val offset = mutationActions
+        repeat(mutationActions) { position ->
+            stateProcessor.offerSetAction {
+                deferreds[position + offset].complete(Unit)
                 copy(count = this.count - 1)
             }
         }
 
         deferreds.forEach { it.await() }
 
-        var currentState: CountingState? = null
-        stateProcessor.completableGetAction { state ->
-            currentState = state
-        }.await()
-
-        assert(currentState!!.count == initState.count)
+        assert(stateHolder.state.count == 0)
     }
 
     @Test
-    fun stateObservableTest() = testScope.runBlockingTest {
-        repeat(10) { i ->
-            stateProcessor.completableSetAction { copy(count = i) }.await()
-            val stateCount = stateHolder.stateObservable.value.count
-            assert(stateCount == i)
+    fun givenStateProcessor_whenStateIsMutated_thenNewStateShouldBePushedToStateObservable() =
+        testScope.runBlockingTest {
+            repeat(10) { i ->
+                val deferred = CompletableDeferred<Unit>()
+                stateProcessor.offerSetAction {
+                    deferred.complete(Unit)
+                    copy(count = i)
+                }
+                deferred.await()
+                val stateCount = stateHolder.stateObservable.value.count
+                assert(stateCount == i)
+            }
         }
-    }
-
-    @Test
-    fun stateProcessorCleanupTest() = testScope.runBlockingTest {
-        stateProcessor.clearProcessor()
-
-        assert(!stateProcessor.isActive)
-    }
 }

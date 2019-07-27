@@ -38,62 +38,83 @@ internal class StateProcessorActor<S : VectorState>(
         get() = stateHolder.stateObservable
 
     /**
-     * A [Queue] holding [SetStateAction]s waiting to be processed
+     * An actor which simply accepts incoming actions, adds them to the appropriate queue and then
+     * flushes the queues one action at a time.
      */
-    private val setStateQueue: Queue<SetStateAction<S>> = ArrayDeque()
+    private val routingActor = actor<Action<S>>(
+        context = coroutineContext,
+        capacity = Channel.UNLIMITED
+    ) {
 
-    /**
-     * A [Queue] holding [GetStateAction]s waiting to be processed
-     */
-    private val getStateQueue: Queue<GetStateAction<S>> = ArrayDeque()
+        val setStateQueue: Queue<SetStateAction<S>> = ArrayDeque()
+        val getStateQueue: Queue<GetStateAction<S>> = ArrayDeque()
+
+        consumeEach { actionToBeRouted ->
+            when (actionToBeRouted) {
+                is SetStateAction -> {
+                    logger.log("Enqueueing Set-State action")
+                    setStateQueue.offer(actionToBeRouted)
+                }
+
+                is GetStateAction -> {
+                    logger.log("Enqueueing Get-State action")
+                    getStateQueue.offer(actionToBeRouted)
+                }
+            }
+
+            while (channel.isEmpty && (setStateQueue.isNotEmpty() || getStateQueue.isNotEmpty())) {
+                /**
+                 * This algorithm may lead to the getStateBlocks never being run if a producer
+                 * is producing set-state blocks fast enough. Consider investigating a priority based
+                 * scheduling algorithm where priority of waiting actions is increased everytime
+                 * an action is processed.
+                 */
+                val actionToBeProcessed = setStateQueue.poll() ?: getStateQueue.poll() ?: throw IllegalStateException("Queues are empty but there's no action to be processed")
+                logger.log("Sending element to be processed")
+                stateProcessingActor.offer(actionToBeProcessed)
+            }
+        }
+    }
+
 
     /**
      * An actor which retrieves the next [Action] to be processed from the queues,
      * and then processes it
      */
-    val stateProcessingActor = actor<Unit>(
+    val stateProcessingActor = actor<Action<S>>(
         context = coroutineContext,
         capacity = Channel.UNLIMITED
     ) {
 
-        consumeEach {
-            val sentAction = setStateQueue.poll() ?: getStateQueue.poll()
-            logger.log("Action: $sentAction")
+        consumeEach { sentAction ->
+
             when (sentAction) {
                 is SetStateAction -> {
                     logger.log("Processing Set-State action")
-                    val newState = sentAction.reducer(currentState)
-                    logger.log("Setting new state to channel")
+                    val newState = sentAction.reducer.invoke(currentState)
                     stateChannel.offer(newState)
                 }
 
                 is GetStateAction -> {
                     logger.log("Processing Get-State action")
-                    sentAction.block(currentState)
+                    sentAction.block.invoke(currentState)
                 }
-
-                else -> Unit // sentAction could be null when both the channels have been flushed
             }
         }
     }
 
     override fun offerSetAction(action: suspend S.() -> S) {
-        logger.log("Enqueueing Set-State action")
-        setStateQueue.offer(SetStateAction(action))
-        logger.log("Flushing queues")
-        stateProcessingActor.offer(Unit)
+        routingActor.offer(SetStateAction(action))
     }
 
     override fun offerGetAction(action: suspend (S) -> Unit) {
-        logger.log("Enqueueing Get-State action")
-        getStateQueue.offer(GetStateAction(action))
-        logger.log("Flushing queues")
-        stateProcessingActor.offer(Unit)
+        routingActor.offer(GetStateAction(action))
     }
 
     override fun clearProcessor() {
         logger.log("Clearing State Processor")
         stateProcessingActor.close()
+        routingActor.close()
         this.cancel()
     }
 }
