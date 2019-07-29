@@ -30,4 +30,4 @@ before_script:
   - "export JAVA_OPTS=-Xmx1536m"
 
 script:
-  - ./gradlew build test --parallel
+  - ./gradlew :vector:build :vector:test --parallel
