@@ -38,9 +38,8 @@ dependencies {
     implementation libs.coroutinesAndroid
 
     implementation libs.appCompat
-    implementation libs.lifecycle
-    implementation libs.ktxCore
-    implementation libs.fragmentKtx
+    implementation libs.viewModel
+    implementation libs.liveData
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
