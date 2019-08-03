@@ -10,12 +10,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAddEntityBinding
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
+import com.haroldadmin.sampleapp.utils.afterTextChanged
 import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.withState
 
 private const val KEY_STATE = "state"
-private const val KEY_NAME = "name"
 
 class AddEntityFragment : VectorFragment() {
 
@@ -26,9 +26,21 @@ class AddEntityFragment : VectorFragment() {
         binding = FragmentAddEntityBinding.inflate(inflater, container, false)
 
         binding.apply {
-            btIncrease.setOnClickListener { viewModel.incrementCount() }
-            btDecrease.setOnClickListener { viewModel.decrementCount() }
-            saveEntity.setOnClickListener { viewModel.saveEntity(name.text.toString()) }
+            btIncrease.setOnClickListener {
+                viewModel.incrementCount()
+            }
+
+            btDecrease.setOnClickListener {
+                viewModel.decrementCount()
+            }
+
+            saveEntity.setOnClickListener {
+                viewModel.saveEntity()
+            }
+
+            name.afterTextChanged { newText ->
+                viewModel.setName(newText.toString())
+            }
         }
 
         return binding.root
@@ -36,7 +48,10 @@ class AddEntityFragment : VectorFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initializeViewModel(savedInstanceState)
+
+        val persistedState: AddEntityState? = savedInstanceState?.getParcelable(KEY_STATE)
+        initializeViewModel(persistedState)
+        initializeView(persistedState)
 
         viewModel.state.observe(viewLifecycleOwner, Observer {
             renderState()
@@ -48,32 +63,26 @@ class AddEntityFragment : VectorFragment() {
             Snackbar.make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT).show()
         }
 
-        binding.count.text = state.temporaryEntity.count.toString()
+        binding.count.text = state.count.toString()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         withState(viewModel) { state ->
-            outState.apply {
-                putString(KEY_NAME, binding.name.text.toString())
-                putParcelable(KEY_STATE, state)
-            }
+            outState.putParcelable(KEY_STATE, state)
         }
     }
 
-    private fun initializeViewModel(savedInstanceState: Bundle?) {
-        val initialState = if (savedInstanceState != null) {
-            val state = savedInstanceState.getParcelable(KEY_STATE) ?: AddEntityState()
-            val name = savedInstanceState.getString(KEY_NAME) ?: ""
-            val tempEntity = state.temporaryEntity.copy(name = name)
-            state.copy(temporaryEntity = tempEntity)
-        } else {
-            AddEntityState()
-        }
-
+    private fun initializeViewModel(persistedState: AddEntityState?) {
         val repository = EntitiesRepository(provider().database.countingEntityQueries)
-        val factory = AddEntityViewModelFactory(repository, initialState)
+        val factory = AddEntityViewModelFactory(repository, persistedState)
 
         viewModel = ViewModelProviders.of(this, factory).get(AddEntityViewModel::class.java)
+    }
+
+    private fun initializeView(persistedState: AddEntityState?) {
+        persistedState ?: return
+        binding.name.setText(persistedState.name)
+        binding.count.text = persistedState.count.toString()
     }
 }

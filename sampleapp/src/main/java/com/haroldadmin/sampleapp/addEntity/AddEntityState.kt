@@ -6,7 +6,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AddEntityState(
-    val temporaryEntity: TemporaryEntity = TemporaryEntity(),
+    val name: String = "",
+    val count: Long = 0,
     val isSaving: Boolean = false,
     val isSaved: Boolean = false
-) : VectorState, Parcelable
+): VectorState, Parcelable

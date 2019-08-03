@@ -13,24 +13,23 @@ class AddEntityViewModel(
 ) : VectorViewModel<AddEntityState>(initState ?: AddEntityState()) {
 
     fun incrementCount() = viewModelScope.launch {
-        setState { copy(temporaryEntity = TemporaryEntity(count = currentState.temporaryEntity.count + 1)) }
+        setState { copy(count = this.count + 1) }
     }
 
     fun decrementCount() = viewModelScope.launch {
-        setState { copy(temporaryEntity = TemporaryEntity(count = currentState.temporaryEntity.count - 1)) }
+        setState { copy(count = this.count - 1) }
     }
 
-    fun saveEntity(name: String) = viewModelScope.launch {
+    fun setName(name: String) = viewModelScope.launch {
+        setState { copy(name = name) }
+    }
+
+    fun saveEntity() = viewModelScope.launch {
         setState { copy(isSaving = true, isSaved = false) }
         withState { state ->
-            val entity = state.temporaryEntity.copy(name = name).toEntity()
+            val entity = CountingEntity.Impl(name = state.name, counter = state.count, colour = getRandomColour())
             entityRepository.saveNewEntity(entity)
             setState { copy(isSaved = true, isSaving = false) }
         }
-    }
-
-    private fun TemporaryEntity.toEntity(): CountingEntity {
-        val colour = getRandomColour()
-        return CountingEntity.Impl(name = this.name, counter = this.count, colour = colour)
     }
 }
