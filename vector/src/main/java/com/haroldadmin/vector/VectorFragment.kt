@@ -16,7 +16,12 @@ abstract class VectorFragment : Fragment() {
 
     protected open val fragmentScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
 
-    protected abstract fun renderState()
+    @Deprecated(message = "Use the parameterized renderState method instead")
+    protected open fun renderState() = Unit
+
+    protected inline fun <reified S: VectorState> renderState(state: S, renderer: (S) -> Unit) {
+        renderer(state)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

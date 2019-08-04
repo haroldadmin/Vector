@@ -13,6 +13,20 @@ class StateStoreTest {
     private val initState = CountingState()
     private val logger = StringLogger()
 
+    @Test(expected = IllegalStateException::class)
+    fun `Accessing current state when no initial state was supplied should throw an error`() {
+        val stateStore = StateStoreFactory.create<CountingState>(StringLogger(), testScope.coroutineContext)
+        stateStore.state
+    }
+
+    @Test
+    fun `Accessing current state after setting initial state when it was not supplied on creation should not throw an error`() {
+        val stateStore = StateStoreFactory.create<CountingState>(StringLogger(), testScope.coroutineContext)
+        stateStore.setInitialState(CountingState())
+
+        stateStore.state
+    }
+
     @Test
     fun `Clearing state store should also clear StateHolder and StateProcessor`() {
         val holder = spyk(StateHolderFactory.create(initState, logger))

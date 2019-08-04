@@ -28,6 +28,9 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -39,6 +42,7 @@ dependencies {
 
     implementation libs.appCompat
     implementation libs.lifecycle
+    implementation libs.vmSavedState
     implementation libs.ktxCore
     implementation libs.fragmentKtx
 

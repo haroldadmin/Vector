@@ -24,6 +24,9 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
  *
  * Note: The state provided to the block is not guaranteed to be the latest state, because there
  * might be other state mutation blocks in the State Store's queue
+ *
+ * Warning: This WILL cause your app to crash if you create your ViewModels without initial state
+ * and fail to provide it later, before calling this function.
  */
 inline fun <S : VectorState> withState(
     viewModel: VectorViewModel<S>,
