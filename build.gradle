@@ -38,6 +38,8 @@ buildscript {
             "coroutinesTest"    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
 
             "appCompat"         : "androidx.appcompat:appcompat:${versions.appCompat}",
+            "viewModel"         : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}",
+            "liveData"          : "androidx.lifecycle:lifecycle-livedata:${versions.lifecycle}",
             "lifecycle"         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
             "lifecycleTest"     : "androidx.arch.core:core-testing:${versions.lifecycleTest}",
             "vmSavedState"      : "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions.vmSavedState}",
@@ -54,7 +56,6 @@ buildscript {
 
             "junit"             : "junit:junit:${versions.junit}",
 
-            "fragmentTesting"   : "androidx.fragment:fragment-testing:${versions.fragmentTesting}",
             "androidxTestCore"  : "androidx.test:core:${versions.androidxTestCore}",
             "androidxTestExt"   : "androidx.test.ext:junit:${versions.androidxTestExt}",
             "androidxTestRunner": "androidx.test:runner:${versions.androidxTestRunner}",

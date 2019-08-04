@@ -45,6 +45,8 @@ dependencies {
     implementation libs.vmSavedState
     implementation libs.ktxCore
     implementation libs.fragmentKtx
+    implementation libs.viewModel
+    implementation libs.liveData
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
