@@ -17,7 +17,7 @@ Vector is based primarily around three classes: `VectorViewModel`, `VectorState`
 
 The Vector ViewModel class is the heart of any screen built with Vector. It is an abstract class extending the Android Architecture Components ViewModel class, and therefore survives configuration changes. It is generic on a class implementing the `VectorState` interface. It is also the only class which can mutate state.
 
-It exposes the current state through a `LiveData` object.
+It exposes the current state through a `Kotlin Flow`.
 
 * **VectorState**
 
@@ -53,11 +53,15 @@ class MyFragment: VectorFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        fragmentScope.launch {
+            myViewModel.state.collect { state ->
+                renderState(state, this@MyFragment::renderer)
+            }
+        }
         myViewModel.state.observe(viewLifecycleOwner, Observer { renderState() })
     }
 
-    override fun renderState = withState(myViewModel) { state -> 
+    override fun renderer(state: MyState) { 
         messageTextView.text = state.message
     }
 }
@@ -82,10 +86,10 @@ class MyViewModel(initState: MyState): VectorViewModel<MyState>(initState) {
 }
 ```
 
-When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Channel`. The reducers passed to this channel are internally processed on a single background thread to avoid race conditions.
+When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Actor`. The reducers passed to this actor are processed sequentially to avoid race conditions.
 
 ### Projects using Vector
-* You can find a sample app along with the library in this repository. 
+* You can find a [sample app](https://github.com/haroldadmin/Vector/tree/master/sampleapp) along with the library in this repository. 
 * [MoonShot](https://www.github.com/haroldadmin/MoonShot) is another project of mine. It's an app to help you keep up with SpaceX launches, and is built with Vector.
 
 If you would like your project using Vector to be featured here, please open an Issue on the repository. I shall take a look at it and add your project to the list.
