@@ -6,4 +6,5 @@
     <string name="entitySavedMessage">Entity Saved!</string>
     <string name="entitiesFragmentEmptyListMessage">This list is empty.\nAdd some entities by tapping the button below!
     </string>
+    <string name="entityChangesSavedMessage">Changes saved!</string>
 </resources>

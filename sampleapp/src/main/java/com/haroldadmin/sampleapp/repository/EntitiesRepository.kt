@@ -11,19 +11,23 @@ class EntitiesRepository(private val dao: CountingEntityQueries) {
         dao.getAll().executeAsList()
     }
 
-    suspend fun getCounterForEntity(name: String): Long = withContext(Dispatchers.IO) {
-        dao.getCounterForEntity(name).executeAsOne()
+    suspend fun getEntity(id: String): CountingEntity = withContext(Dispatchers.IO) {
+        dao.getEntity(id).executeAsOne()
+    }
+
+    suspend fun getCounterForEntity(id: String): Long = withContext(Dispatchers.IO) {
+        dao.getCounterForEntity(id).executeAsOne()
     }
 
     suspend fun saveNewEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.insert(entity.name, entity.counter, entity.colour)
+        dao.insert(entity.id, entity.name, entity.counter, entity.colour)
     }
 
     suspend fun deleteEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.delete(entity.name)
+        dao.delete(entity.id)
     }
 
     suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.update(entity.counter, entity.name)
+        dao.update(entity.counter, entity.name, entity.colour, entity.id)
     }
 }

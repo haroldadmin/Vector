@@ -1,23 +1,22 @@
 package com.haroldadmin.sampleapp.entities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haroldadmin.sampleapp.R
-import com.haroldadmin.sampleapp.addEntity.AddEntityFragment
 import com.haroldadmin.sampleapp.databinding.FragmentEntitiesBinding
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.utils.hide
 import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
-import com.haroldadmin.vector.withState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class EntitiesFragment : VectorFragment() {
 
@@ -31,15 +30,18 @@ class EntitiesFragment : VectorFragment() {
         ))
     }
 
-    private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback())
+    private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback()) { entity ->
+        findNavController().navigate(EntitiesFragmentDirections.editEntity(entity.id))
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel.state.observe(viewLifecycleOwner, Observer {
-            renderState()
-        })
-
+        fragmentScope.launch {
+            viewModel.state.collect { state ->
+                Log.d("AEEF", "State: $state")
+                renderState(state, this@EntitiesFragment::renderer)
+            }
+        }
         viewModel.getAllEntities()
     }
 
@@ -53,16 +55,13 @@ class EntitiesFragment : VectorFragment() {
         }
 
         binding.addEntity.setOnClickListener {
-            requireActivity().supportFragmentManager.commit {
-                replace(R.id.fragmentContainer, AddEntityFragment())
-                addToBackStack("entities")
-            }
+            findNavController().navigate(EntitiesFragmentDirections.addEntity())
         }
 
         return binding.root
     }
 
-    override fun renderState() = withState(viewModel) { state ->
+    private fun renderer(state: EntitiesState) {
         if (state.entities.isNullOrEmpty()) {
             binding.emptyListMessage.show()
             binding.pbLoading.hide()

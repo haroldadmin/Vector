@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.squareup.sqldelight'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -35,6 +36,10 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -53,6 +58,9 @@ dependencies {
     implementation libs.constraintLayout
     implementation libs.recyclerView
     implementation libs.materialComponents
+    implementation libs.navigation
+    implementation libs.navigationUi
+    implementation libs.vmSavedState
 
     implementation libs.sqldelightDriver
 
