@@ -4,21 +4,21 @@ buildscript {
             "minSdk"     : 15,
             "targetSdk"  : 29,
             "kotlin"     : "1.3.41",
-            "agp"        : "3.5.0-rc01",
+            "agp"        : "3.5.0-rc02",
             "versionCode": 7,
             "versionName": "0.3.0"
     ]
 
     ext.versions = [
-            "coroutines"        : "1.3.0-RC",
+            "coroutines"        : "1.3.0-RC2",
             "appCompat"         : "1.0.2",
-            "lifecycle"         : "2.2.0-alpha02",
+            "lifecycle"         : "2.2.0-alpha03",
             "lifecycleTest"     : "2.0.0",
-            "vmSavedState"      : "1.0.0-alpha02",
+            "vmSavedState"      : "1.0.0-alpha03",
             "ktxCore"           : "1.0.2",
-            "recyclerView"      : "1.1.0-beta01",
-            "materialComponents": "1.1.0-alpha08",
-            "fragmentKtx"       : "1.1.0-rc03",
+            "recyclerView"      : "1.1.0-beta03",
+            "materialComponents": "1.1.0-alpha09",
+            "fragment"          : "1.1.0-rc04",
             "constraintLayout"  : "1.1.3",
             "navigation"        : "2.1.0-beta02",
             "sqldelight"        : "1.1.4",
@@ -38,6 +38,7 @@ buildscript {
             "coroutinesTest"    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
 
             "appCompat"         : "androidx.appcompat:appcompat:${versions.appCompat}",
+            "fragment"          : "androidx.fragment:fragment:${versions.fragment}",
             "viewModel"         : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}",
             "liveData"          : "androidx.lifecycle:lifecycle-livedata:${versions.lifecycle}",
             "lifecycle"         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
@@ -74,7 +75,7 @@ buildscript {
         classpath "com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}"
-        classpath 'androidx.benchmark:benchmark-gradle-plugin:1.0.0-alpha03'
+        classpath 'androidx.benchmark:benchmark-gradle-plugin:1.0.0-alpha04'
     }
 }
 
