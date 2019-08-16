@@ -49,7 +49,6 @@ class AddEditEntityFragment : VectorFragment() {
             fragmentScope.launch {
                 name.debouncedTextChanges(200)
                     .collect { name ->
-                        Log.d("AEEF", "Debounced name: $name")
                         viewModel.setName(name.toString())
                     }
             }
@@ -60,40 +59,33 @@ class AddEditEntityFragment : VectorFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentScope.launch {
-            viewModel.state.collect { state ->
-                renderState(state, this@AddEditEntityFragment::renderer)
-            }
-        }
-    }
+        renderState(viewModel) { state ->
+            when (state) {
+                is AddEditEntityState.AddEntity -> {
+                    with(binding) {
+                        count.text = state.count.toString()
+                    }
 
-    private fun renderer(state: AddEditEntityState) {
-
-        when (state) {
-            is AddEditEntityState.AddEntity -> {
-                with(binding) {
-                    count.text = state.count.toString()
-                }
-
-                if (state.isSaved) {
-                    Snackbar
-                        .make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-
-            is AddEditEntityState.EditEntity -> {
-                with(binding) {
-                    count.text = state.count.toString()
-                    if (name.text.toString() != state.name) {
-                        name.setText(state.name)
+                    if (state.isSaved) {
+                        Snackbar
+                            .make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT)
+                            .show()
                     }
                 }
 
-                if (state.isSaved) {
-                    Snackbar
-                        .make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT)
-                        .show()
+                is AddEditEntityState.EditEntity -> {
+                    with(binding) {
+                        count.text = state.count.toString()
+                        if (name.text.toString() != state.name) {
+                            name.setText(state.name)
+                        }
+                    }
+
+                    if (state.isSaved) {
+                        Snackbar
+                            .make(binding.root, R.string.entitySavedMessage, Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
         }

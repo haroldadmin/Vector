@@ -1,7 +1,6 @@
 package com.haroldadmin.sampleapp.entities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import com.haroldadmin.sampleapp.utils.hide
 import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class EntitiesFragment : VectorFragment() {
 
@@ -36,10 +33,18 @@ class EntitiesFragment : VectorFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentScope.launch {
-            viewModel.state.collect { state ->
-                Log.d("AEEF", "State: $state")
-                renderState(state, this@EntitiesFragment::renderer)
+        renderState(viewModel) { state ->
+            entitiesAdapter.submitList(state.entities)
+            if (state.entities.isNullOrEmpty()) {
+                binding.emptyListMessage.show()
+                binding.pbLoading.hide()
+            } else {
+                binding.emptyListMessage.hide()
+                if (state.isLoading) {
+                    binding.pbLoading.show()
+                } else {
+                    binding.pbLoading.hide()
+                }
             }
         }
         viewModel.getAllEntities()
@@ -59,20 +64,5 @@ class EntitiesFragment : VectorFragment() {
         }
 
         return binding.root
-    }
-
-    private fun renderer(state: EntitiesState) {
-        if (state.entities.isNullOrEmpty()) {
-            binding.emptyListMessage.show()
-            binding.pbLoading.hide()
-        } else {
-            binding.emptyListMessage.hide()
-            entitiesAdapter.submitList(state.entities)
-            if (state.isLoading) {
-                binding.pbLoading.show()
-            } else {
-                binding.pbLoading.hide()
-            }
-        }
     }
 }
