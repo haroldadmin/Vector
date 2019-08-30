@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 
@@ -22,7 +21,7 @@ class AddEditEntityViewModelFactory(
         handle: SavedStateHandle
     ): T {
         if (modelClass == AddEditEntityViewModel::class.java) {
-            return AddEditEntityViewModel(handle = handle, entityId = entityId, entityRepository =  repository) as T
+            return AddEditEntityViewModel(handle = handle, entityId = entityId, entityRepository = repository) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel $modelClass requested")
         }

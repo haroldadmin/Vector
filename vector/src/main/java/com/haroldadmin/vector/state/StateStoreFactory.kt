@@ -9,7 +9,7 @@ import kotlin.coroutines.CoroutineContext
  */
 internal object StateStoreFactory {
 
-    fun <S: VectorState> create(
+    fun <S : VectorState> create(
         logger: Logger,
         coroutineContext: CoroutineContext
     ): StateStore<S> {

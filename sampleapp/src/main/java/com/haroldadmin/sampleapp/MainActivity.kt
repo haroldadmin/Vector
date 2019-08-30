@@ -3,14 +3,11 @@ package com.haroldadmin.sampleapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.commit
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.haroldadmin.sampleapp.databinding.ActivityMainBinding
-import com.haroldadmin.sampleapp.entities.EntitiesFragment
 
 class MainActivity : AppCompatActivity() {
 

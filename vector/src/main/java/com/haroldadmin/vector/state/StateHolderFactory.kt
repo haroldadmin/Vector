@@ -14,7 +14,7 @@ internal object StateHolderFactory {
      *
      * @param logger The logger to be used by the state holder for debug logs
      */
-    fun <S: VectorState> create(logger: Logger): StateHolder<S> {
+    fun <S : VectorState> create(logger: Logger): StateHolder<S> {
         return StateHolderImpl(null, logger)
     }
 

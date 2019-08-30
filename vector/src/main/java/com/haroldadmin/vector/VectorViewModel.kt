@@ -1,11 +1,7 @@
 package com.haroldadmin.vector
 
 import androidx.annotation.CallSuper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
 import com.haroldadmin.vector.state.StateStoreFactory
@@ -13,9 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /**

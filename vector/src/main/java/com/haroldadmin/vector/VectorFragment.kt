@@ -26,7 +26,7 @@ abstract class VectorFragment : Fragment() {
      * If your fragment is tied to a [VectorViewModel] then consider using the overloaded version
      * of the method which takes in a viewModel as an input parameter
      */
-    protected inline fun <reified S: VectorState> renderState(state: S, renderer: (S) -> Unit) {
+    protected inline fun <reified S : VectorState> renderState(state: S, renderer: (S) -> Unit) {
         renderer(state)
     }
 
@@ -34,7 +34,7 @@ abstract class VectorFragment : Fragment() {
      * Renders the UI based on emitted state updates from the given [viewModel] using the [renderer]
      * block.
      */
-    protected inline fun <S: VectorState> renderState(viewModel: VectorViewModel<S>, crossinline renderer: (S) -> Unit) {
+    protected inline fun <S : VectorState> renderState(viewModel: VectorViewModel<S>, crossinline renderer: (S) -> Unit) {
         fragmentScope.launch {
             viewModel.state.collect { state ->
                 renderer(state)
