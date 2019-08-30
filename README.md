@@ -1,6 +1,6 @@
 # Vector
 
-[![Build Status](https://travis-ci.com/haroldadmin/Vector.svg?branch=master)](https://travis-ci.com/haroldadmin/Vector)
+[![Build Status](https://github.com/haroldadmin/vector/workflows/Android%20CI/badge.svg)](https://github.com/haroldadmin/Vector/actions)
 
 Vector is an Android library to help implement the MVI architecture pattern. 
 
@@ -53,16 +53,9 @@ class MyFragment: VectorFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentScope.launch {
-            myViewModel.state.collect { state ->
-                renderState(state, this@MyFragment::renderer)
-            }
+        renderState(viewModel) { state ->
+            toast(state.message)
         }
-        myViewModel.state.observe(viewLifecycleOwner, Observer { renderState() })
-    }
-
-    override fun renderer(state: MyState) { 
-        messageTextView.text = state.message
     }
 }
 ```
