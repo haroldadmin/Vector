@@ -4,8 +4,9 @@ import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.CountingEntityQueries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class EntitiesRepository(private val dao: CountingEntityQueries) {
+class EntitiesRepository @Inject constructor(private val dao: CountingEntityQueries) {
 
     suspend fun getAllEntities(): List<CountingEntity> = withContext(Dispatchers.IO) {
         dao.getAll().executeAsList()
