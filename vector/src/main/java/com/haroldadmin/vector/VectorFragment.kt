@@ -14,13 +14,6 @@ abstract class VectorFragment : Fragment() {
 
     protected open val fragmentScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
 
-    @Deprecated(message = """
-        Use the parameterized renderState method instead.
-        This method WILL be removed before the 1.0 release.
-        """)
-    // TODO Remove this method before the 1.0 release
-    protected open fun renderState() = Unit
-
     /**
      * Renders the UI based on the given [state] parameter using the [renderer] block
      * If your fragment is tied to a [VectorViewModel] then consider using the overloaded version
