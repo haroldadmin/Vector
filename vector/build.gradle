@@ -41,6 +41,7 @@ dependencies {
     implementation libs.coroutinesAndroid
 
     implementation libs.fragment
+    implementation libs.appCompat
     implementation libs.vmSavedState
     implementation libs.viewModel
 
