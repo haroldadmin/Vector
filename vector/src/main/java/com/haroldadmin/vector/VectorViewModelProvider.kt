@@ -2,6 +2,7 @@ package com.haroldadmin.vector
 
 import android.os.Bundle
 import androidx.annotation.RestrictTo
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
 import java.lang.NoSuchMethodException
@@ -21,7 +22,7 @@ object VectorViewModelProvider {
 
         val factory = VectorSavedStateViewModelFactory(savedStateRegistryOwner, defaultArgs) { modelClass, handle ->
             val initialState = stateFactory.createInitialState<S>(modelClass, stateClass, handle, viewModelOwner)
-            createViewModel<VM, S>(modelClass, stateClass, initialState, viewModelOwner)
+            createViewModel<VM, S>(modelClass, stateClass, initialState, viewModelOwner, handle)
         }
 
         return when (viewModelOwner) {
@@ -36,20 +37,21 @@ object VectorViewModelProvider {
         vmClass: Class<*>,
         stateClass: Class<*>,
         initialState: S,
-        owner: ViewModelOwner
+        owner: ViewModelOwner,
+        handle: SavedStateHandle
     ): VM {
         return vmClass.factoryCompanion().let { factoryClass ->
             try {
                 // Invoke companion factory method
                 @Suppress("UNCHECKED_CAST")
                 factoryClass
-                    .getMethod("create", stateClass, ViewModelOwner::class.java)
-                    .invoke(factoryClass.instance(), initialState, owner) as VM
+                    .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
+                    .invoke(factoryClass.instance(), initialState, owner, handle) as VM
             } catch (ex: NoSuchMethodException){
                 @Suppress("UNCHECKED_CAST")
                 factoryClass
-                    .getMethod("create", stateClass, ViewModelOwner::class.java)
-                    .invoke(null, initialState, owner) as VM
+                    .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
+                    .invoke(null, initialState, owner, handle) as VM
             } catch (ex: NoSuchMethodException) {
                 // Try instantiating with the constructor directly
                 @Suppress("UNCHECKED_CAST")

@@ -33,7 +33,8 @@ internal class TestViewModelWithFactory(
 
         override fun create(
             initialState: TestStates,
-            owner: ViewModelOwner
+            owner: ViewModelOwner,
+            handle: SavedStateHandle
         ): TestViewModelWithFactory? {
             return TestViewModelWithFactory(initialState)
         }

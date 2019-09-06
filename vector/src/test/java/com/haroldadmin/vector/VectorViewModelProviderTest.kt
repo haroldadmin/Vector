@@ -11,6 +11,7 @@ class VectorViewModelProviderTest {
             TestViewModelWithFactory::class.java,
             TestStates::class.java,
             TestStates.TestState(0),
+            mockk(),
             mockk()
         )
 
