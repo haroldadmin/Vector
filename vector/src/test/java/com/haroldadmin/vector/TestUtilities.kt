@@ -27,11 +27,14 @@ internal class TestViewModelWithFactory(
     logger: Logger = systemOutLogger()
 ): VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
     companion object: VectorViewModelFactory<TestViewModelWithFactory, TestStates> {
-        override fun initialState(handle: SavedStateHandle): TestStates? {
+        override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): TestStates? {
             return TestStates.TestState(count = 0)
         }
 
-        override fun create(initialState: TestStates): TestViewModelWithFactory? {
+        override fun create(
+            initialState: TestStates,
+            owner: ViewModelOwner
+        ): TestViewModelWithFactory? {
             return TestViewModelWithFactory(initialState)
         }
     }
@@ -43,13 +46,14 @@ internal class TestViewModelWithFactoryAndDefaults(
     logger: Logger = systemOutLogger()
 ): VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext, logger) {
     companion object: VectorViewModelFactory<TestViewModelWithFactoryAndDefaults, TestStates.TestStateWithDefaults> {
-        override fun initialState(handle: SavedStateHandle): TestStates.TestStateWithDefaults? {
+        override fun initialState(
+            handle: SavedStateHandle,
+            owner: ViewModelOwner
+        ): TestStates.TestStateWithDefaults? {
             return TestStates.TestStateWithDefaults(count = 0)
         }
     }
 }
 
 internal class TestActivity: AppCompatActivity()
-internal class TestFragment: Fragment() {
-    val viewModel: TestViewModelWithFactory by fragmentViewModel()
-}
+internal class TestFragment: Fragment()

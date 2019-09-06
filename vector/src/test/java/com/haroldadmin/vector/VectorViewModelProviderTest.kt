@@ -1,5 +1,6 @@
 package com.haroldadmin.vector
 
+import io.mockk.mockk
 import org.junit.Test
 
 class VectorViewModelProviderTest {
@@ -9,7 +10,8 @@ class VectorViewModelProviderTest {
         val vm = VectorViewModelProvider.createViewModel(
             TestViewModelWithFactory::class.java,
             TestStates::class.java,
-            TestStates.TestState(0)
+            TestStates.TestState(0),
+            mockk()
         )
 
         assert(vm.currentState == TestStates.TestState(0))

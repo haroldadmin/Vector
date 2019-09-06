@@ -1,14 +1,8 @@
 package com.haroldadmin.vector
 
-import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.systemOutLogger
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import org.junit.Before
 import org.junit.Test
-import kotlin.coroutines.CoroutineContext
 
 internal class VectorStateFactoryTest {
 
@@ -24,6 +18,7 @@ internal class VectorStateFactoryTest {
         val state = factory.createInitialState<TestStates.TestState>(
             TestViewModel::class.java,
             TestStates.TestState::class.java,
+            mockk(),
             mockk()
         )
         assert(state.count == 42)
@@ -34,6 +29,7 @@ internal class VectorStateFactoryTest {
         val state = factory.createInitialState<TestStates.TestStateWithDefaults>(
             TestViewModel::class.java,
             TestStates.TestStateWithDefaults::class.java,
+            mockk(),
             mockk()
         )
         assert(state.count == 42)
@@ -44,6 +40,7 @@ internal class VectorStateFactoryTest {
         val state = factory.createInitialState<TestStates.TestState>(
             TestViewModelWithFactory::class.java,
             TestStates.TestState::class.java,
+            mockk(),
             mockk()
         )
         assert(state.count == 0)
@@ -54,6 +51,7 @@ internal class VectorStateFactoryTest {
         val state = factory.createInitialState<TestStates.TestStateWithDefaults>(
             TestViewModelWithFactoryAndDefaults::class.java,
             TestStates.TestStateWithDefaults::class.java,
+            mockk(),
             mockk()
         )
         assert(state.count == 0)
