@@ -16,4 +16,10 @@ abstract class SavedStateVectorViewModel<S : VectorState>(
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = androidLogger(),
     protected val savedStateHandle: SavedStateHandle
-) : VectorViewModel<S>(initialState, stateStoreContext, logger)
+) : VectorViewModel<S>(initialState, stateStoreContext, logger) {
+
+    companion object {
+        const val KEY_SAVED_STATE = "vector:saved-state"
+    }
+
+}
