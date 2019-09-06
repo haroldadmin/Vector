@@ -1,28 +1,30 @@
 package com.haroldadmin.sampleapp.addEditEntity
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAddEntityBinding
-import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.utils.debouncedTextChanges
-import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.vector.VectorFragment
+import com.haroldadmin.vector.fragmentViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class AddEditEntityFragment : VectorFragment() {
 
+    @Inject lateinit var viewModelFactory: AddEditEntityViewModel.Factory
     private lateinit var binding: FragmentAddEntityBinding
-    private val safeArgs by navArgs<AddEditEntityFragmentArgs>()
-    private val viewModel by viewModels<AddEditEntityViewModel> {
-        val repository = EntitiesRepository(provider().database.countingEntityQueries)
-        AddEditEntityViewModelFactory(this, null, safeArgs.entityId, repository)
+
+    private val viewModel: AddEditEntityViewModel by fragmentViewModel()
+
+    override fun onAttach(context: Context) {
+        inject()
+        super.onAttach(context)
     }
 
     override fun onCreateView(

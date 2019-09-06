@@ -6,11 +6,13 @@ import com.haroldadmin.vector.Vector
 
 class EntityCounter : Application() {
 
-    lateinit var provider: Provider
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-        Vector.enableLogging = true
-        provider = Provider(context = this)
+        Vector.enableLogging = false
+        appComponent = DaggerAppComponent
+            .factory()
+            .create(this)
     }
 }

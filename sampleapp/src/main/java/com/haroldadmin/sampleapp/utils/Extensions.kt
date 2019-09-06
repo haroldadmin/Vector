@@ -9,8 +9,6 @@ import com.haroldadmin.sampleapp.EntityCounter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
-fun Fragment.provider() = ((requireActivity().application) as EntityCounter).provider
-
 fun View.hide() {
     this.visibility = View.GONE
 }

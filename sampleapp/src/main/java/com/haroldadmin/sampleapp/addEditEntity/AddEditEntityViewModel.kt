@@ -5,15 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.repository.getRandomColour
+import com.haroldadmin.vector.FragmentViewModelOwner
 import com.haroldadmin.vector.SavedStateVectorViewModel
+import com.haroldadmin.vector.VectorViewModelFactory
+import com.haroldadmin.vector.ViewModelOwner
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
 
-private const val KEY_STATE = "state"
-
-class AddEditEntityViewModel(
-    initState: AddEditEntityState? = null,
-    handle: SavedStateHandle,
-    private val entityId: String?,
+class AddEditEntityViewModel @AssistedInject constructor(
+    @Assisted initState: AddEditEntityState? = null,
+    @Assisted handle: SavedStateHandle,
     private val entityRepository: EntitiesRepository
 ) : SavedStateVectorViewModel<AddEditEntityState>(
     initialState = initState,
@@ -21,29 +23,12 @@ class AddEditEntityViewModel(
 ) {
 
     init {
-        viewModelScope.launch {
-
-            val persistedState: AddEditEntityState? = savedStateHandle[KEY_STATE]
-
-            when {
-                persistedState != null -> {
-                    setInitialState(persistedState)
-                }
-
-                entityId != null -> {
-                    val entity = entityRepository.getEntity(entityId)
-                    setInitialState(
-                        AddEditEntityState.EditEntity(
-                            id = entity.id,
-                            name = entity.name,
-                            count = entity.counter
-                        )
-                    )
-                }
-                else -> {
-                    setInitialState(
-                        AddEditEntityState.AddEntity()
-                    )
+        if (initState is AddEditEntityState.EditEntity) {
+            viewModelScope.launch {
+                val entity = entityRepository.getEntity(initState.id)
+                setState {
+                    this as AddEditEntityState.EditEntity
+                    copy(name = entity.name, count = entity.counter)
                 }
             }
         }
@@ -78,8 +63,6 @@ class AddEditEntityViewModel(
                     copy(count = this.count - 1, isSaved = false)
                 }
             }
-            savedStateHandle.set(KEY_STATE, state)
-
             persistState()
         }
     }
@@ -127,12 +110,48 @@ class AddEditEntityViewModel(
                     copy(isSaved = true)
                 }
             }
-
             persistState()
         }
     }
 
     private fun persistState() = withState { state ->
-        savedStateHandle.set(KEY_STATE, state)
+        savedStateHandle.set(KEY_SAVED_STATE, state)
+    }
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initState: AddEditEntityState, handle: SavedStateHandle): AddEditEntityViewModel
+    }
+
+    companion object : VectorViewModelFactory<AddEditEntityViewModel, AddEditEntityState> {
+
+        override fun initialState(
+            handle: SavedStateHandle,
+            owner: ViewModelOwner
+        ): AddEditEntityState? {
+            val persistedState: AddEditEntityState? = handle[KEY_SAVED_STATE]
+            if (persistedState != null) return persistedState
+
+            owner as FragmentViewModelOwner
+            val entityId = owner.args()?.getString("entityId")
+
+            return if (entityId == null) {
+                AddEditEntityState.AddEntity()
+            } else {
+                AddEditEntityState.EditEntity(id = entityId)
+            }
+        }
+
+        override fun create(
+            initialState: AddEditEntityState,
+            owner: ViewModelOwner,
+            handle: SavedStateHandle
+        ): AddEditEntityViewModel? {
+            owner as FragmentViewModelOwner
+            return owner.fragment<AddEditEntityFragment>().viewModelFactory.create(
+                initialState,
+                handle
+            )
+        }
     }
 }
