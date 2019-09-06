@@ -1,5 +1,6 @@
 package com.haroldadmin.vector
 
+import androidx.annotation.RestrictTo
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
@@ -48,4 +49,29 @@ internal inline fun <T> ConflatedBroadcastChannel<T>.compute(crossinline newValu
     val newValue = newValueProvider.invoke(this.value)
     this.offer(newValue)
     return true
+}
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.factoryCompanion(): Class<*> {
+    return companionObject()?.let { clazz ->
+        if (VectorViewModelFactory::class.java.isAssignableFrom(clazz)) {
+            clazz
+        } else {
+            null
+        }
+    } ?: throw DoesNotImplementVectorVMFactoryException()
+}
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.companionObject(): Class<*>? {
+    return try {
+        Class.forName("$name\$Companion")
+    } catch (ex: ClassNotFoundException) {
+        null
+    }
+}
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.instance(initArg: Any? = null): Any? {
+    return declaredConstructors.firstOrNull { it.parameterTypes.size == 1 }?.newInstance(initArg)
 }
