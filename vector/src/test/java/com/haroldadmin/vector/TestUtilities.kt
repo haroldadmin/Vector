@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.systemOutLogger
+import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
@@ -15,11 +16,7 @@ internal sealed class TestStates : VectorState {
     data class TestStateWithDefaults(override val count: Int = 42) : TestStates()
 }
 
-internal class TestViewModel(
-    initialState: TestStates?,
-    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    logger: Logger = systemOutLogger()
-) : VectorViewModel<TestStates>(initialState, stateStoreContext, logger)
+internal class TestViewModel(initialState: TestStates?) : VectorViewModel<TestStates>(initialState)
 
 internal class TestViewModelWithFactory(
     initialState: TestStates?,
@@ -55,6 +52,40 @@ internal class TestViewModelWithFactoryAndDefaults(
         }
     }
 }
+
+internal class TestSavedStateViewModel(
+    initialState: CountingState
+) : VectorViewModel<CountingState>(initialState)
+
+internal class TestSavedStateViewModelWithFactory(
+    initialState: CountingState,
+    handle: SavedStateHandle
+) : SavedStateVectorViewModel<CountingState>(
+    initialState = initialState,
+    savedStateHandle = handle
+) {
+    companion object: VectorViewModelFactory<TestSavedStateViewModelWithFactory, CountingState> {
+        override fun create(
+            initialState: CountingState,
+            owner: ViewModelOwner,
+            handle: SavedStateHandle
+        ): TestSavedStateViewModelWithFactory? {
+            return TestSavedStateViewModelWithFactory(initialState, handle)
+        }
+    }
+}
+
+internal class TestViewModelWithMultipleParams(
+    initialState: CountingState?,
+    stateStoreContext: CoroutineContext,
+    logger: Logger,
+    savedStateHandle: SavedStateHandle
+) : SavedStateVectorViewModel<CountingState>(
+    initialState,
+    stateStoreContext,
+    logger,
+    savedStateHandle
+)
 
 internal class TestActivity : AppCompatActivity()
 internal class TestFragment : Fragment()

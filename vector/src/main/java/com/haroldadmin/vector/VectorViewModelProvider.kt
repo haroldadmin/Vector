@@ -5,12 +5,18 @@ import androidx.annotation.RestrictTo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
+import com.haroldadmin.vector.loggers.Logger
+import com.haroldadmin.vector.loggers.androidLogger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import java.lang.NoSuchMethodException
 import java.lang.InstantiationException
+import kotlin.coroutines.CoroutineContext
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 object VectorViewModelProvider {
 
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
         vmClass: Class<out VM>,
         stateClass: Class<out S>,
@@ -31,6 +37,7 @@ object VectorViewModelProvider {
         }.get(vmClass)
     }
 
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
         vmClass: Class<out VM>,
         stateClass: Class<out S>,
@@ -51,39 +58,45 @@ object VectorViewModelProvider {
         }.get(vmClass)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> createViewModel(
         vmClass: Class<*>,
         stateClass: Class<*>,
         initialState: S,
         owner: ViewModelOwner,
-        handle: SavedStateHandle
+        handle: SavedStateHandle,
+        stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+        logger: Logger = androidLogger()
     ): VM {
-        return vmClass.factoryCompanion().let { factoryClass ->
-            try {
-                // Invoke companion factory method
-                @Suppress("UNCHECKED_CAST")
-                factoryClass
-                    .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
-                    .invoke(factoryClass.instance(), initialState, owner, handle) as VM
-            } catch (ex: NoSuchMethodException) {
-                @Suppress("UNCHECKED_CAST")
-                factoryClass
-                    .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
-                    .invoke(null, initialState, owner, handle) as VM
-            } catch (ex: NoSuchMethodException) {
-                // Try instantiating with the constructor directly
-                @Suppress("UNCHECKED_CAST")
-                vmClass.instance(initialState) as VM
-            } catch (ex: InstantiationException) {
-                throw UnInstantiableViewModelException(vmClass.simpleName)
+        return try {
+            vmClass.factoryCompanion().let { factoryClass ->
+                try {
+                    // Invoke companion factory method
+                    factoryClass
+                        .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
+                        .invoke(factoryClass.instance(), initialState, owner, handle) as VM
+                } catch (ex: NoSuchMethodException) {
+                    factoryClass
+                        .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
+                        .invoke(null, initialState, owner, handle) as VM
+                }
+            }
+        } catch (ex: DoesNotImplementVectorVMFactoryException) {
+            val constructor = vmClass.kotlin.constructors.first() // Using Kotlin constructor here to access parameters size
+            when (constructor.parameters.size) {
+                1 -> vmClass.instance(initialState) as VM
+                2 -> constructor.call(initialState, handle) as VM
+                3 -> constructor.call(initialState, stateStoreContext, logger) as VM
+                4 -> constructor.call(initialState, stateStoreContext, logger, handle) as VM
+                else -> throw UnInstantiableViewModelException(vmClass.simpleName)
             }
         }
     }
 }
 
-class UnInstantiableViewModelException(className: String) :
+internal class UnInstantiableViewModelException(className: String) :
     IllegalArgumentException("$className can not be instantiated with a proper companion factory method")
 
-class DoesNotImplementVectorVMFactoryException :
+internal class DoesNotImplementVectorVMFactoryException :
     Exception("This class's companion object does not implement a VectorViewModel Factory")

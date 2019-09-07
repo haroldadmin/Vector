@@ -35,6 +35,7 @@ buildscript {
 
     ext.libs = [
             "kotlinStdLib"      : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${buildConfig.kotlin}",
+            "kotlinReflect"     : "org.jetbrains.kotlin:kotlin-reflect:${buildConfig.kotlin}",
             "coroutinesCore"    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
             "coroutinesAndroid" : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
             "coroutinesTest"    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
