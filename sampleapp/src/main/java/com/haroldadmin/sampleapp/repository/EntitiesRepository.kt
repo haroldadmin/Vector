@@ -31,4 +31,8 @@ class EntitiesRepository @Inject constructor(private val dao: CountingEntityQuer
     suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
         dao.update(entity.counter, entity.name, entity.colour, entity.id)
     }
+
+    suspend fun getNumberOfEntities(): Long = withContext(Dispatchers.IO) {
+        dao.getNumberOfEntities().executeAsOne()
+    }
 }

@@ -3,7 +3,6 @@ package com.haroldadmin.sampleapp.entities
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.repository.EntitiesRepository
-import com.haroldadmin.vector.FragmentViewModelOwner
 import com.haroldadmin.vector.VectorViewModel
 import com.haroldadmin.vector.VectorViewModelFactory
 import com.haroldadmin.vector.ViewModelOwner
@@ -32,15 +31,6 @@ class EntitiesViewModel @AssistedInject constructor(
     companion object: VectorViewModelFactory<EntitiesViewModel, EntitiesState> {
         override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): EntitiesState? {
             return EntitiesState()
-        }
-
-        override fun create(
-            initialState: EntitiesState,
-            owner: ViewModelOwner,
-            handle: SavedStateHandle
-        ): EntitiesViewModel? {
-            val fragment = (owner as FragmentViewModelOwner).fragment<EntitiesFragment>()
-            return fragment.viewModelFactory.create(initialState)
         }
     }
 }

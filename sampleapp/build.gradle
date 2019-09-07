@@ -63,8 +63,11 @@ dependencies {
     implementation libs.vmSavedState
 
     implementation libs.dagger.dagger
+    implementation libs.dagger.daggerAndroid
+    implementation libs.dagger.daggerAndroidSupport
     implementation libs.dagger.assistedInject
     kapt libs.dagger.compiler
+    kapt libs.dagger.androidCompiler
     kapt libs.dagger.assistedInjectCompiler
 
     implementation libs.sqldelightDriver

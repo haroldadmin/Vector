@@ -35,3 +35,7 @@ WHERE id = :id;
 delete:
 DELETE FROM countingEntity
 WHERE id = :id;
+
+getNumberOfEntities:
+SELECT COUNT(*)
+FROM countingEntity;

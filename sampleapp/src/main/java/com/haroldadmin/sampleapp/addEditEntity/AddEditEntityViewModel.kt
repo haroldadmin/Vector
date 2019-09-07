@@ -37,56 +37,52 @@ class AddEditEntityViewModel @AssistedInject constructor(
     fun incrementCount() = viewModelScope.launch {
         withState { state ->
             when (state) {
-                is AddEditEntityState.AddEntity -> setState {
+                is AddEditEntityState.AddEntity -> setStateAndPersist {
                     this as AddEditEntityState.AddEntity
                     copy(count = this.count + 1, isSaved = false)
                 }
-                is AddEditEntityState.EditEntity -> setState {
+                is AddEditEntityState.EditEntity -> setStateAndPersist {
                     this as AddEditEntityState.EditEntity
                     copy(count = this.count + 1, isSaved = false)
                 }
             }
-
-            persistState()
         }
     }
 
     fun decrementCount() = viewModelScope.launch {
         withState { state ->
             when (state) {
-                is AddEditEntityState.AddEntity -> setState {
+                is AddEditEntityState.AddEntity -> setStateAndPersist {
                     this as AddEditEntityState.AddEntity
                     copy(count = this.count - 1, isSaved = false)
                 }
-                is AddEditEntityState.EditEntity -> setState {
+                is AddEditEntityState.EditEntity -> setStateAndPersist {
                     this as AddEditEntityState.EditEntity
                     copy(count = this.count - 1, isSaved = false)
                 }
             }
-            persistState()
         }
     }
 
     fun setName(name: String) = viewModelScope.launch {
         withState { state ->
             when (state) {
-                is AddEditEntityState.AddEntity -> setState {
+                is AddEditEntityState.AddEntity -> setStateAndPersist {
                     this as AddEditEntityState.AddEntity
                     copy(name = name, isSaved = false)
                 }
-                is AddEditEntityState.EditEntity -> setState {
+                is AddEditEntityState.EditEntity -> setStateAndPersist {
                     this as AddEditEntityState.EditEntity
                     copy(name = name, isSaved = false)
                 }
             }
         }
-        persistState()
     }
 
     fun saveEntity() = viewModelScope.launch {
         withState { state ->
             when (state) {
-                is AddEditEntityState.AddEntity -> setState {
+                is AddEditEntityState.AddEntity -> setStateAndPersist {
                     this as AddEditEntityState.AddEntity
                     val entity = CountingEntity.Impl(
                         id = this.id,
@@ -98,7 +94,7 @@ class AddEditEntityViewModel @AssistedInject constructor(
                     copy(isSaved = true)
                 }
 
-                is AddEditEntityState.EditEntity -> setState {
+                is AddEditEntityState.EditEntity -> setStateAndPersist {
                     this as AddEditEntityState.EditEntity
                     val entity = CountingEntity.Impl(
                         id = this.id,
@@ -110,12 +106,7 @@ class AddEditEntityViewModel @AssistedInject constructor(
                     copy(isSaved = true)
                 }
             }
-            persistState()
         }
-    }
-
-    private fun persistState() = withState { state ->
-        savedStateHandle.set(KEY_SAVED_STATE, state)
     }
 
     @AssistedInject.Factory
@@ -140,18 +131,6 @@ class AddEditEntityViewModel @AssistedInject constructor(
             } else {
                 AddEditEntityState.EditEntity(id = entityId)
             }
-        }
-
-        override fun create(
-            initialState: AddEditEntityState,
-            owner: ViewModelOwner,
-            handle: SavedStateHandle
-        ): AddEditEntityViewModel? {
-            owner as FragmentViewModelOwner
-            return owner.fragment<AddEditEntityFragment>().viewModelFactory.create(
-                initialState,
-                handle
-            )
         }
     }
 }

@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.snackbar.Snackbar
+import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAddEntityBinding
 import com.haroldadmin.sampleapp.utils.debouncedTextChanges
 import com.haroldadmin.vector.VectorFragment
+import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,12 +21,21 @@ import javax.inject.Inject
 class AddEditEntityFragment : VectorFragment() {
 
     @Inject lateinit var viewModelFactory: AddEditEntityViewModel.Factory
+    @Inject lateinit var appViewModelFactory: AppViewModel.Factory
+
     private lateinit var binding: FragmentAddEntityBinding
 
-    private val viewModel: AddEditEntityViewModel by fragmentViewModel()
+    private val viewModel: AddEditEntityViewModel by fragmentViewModel { initialState, handle ->
+        viewModelFactory.create(initialState, handle)
+    }
+
+    private val appViewModel: AppViewModel by activityViewModel { initialState, _ ->
+        appViewModelFactory.create(initialState)
+    }
 
     override fun onAttach(context: Context) {
-        inject()
+        AndroidSupportInjection.inject(this)
+//        inject()
         super.onAttach(context)
     }
 
@@ -45,6 +57,7 @@ class AddEditEntityFragment : VectorFragment() {
 
             saveEntity.setOnClickListener {
                 viewModel.saveEntity()
+                appViewModel.updateNumberOfEntities()
             }
 
             fragmentScope.launch {

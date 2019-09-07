@@ -8,26 +8,38 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.databinding.FragmentEntitiesBinding
 import com.haroldadmin.sampleapp.utils.hide
 import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
+import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
+import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class EntitiesFragment : VectorFragment() {
 
     @Inject lateinit var viewModelFactory: EntitiesViewModel.Factory
+    @Inject lateinit var appViewModelFactory: AppViewModel.Factory
+
     private lateinit var binding: FragmentEntitiesBinding
 
-    private val viewModel: EntitiesViewModel by fragmentViewModel()
+    private val viewModel: EntitiesViewModel by fragmentViewModel { initialState, _ ->
+        viewModelFactory.create(initialState)
+    }
+
+    private val appViewModel: AppViewModel by activityViewModel { initialState, _ ->
+        appViewModelFactory.create(initialState)
+    }
 
     private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback()) { entity ->
         findNavController().navigate(EntitiesFragmentDirections.editEntity(entity.id))
     }
 
     override fun onAttach(context: Context) {
-        inject()
+//        inject()
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
@@ -46,6 +58,7 @@ class EntitiesFragment : VectorFragment() {
                     binding.pbLoading.hide()
                 }
             }
+            appViewModel.updateNumberOfEntities()
         }
         viewModel.getAllEntities()
     }
