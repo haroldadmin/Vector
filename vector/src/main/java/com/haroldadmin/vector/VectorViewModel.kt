@@ -19,27 +19,8 @@ import kotlin.coroutines.CoroutineContext
  * @param initialState The initial state for this ViewModel
  * @param stateStoreContext The [CoroutineContext] to be used with the state store
  *
- * Initial State can be used in conjunction with fragment provided state to
- * recover from process deaths. However, using the [SavedStateVectorViewModel] must be **strongly**
- * preferred over this method.
- *
- * Example:
- *
- * class MyViewModel(initState: MyState?) : VectorViewModel<MyState, MyAction>(initState ?: MyState()) {
- *      ...
- * }
- *
- * class MyFragment {
- *      onActivityCreated(savedInstanceState: Bundle?) {
- *          val initialState: MyState? = null
- *          if (savedInstanceState != null) {
- *              initialState = MyState(bundle.getString("USER_ID")
- *          }
- *          val viewModel = ViewModelProviders
- *                  .of(this, MyVMFactory(initialState))
- *                  .get(MyViewModel::class.java)
- *      }
- * }
+ * A [VectorViewModel] can implement the [VectorViewModelFactory] in its Companion object
+ * to provide ways to create the initial state, as well as the ViewModel itself.
  */
 abstract class VectorViewModel<S : VectorState>(
     initialState: S?,
@@ -69,6 +50,14 @@ abstract class VectorViewModel<S : VectorState>(
      * This is useful when the ViewModel was created without an initial state.
      * [setState] function should **NOT** to set this state.
      */
+    @Deprecated(
+        """
+        This method should not be used anymore. Your ViewModel should implement a VectorViewModelFactory
+        in its companion object, and override the initialState() method to get the initial state.
+        
+        THIS METHOD WILL BE REMOVED BEFORE 1.0 release.
+        """
+    )
     protected fun setInitialState(state: S) {
         stateStore.setInitialState(state)
     }

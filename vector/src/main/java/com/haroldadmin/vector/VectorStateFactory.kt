@@ -1,8 +1,14 @@
 package com.haroldadmin.vector
 
+import androidx.annotation.RestrictTo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelStoreOwner
 
+/**
+ * Creates an initial state for a ViewModel using either the [VectorViewModelFactory] or using
+ * the default constructor
+ */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 interface VectorStateFactory {
 
     fun <S : VectorState> createInitialState(
@@ -13,6 +19,7 @@ interface VectorStateFactory {
     ): S
 }
 
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 class RealStateFactory : VectorStateFactory {
     override fun <S : VectorState> createInitialState(
         vmClass: Class<*>,
@@ -65,6 +72,6 @@ class RealStateFactory : VectorStateFactory {
     }
 }
 
-class UnInstantiableStateClassException(
+internal class UnInstantiableStateClassException(
     className: String
 ) : IllegalArgumentException("$className could not be instantiated without a VectorViewModelFactory")

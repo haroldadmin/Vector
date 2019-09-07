@@ -10,9 +10,11 @@ import com.haroldadmin.vector.loggers.androidLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import java.lang.NoSuchMethodException
-import java.lang.InstantiationException
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * A class which is responsible for creating ViewModel instances
+ */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 object VectorViewModelProvider {
 

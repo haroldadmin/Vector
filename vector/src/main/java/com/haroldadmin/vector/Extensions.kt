@@ -51,6 +51,10 @@ internal inline fun <T> ConflatedBroadcastChannel<T>.compute(crossinline newValu
     return true
 }
 
+/**
+ * Tries to find the companion object of a class that implements [VectorViewModelFactory] and
+ * returns it. If no such companion object is found, it throws [DoesNotImplementVectorVMFactoryException]
+ */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.factoryCompanion(): Class<*> {
     return companionObject()?.let { clazz ->
@@ -62,6 +66,10 @@ internal fun Class<*>.factoryCompanion(): Class<*> {
     } ?: throw DoesNotImplementVectorVMFactoryException()
 }
 
+/**
+ * Tries to find the companion object of the given class, and returns it. If the class does not
+ * have a companion object, returns null
+ */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.companionObject(): Class<*>? {
     return try {
@@ -71,6 +79,10 @@ internal fun Class<*>.companionObject(): Class<*>? {
     }
 }
 
+/**
+ * Creates a new instance of the given class using the constructor having one parameter only.
+ * If no such constructor exists, returns null.
+ */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.instance(initArg: Any? = null): Any? {
     return declaredConstructors.firstOrNull { it.parameterTypes.size == 1 }?.newInstance(initArg)

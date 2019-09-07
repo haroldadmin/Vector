@@ -64,7 +64,7 @@ internal class TestSavedStateViewModelWithFactory(
     initialState = initialState,
     savedStateHandle = handle
 ) {
-    companion object: VectorViewModelFactory<TestSavedStateViewModelWithFactory, CountingState> {
+    companion object : VectorViewModelFactory<TestSavedStateViewModelWithFactory, CountingState> {
         override fun create(
             initialState: CountingState,
             owner: ViewModelOwner,
