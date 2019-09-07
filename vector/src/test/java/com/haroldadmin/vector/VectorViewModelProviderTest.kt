@@ -17,5 +17,4 @@ class VectorViewModelProviderTest {
 
         assert(vm.currentState == TestStates.TestState(0))
     }
-
 }

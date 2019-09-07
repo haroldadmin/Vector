@@ -21,7 +21,4 @@ object RepositoryModule {
     fun countingQueries(database: Database): CountingEntityQueries {
         return database.countingEntityQueries
     }
-
 }
-
-

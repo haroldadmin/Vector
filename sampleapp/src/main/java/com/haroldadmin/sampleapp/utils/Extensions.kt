@@ -4,8 +4,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import androidx.fragment.app.Fragment
-import com.haroldadmin.sampleapp.EntityCounter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 

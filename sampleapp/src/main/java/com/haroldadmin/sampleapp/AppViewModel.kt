@@ -29,7 +29,7 @@ class AppViewModel @AssistedInject constructor(
         fun create(initialState: AppState): AppViewModel
     }
 
-    companion object: VectorViewModelFactory<AppViewModel, AppState> {
+    companion object : VectorViewModelFactory<AppViewModel, AppState> {
         override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): AppState? {
             return AppState(0)
         }

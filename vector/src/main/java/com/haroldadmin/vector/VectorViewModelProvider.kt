@@ -11,7 +11,7 @@ import java.lang.InstantiationException
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 object VectorViewModelProvider {
 
-    fun <VM: VectorViewModel<S>, S: VectorState> get(
+    fun <VM : VectorViewModel<S>, S : VectorState> get(
         vmClass: Class<out VM>,
         stateClass: Class<out S>,
         savedStateRegistryOwner: SavedStateRegistryOwner,
@@ -31,7 +31,7 @@ object VectorViewModelProvider {
         }.get(vmClass)
     }
 
-    fun <VM: VectorViewModel<S>, S: VectorState> get(
+    fun <VM : VectorViewModel<S>, S : VectorState> get(
         vmClass: Class<out VM>,
         stateClass: Class<out S>,
         savedStateRegistryOwner: SavedStateRegistryOwner,
@@ -51,7 +51,6 @@ object VectorViewModelProvider {
         }.get(vmClass)
     }
 
-
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> createViewModel(
         vmClass: Class<*>,
@@ -67,7 +66,7 @@ object VectorViewModelProvider {
                 factoryClass
                     .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
                     .invoke(factoryClass.instance(), initialState, owner, handle) as VM
-            } catch (ex: NoSuchMethodException){
+            } catch (ex: NoSuchMethodException) {
                 @Suppress("UNCHECKED_CAST")
                 factoryClass
                     .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
@@ -83,8 +82,8 @@ object VectorViewModelProvider {
     }
 }
 
-class UnInstantiableViewModelException(className: String)
-    : IllegalArgumentException("$className can not be instantiated with a proper companion factory method")
+class UnInstantiableViewModelException(className: String) :
+    IllegalArgumentException("$className can not be instantiated with a proper companion factory method")
 
 class DoesNotImplementVectorVMFactoryException :
     Exception("This class's companion object does not implement a VectorViewModel Factory")

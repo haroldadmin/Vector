@@ -1,7 +1,6 @@
 package com.haroldadmin.sampleapp
 
 import android.app.Application
-import com.haroldadmin.sampleapp.utils.Provider
 import com.haroldadmin.vector.Vector
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

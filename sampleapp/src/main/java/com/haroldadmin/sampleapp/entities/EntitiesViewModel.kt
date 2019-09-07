@@ -28,7 +28,7 @@ class EntitiesViewModel @AssistedInject constructor(
         fun create(initialState: EntitiesState): EntitiesViewModel
     }
 
-    companion object: VectorViewModelFactory<EntitiesViewModel, EntitiesState> {
+    companion object : VectorViewModelFactory<EntitiesViewModel, EntitiesState> {
         override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): EntitiesState? {
             return EntitiesState()
         }

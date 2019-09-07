@@ -8,9 +8,9 @@ import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
 @Subcomponent
-interface AddEditEntityComponent: AndroidInjector<AddEditEntityFragment> {
+interface AddEditEntityComponent : AndroidInjector<AddEditEntityFragment> {
     @Subcomponent.Factory
-    interface Factory: AndroidInjector.Factory<AddEditEntityFragment>
+    interface Factory : AndroidInjector.Factory<AddEditEntityFragment>
 }
 
 @Module(subcomponents = [AddEditEntityComponent::class])

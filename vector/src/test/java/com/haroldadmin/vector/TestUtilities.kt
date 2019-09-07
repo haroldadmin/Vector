@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-internal sealed class TestStates: VectorState {
+internal sealed class TestStates : VectorState {
     abstract val count: Int
     data class TestState(override val count: Int) : TestStates()
     data class TestStateWithDefaults(override val count: Int = 42) : TestStates()
@@ -25,8 +25,8 @@ internal class TestViewModelWithFactory(
     initialState: TestStates?,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = systemOutLogger()
-): VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
-    companion object: VectorViewModelFactory<TestViewModelWithFactory, TestStates> {
+) : VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
+    companion object : VectorViewModelFactory<TestViewModelWithFactory, TestStates> {
         override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): TestStates? {
             return TestStates.TestState(count = 0)
         }
@@ -45,8 +45,8 @@ internal class TestViewModelWithFactoryAndDefaults(
     initialState: TestStates.TestStateWithDefaults?,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = systemOutLogger()
-): VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext, logger) {
-    companion object: VectorViewModelFactory<TestViewModelWithFactoryAndDefaults, TestStates.TestStateWithDefaults> {
+) : VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext, logger) {
+    companion object : VectorViewModelFactory<TestViewModelWithFactoryAndDefaults, TestStates.TestStateWithDefaults> {
         override fun initialState(
             handle: SavedStateHandle,
             owner: ViewModelOwner
@@ -56,5 +56,5 @@ internal class TestViewModelWithFactoryAndDefaults(
     }
 }
 
-internal class TestActivity: AppCompatActivity()
-internal class TestFragment: Fragment()
+internal class TestActivity : AppCompatActivity()
+internal class TestFragment : Fragment()

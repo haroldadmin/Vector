@@ -1,7 +1,7 @@
 package com.haroldadmin.vector
 
 @Suppress("ClassName")
-class vectorLazy<out T>(private val initializer: () -> T): Lazy<T> {
+class vectorLazy<out T>(private val initializer: () -> T) : Lazy<T> {
 
     @Volatile
     private var _value: T? = null
@@ -24,7 +24,7 @@ class vectorLazy<out T>(private val initializer: () -> T): Lazy<T> {
                     }
                 }
             }
-       }
+        }
 
     override fun isInitialized(): Boolean = _value != null
 }

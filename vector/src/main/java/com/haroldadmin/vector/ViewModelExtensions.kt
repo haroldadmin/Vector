@@ -19,7 +19,7 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.f
     }
 }
 
-inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> Fragment.fragmentViewModel(
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.fragmentViewModel(
     noinline viewModelCreator: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {
@@ -45,7 +45,7 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
     }
 }
 
-inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> Fragment.activityViewModel(
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.activityViewModel(
     noinline producer: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {
@@ -59,7 +59,7 @@ inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> Fragment.act
     }
 }
 
-inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> AppCompatActivity.viewModel(): vectorLazy<VM> {
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> AppCompatActivity.viewModel(): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
             vmClass = VM::class.java,
@@ -71,7 +71,7 @@ inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> AppCompatAct
     }
 }
 
-inline fun <reified VM: VectorViewModel<S>, reified S: VectorState> AppCompatActivity.viewModel(
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> AppCompatActivity.viewModel(
     noinline producer: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {

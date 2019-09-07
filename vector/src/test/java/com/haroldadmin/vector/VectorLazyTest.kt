@@ -24,5 +24,4 @@ class VectorLazyTest {
         val value = lazy.value
         assert(value == 42)
     }
-
 }

@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModelStoreOwner
 
 interface VectorStateFactory {
 
-    fun <S: VectorState> createInitialState(
+    fun <S : VectorState> createInitialState(
         vmClass: Class<*>,
         stateClass: Class<*>,
         handle: SavedStateHandle,
         owner: ViewModelOwner
     ): S
-
 }
 
-class RealStateFactory: VectorStateFactory {
+class RealStateFactory : VectorStateFactory {
     override fun <S : VectorState> createInitialState(
         vmClass: Class<*>,
         stateClass: Class<*>,
@@ -26,7 +25,7 @@ class RealStateFactory: VectorStateFactory {
             ?: throw UnInstantiableStateClassException(stateClass.simpleName)
     }
 
-    private fun <S: VectorState> getStateFromVectorVMFactory(
+    private fun <S : VectorState> getStateFromVectorVMFactory(
         vmClass: Class<*>,
         handle: SavedStateHandle,
         owner: ViewModelOwner
@@ -52,7 +51,7 @@ class RealStateFactory: VectorStateFactory {
         }
     }
 
-    private fun <S: VectorState> getDefaultStateFromConstructor(stateClass: Class<*>): S? {
+    private fun <S : VectorState> getDefaultStateFromConstructor(stateClass: Class<*>): S? {
         return stateClass.let {
             try {
                 @Suppress("UNCHECKED_CAST")
@@ -68,4 +67,4 @@ class RealStateFactory: VectorStateFactory {
 
 class UnInstantiableStateClassException(
     className: String
-): IllegalArgumentException("$className could not be instantiated without a VectorViewModelFactory")
+) : IllegalArgumentException("$className could not be instantiated without a VectorViewModelFactory")
