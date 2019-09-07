@@ -44,7 +44,7 @@ import kotlin.coroutines.CoroutineContext
 abstract class VectorViewModel<S : VectorState>(
     initialState: S?,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    private val logger: Logger = androidLogger()
+    protected val logger: Logger = androidLogger()
 ) : ViewModel() {
 
     protected open val stateStore = if (initialState != null) {

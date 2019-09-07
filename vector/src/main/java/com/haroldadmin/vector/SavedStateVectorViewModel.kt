@@ -22,4 +22,13 @@ abstract class SavedStateVectorViewModel<S : VectorState>(
         const val KEY_SAVED_STATE = "vector:saved-state"
     }
 
+    protected fun setStateAndPersist(reducer: suspend S.() -> S) {
+        setState(reducer)
+        persistState()
+    }
+
+    protected open fun persistState() = withState { state ->
+        logger.log("Persisting state: $state")
+        savedStateHandle.set(KEY_SAVED_STATE, state)
+    }
 }
