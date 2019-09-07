@@ -31,6 +31,26 @@ object VectorViewModelProvider {
         }.get(vmClass)
     }
 
+    fun <VM: VectorViewModel<S>, S: VectorState> get(
+        vmClass: Class<out VM>,
+        stateClass: Class<out S>,
+        savedStateRegistryOwner: SavedStateRegistryOwner,
+        viewModelOwner: ViewModelOwner,
+        viewModelProducer: (initialState: S, handle: SavedStateHandle) -> VM,
+        stateFactory: VectorStateFactory = RealStateFactory(),
+        defaultArgs: Bundle? = null
+    ): VM {
+        val factory = VectorSavedStateViewModelFactory(savedStateRegistryOwner, defaultArgs) { modelClass, handle ->
+            val initialState = stateFactory.createInitialState<S>(modelClass, stateClass, handle, viewModelOwner)
+            viewModelProducer(initialState, handle)
+        }
+
+        return when (viewModelOwner) {
+            is ActivityViewModelOwner -> ViewModelProvider(viewModelOwner.activity, factory)
+            is FragmentViewModelOwner -> ViewModelProvider(viewModelOwner.fragment, factory)
+        }.get(vmClass)
+    }
+
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> createViewModel(
