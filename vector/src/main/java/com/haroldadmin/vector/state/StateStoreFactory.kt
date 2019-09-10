@@ -10,6 +10,15 @@ import kotlin.coroutines.CoroutineContext
 internal object StateStoreFactory {
 
     fun <S : VectorState> create(
+        logger: Logger,
+        coroutineContext: CoroutineContext
+    ): StateStore<S> {
+        val stateHolder = StateHolderFactory.create<S>(logger)
+        val stateProcessor = StateProcessorFactory.create(stateHolder, logger, coroutineContext)
+        return create(stateHolder, stateProcessor, logger)
+    }
+
+    fun <S : VectorState> create(
         initialState: S,
         logger: Logger,
         coroutineContext: CoroutineContext
