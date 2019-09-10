@@ -4,35 +4,26 @@ import com.haroldadmin.sampleapp.CountingEntity
 import com.haroldadmin.sampleapp.CountingEntityQueries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class EntitiesRepository @Inject constructor(private val dao: CountingEntityQueries) {
+class EntitiesRepository(private val dao: CountingEntityQueries) {
 
     suspend fun getAllEntities(): List<CountingEntity> = withContext(Dispatchers.IO) {
         dao.getAll().executeAsList()
     }
 
-    suspend fun getEntity(id: String): CountingEntity = withContext(Dispatchers.IO) {
-        dao.getEntity(id).executeAsOne()
-    }
-
-    suspend fun getCounterForEntity(id: String): Long = withContext(Dispatchers.IO) {
-        dao.getCounterForEntity(id).executeAsOne()
+    suspend fun getCounterForEntity(name: String): Long = withContext(Dispatchers.IO) {
+        dao.getCounterForEntity(name).executeAsOne()
     }
 
     suspend fun saveNewEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.insert(entity.id, entity.name, entity.counter, entity.colour)
+        dao.insert(entity.name, entity.counter, entity.colour)
     }
 
     suspend fun deleteEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.delete(entity.id)
+        dao.delete(entity.name)
     }
 
     suspend fun updateEntity(entity: CountingEntity) = withContext(Dispatchers.IO) {
-        dao.update(entity.counter, entity.name, entity.colour, entity.id)
-    }
-
-    suspend fun getNumberOfEntities(): Long = withContext(Dispatchers.IO) {
-        dao.getNumberOfEntities().executeAsOne()
+        dao.update(entity.counter, entity.name)
     }
 }
