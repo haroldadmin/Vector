@@ -19,25 +19,20 @@ class EntitiesDiffCallback : DiffUtil.ItemCallback<CountingEntity>() {
     }
 }
 
-class EntityViewHolder(private val binding: ItemEntityBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(countingEntity: CountingEntity, onEntityClick: (CountingEntity) -> Unit) {
-        binding.apply {
-            entity = countingEntity
-            root.setOnClickListener { onEntityClick(countingEntity) }
-            binding.executePendingBindings()
-        }
+class EntityViewHolder(private val binding: ItemEntityBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(entity: CountingEntity) {
+        binding.entity = entity
+        binding.executePendingBindings()
     }
 }
 
-class EntitiesAdapter(diffCallback: EntitiesDiffCallback, val onEntityClick: (CountingEntity) -> Unit) :
-    ListAdapter<CountingEntity, EntityViewHolder>(diffCallback) {
+class EntitiesAdapter(diffCallback: EntitiesDiffCallback) : ListAdapter<CountingEntity, EntityViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntityViewHolder {
         val binding = ItemEntityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return EntityViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: EntityViewHolder, position: Int) {
-        holder.bind(getItem(position), onEntityClick)
+        holder.bind(getItem(position))
     }
 }

@@ -3,24 +3,21 @@ buildscript {
             "compileSdk" : 29,
             "minSdk"     : 15,
             "targetSdk"  : 29,
-            "kotlin"     : "1.3.50",
-            "agp"        : "3.5.0",
-            "versionCode": 9,
-            "versionName": "0.4.2"
+            "kotlin"     : "1.3.41",
+            "agp"        : "3.5.0-rc01",
+            "versionCode": 7,
+            "versionName": "0.3.0"
     ]
 
     ext.versions = [
-            "coroutines"        : "1.3.0",
-            "appCompat"         : "1.1.0",
-            "lifecycle"         : "2.2.0-alpha04",
-            "lifecycleTest"     : "2.0.0",
-            "vmSavedState"      : "1.0.0-alpha04",
+            "coroutines"        : "1.3.0-RC",
+            "appCompat"         : "1.0.2",
+            "lifecycle"         : "2.1.0-rc01",
             "ktxCore"           : "1.0.2",
-            "recyclerView"      : "1.1.0-beta04",
-            "materialComponents": "1.1.0-alpha10",
-            "fragment"          : "1.1.0",
+            "recyclerView"      : "1.1.0-beta01",
+            "materialComponents": "1.1.0-alpha08",
+            "fragmentKtx"       : "1.1.0-rc03",
             "constraintLayout"  : "1.1.3",
-            "navigation"        : "2.1.0",
             "sqldelight"        : "1.1.4",
             "junit"             : "4.12",
             "fragmentTesting"   : "1.1.0-alpha09",
@@ -28,30 +25,23 @@ buildscript {
             "androidxTestExt"   : "1.1.1",
             "androidxTestRunner": "1.2.0",
             "espressoCore"      : "3.2.0",
-            "mockk"             : "1.9.2",
-            "dagger"            : "2.24",
-            "assistedInject"    : "0.5.0"
+            "mockk"             : "1.9.2"
     ]
 
     ext.libs = [
             "kotlinStdLib"      : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${buildConfig.kotlin}",
-            "kotlinReflect"     : "org.jetbrains.kotlin:kotlin-reflect:${buildConfig.kotlin}",
             "coroutinesCore"    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
             "coroutinesAndroid" : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
             "coroutinesTest"    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
 
             "appCompat"         : "androidx.appcompat:appcompat:${versions.appCompat}",
-            "fragment"          : "androidx.fragment:fragment:${versions.fragment}",
             "viewModel"         : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}",
             "liveData"          : "androidx.lifecycle:lifecycle-livedata:${versions.lifecycle}",
             "lifecycle"         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
             "lifecycleTest"     : "androidx.arch.core:core-testing:${versions.lifecycleTest}",
-            "vmSavedState"      : "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions.vmSavedState}",
             "ktxCore"           : "androidx.core:core-ktx:${versions.ktxCore}",
             "recyclerView"      : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
             "materialComponents": "com.google.android.material:material:${versions.materialComponents}",
-            "navigation"        : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
-            "navigationUi"     : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
 
             "sqldelightDriver"  : "com.squareup.sqldelight:android-driver:${versions.sqldelight}",
 
@@ -64,17 +54,7 @@ buildscript {
             "androidxTestExt"   : "androidx.test.ext:junit:${versions.androidxTestExt}",
             "androidxTestRunner": "androidx.test:runner:${versions.androidxTestRunner}",
             "espressoCore"      : "androidx.test.espresso:espresso-core:${versions.espressoCore}",
-            "mockk"             : "io.mockk:mockk:${versions.mockk}",
-
-            "dagger"            : [
-                    "dagger"                    : "com.google.dagger:dagger:${versions.dagger}",
-                    "daggerAndroid"             : "com.google.dagger:dagger-android:${versions.dagger}",
-                    "daggerAndroidSupport"      : "com.google.dagger:dagger-android-support:${versions.dagger}",
-                    "compiler"                  : "com.google.dagger:dagger-compiler:${versions.dagger}",
-                    "androidCompiler"           : "com.google.dagger:dagger-android-processor:${versions.dagger}",
-                    "assistedInject"            : "com.squareup.inject:assisted-inject-annotations-dagger2:${versions.assistedInject}",
-                    "assistedInjectCompiler"    : "com.squareup.inject:assisted-inject-processor-dagger2:${versions.assistedInject}"
-            ]
+            "mockk"             : "io.mockk:mockk:${versions.mockk}"
     ]
 
     repositories {
@@ -87,8 +67,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${buildConfig.kotlin}"
         classpath "com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}"
-        classpath 'androidx.benchmark:benchmark-gradle-plugin:1.0.0-alpha04'
+        classpath 'androidx.benchmark:benchmark-gradle-plugin:1.0.0-alpha03'
     }
 }
 

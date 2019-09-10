@@ -1,15 +1,19 @@
 package com.haroldadmin.vector
 
 import androidx.annotation.CallSuper
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
 import com.haroldadmin.vector.state.StateStoreFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -19,47 +23,52 @@ import kotlin.coroutines.CoroutineContext
  * @param initialState The initial state for this ViewModel
  * @param stateStoreContext The [CoroutineContext] to be used with the state store
  *
- * A [VectorViewModel] can implement the [VectorViewModelFactory] in its Companion object
- * to provide ways to create the initial state, as well as the ViewModel itself.
+ * Initial State can be used in conjunction with fragment provided state to
+ * recover from process deaths.
+ *
+ * Example:
+ *
+ * class MyViewModel(initState: MyState?) : VectorViewModel<MyState, MyAction>(initState ?: MyState()) {
+ *      ...
+ * }
+ *
+ * class MyFragment {
+ *      onActivityCreated(savedInstanceState: Bundle?) {
+ *          val initialState: MyState? = null
+ *          if (savedInstanceState != null) {
+ *              initialState = MyState(bundle.getString("USER_ID")
+ *          }
+ *          val viewModel = ViewModelProviders
+ *                  .of(this, MyVMFactory(initialState))
+ *                  .get(MyViewModel::class.java)
+ *      }
+ * }
  */
 abstract class VectorViewModel<S : VectorState>(
-    initialState: S?,
+    initialState: S,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    protected val logger: Logger = androidLogger()
+    private val logger: Logger = androidLogger()
 ) : ViewModel() {
 
-    protected open val stateStore = if (initialState != null) {
+    protected open val stateStore =
         StateStoreFactory.create(initialState, logger, stateStoreContext)
-    } else {
-        StateStoreFactory.create(logger, stateStoreContext)
-    }
 
-    val state: Flow<S> by lazy {
-        stateStore
-            .stateObservable
-            .asFlow()
-            .filterNotNull()
+    private val _stateLiveData = MutableLiveData(initialState)
+
+    val state: LiveData<S> = MediatorLiveData<S>().apply {
+        addSource(_stateLiveData, this::setValue)
     }
 
     val currentState: S
         get() = stateStore.state
 
-    /**
-     * Allows setting an initial state after the ViewModel has been constructed.
-     *
-     * This is useful when the ViewModel was created without an initial state.
-     * [setState] function should **NOT** to set this state.
-     */
-    @Deprecated(
-        """
-        This method should not be used anymore. Your ViewModel should implement a VectorViewModelFactory
-        in its companion object, and override the initialState() method to get the initial state.
-        
-        THIS METHOD WILL BE REMOVED BEFORE 1.0 release.
-        """
-    )
-    protected fun setInitialState(state: S) {
-        stateStore.setInitialState(state)
+    init {
+        viewModelScope.launch {
+            stateStore
+                .stateObservable
+                .asFlow()
+                .collect { newState -> _stateLiveData.value = newState }
+        }
     }
 
     /**
