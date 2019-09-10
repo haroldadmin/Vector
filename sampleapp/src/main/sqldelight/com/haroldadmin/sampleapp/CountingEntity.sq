@@ -1,16 +1,22 @@
 import com.haroldadmin.sampleapp.repository.Colour;
 
 CREATE TABLE countingEntity (
+    id TEXT NOT NULL,
     name TEXT NOT NULL,
     counter INTEGER NOT NULL,
     colour TEXT AS Colour NOT NULL,
-    PRIMARY KEY(name)
+    PRIMARY KEY(id)
 );
+
+getEntity:
+SELECT *
+FROM countingEntity
+WHERE id = :id;
 
 getCounterForEntity:
 SELECT counter
 FROM countingEntity
-WHERE name = :name;
+WHERE id = :id;
 
 getAll:
 SELECT *
@@ -18,14 +24,18 @@ FROM countingEntity;
 
 insert:
 INSERT OR REPLACE
-INTO countingEntity(name, counter, colour)
-VALUES(:name, :counter, :colour);
+INTO countingEntity(id, name, counter, colour)
+VALUES(:id, :name, :counter, :colour);
 
 update:
 UPDATE countingEntity
-SET counter = :counter
-WHERE name = :name;
+SET counter = :counter, name = :name, colour = :colour
+WHERE id = :id;
 
 delete:
 DELETE FROM countingEntity
-WHERE name = :name;
+WHERE id = :id;
+
+getNumberOfEntities:
+SELECT COUNT(*)
+FROM countingEntity;

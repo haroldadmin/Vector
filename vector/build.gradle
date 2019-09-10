@@ -28,18 +28,23 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
 
+    implementation libs.fragment
     implementation libs.appCompat
+    implementation libs.vmSavedState
     implementation libs.viewModel
-    implementation libs.liveData
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest

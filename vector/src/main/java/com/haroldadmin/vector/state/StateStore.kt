@@ -14,6 +14,17 @@ abstract class StateStore<S : VectorState>(
 ) : StateHolder<S> by stateHolder, StateProcessor<S> by stateProcessor {
 
     /**
+     * Can be used to set initial state if the state holder supplied to this StateStore was created
+     * without one.
+     *
+     * The initial state should not be set using the state processor, because it expects
+     * that at least one state value should be present in the state holder when processing set-state blocks
+     */
+    fun setInitialState(state: S) {
+        stateHolder.stateObservable.offer(state)
+    }
+
+    /**
      * Clear any resources held by this state store.
      * Implementations should also forward the call to [stateHolder] and [stateProcessor]
      */
