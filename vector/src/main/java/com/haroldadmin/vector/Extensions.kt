@@ -1,5 +1,6 @@
 package com.haroldadmin.vector
 
+import androidx.annotation.RestrictTo
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
@@ -24,6 +25,9 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
  *
  * Note: The state provided to the block is not guaranteed to be the latest state, because there
  * might be other state mutation blocks in the State Store's queue
+ *
+ * Warning: This WILL cause your app to crash if you create your ViewModels without initial state
+ * and fail to provide it later, before calling this function.
  */
 inline fun <S : VectorState> withState(
     viewModel: VectorViewModel<S>,
@@ -45,4 +49,41 @@ internal inline fun <T> ConflatedBroadcastChannel<T>.compute(crossinline newValu
     val newValue = newValueProvider.invoke(this.value)
     this.offer(newValue)
     return true
+}
+
+/**
+ * Tries to find the companion object of a class that implements [VectorViewModelFactory] and
+ * returns it. If no such companion object is found, it throws [DoesNotImplementVectorVMFactoryException]
+ */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.factoryCompanion(): Class<*> {
+    return companionObject()?.let { clazz ->
+        if (VectorViewModelFactory::class.java.isAssignableFrom(clazz)) {
+            clazz
+        } else {
+            null
+        }
+    } ?: throw DoesNotImplementVectorVMFactoryException()
+}
+
+/**
+ * Tries to find the companion object of the given class, and returns it. If the class does not
+ * have a companion object, returns null
+ */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.companionObject(): Class<*>? {
+    return try {
+        Class.forName("$name\$Companion")
+    } catch (ex: ClassNotFoundException) {
+        null
+    }
+}
+
+/**
+ * Creates a new instance of the given class using the constructor having one parameter only.
+ * If no such constructor exists, returns null.
+ */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+internal fun Class<*>.instance(initArg: Any? = null): Any? {
+    return declaredConstructors.firstOrNull { it.parameterTypes.size == 1 }?.newInstance(initArg)
 }
