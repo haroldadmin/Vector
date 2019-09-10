@@ -1,16 +1,28 @@
 package com.haroldadmin.sampleapp
 
 import android.app.Application
-import com.haroldadmin.sampleapp.utils.Provider
 import com.haroldadmin.vector.Vector
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import javax.inject.Inject
 
-class EntityCounter : Application() {
+class EntityCounter : Application(), HasAndroidInjector {
 
-    lateinit var provider: Provider
+    @Inject lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
         Vector.enableLogging = true
-        provider = Provider(context = this)
+        appComponent = DaggerAppComponent
+            .factory()
+            .create(this)
+            .also { comp -> comp.inject(this) }
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
     }
 }

@@ -1,45 +1,65 @@
 package com.haroldadmin.sampleapp.entities
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haroldadmin.sampleapp.R
-import com.haroldadmin.sampleapp.addEntity.AddEntityFragment
+import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.databinding.FragmentEntitiesBinding
-import com.haroldadmin.sampleapp.repository.EntitiesRepository
 import com.haroldadmin.sampleapp.utils.hide
-import com.haroldadmin.sampleapp.utils.provider
 import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
-import com.haroldadmin.vector.withState
+import com.haroldadmin.vector.activityViewModel
+import com.haroldadmin.vector.fragmentViewModel
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class EntitiesFragment : VectorFragment() {
 
+    @Inject lateinit var viewModelFactory: EntitiesViewModel.Factory
+    @Inject lateinit var appViewModelFactory: AppViewModel.Factory
+
     private lateinit var binding: FragmentEntitiesBinding
 
-    private val viewModel by viewModels<EntitiesViewModel> {
-        val repository = EntitiesRepository(provider().database.countingEntityQueries)
-        EntitiesViewModelFactory(repository, EntitiesState(
-            entities = null,
-            isLoading = true
-        ))
+    private val viewModel: EntitiesViewModel by fragmentViewModel { initialState, _ ->
+        viewModelFactory.create(initialState)
     }
 
-    private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback())
+    private val appViewModel: AppViewModel by activityViewModel { initialState, _ ->
+        appViewModelFactory.create(initialState)
+    }
+
+    private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback()) { entity ->
+        findNavController().navigate(EntitiesFragmentDirections.editEntity(entity.id))
+    }
+
+    override fun onAttach(context: Context) {
+//        inject()
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel.state.observe(viewLifecycleOwner, Observer {
-            renderState()
-        })
-
+        renderState(viewModel) { state ->
+            entitiesAdapter.submitList(state.entities)
+            if (state.entities.isNullOrEmpty()) {
+                binding.emptyListMessage.show()
+                binding.pbLoading.hide()
+            } else {
+                binding.emptyListMessage.hide()
+                if (state.isLoading) {
+                    binding.pbLoading.show()
+                } else {
+                    binding.pbLoading.hide()
+                }
+            }
+            appViewModel.updateNumberOfEntities()
+        }
         viewModel.getAllEntities()
     }
 
@@ -53,27 +73,9 @@ class EntitiesFragment : VectorFragment() {
         }
 
         binding.addEntity.setOnClickListener {
-            requireActivity().supportFragmentManager.commit {
-                replace(R.id.fragmentContainer, AddEntityFragment())
-                addToBackStack("entities")
-            }
+            findNavController().navigate(EntitiesFragmentDirections.addEntity())
         }
 
         return binding.root
-    }
-
-    override fun renderState() = withState(viewModel) { state ->
-        if (state.entities.isNullOrEmpty()) {
-            binding.emptyListMessage.show()
-            binding.pbLoading.hide()
-        } else {
-            binding.emptyListMessage.hide()
-            entitiesAdapter.submitList(state.entities)
-            if (state.isLoading) {
-                binding.pbLoading.show()
-            } else {
-                binding.pbLoading.hide()
-            }
-        }
     }
 }
