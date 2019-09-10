@@ -1,6 +1,5 @@
 package com.haroldadmin.vector.state
 
-import com.haroldadmin.vector.loggers.StringLogger
 import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
@@ -107,12 +106,4 @@ class StateProcessorTest {
                 assert(stateCount == i)
             }
         }
-
-    @Test(expected = IllegalStateException::class)
-    fun givenStateProcessorWithoutInitialStateInStateHolder_whenStateIsMutated_thenShouldThrowError() = testScope.runBlockingTest {
-        val holder = StateHolderFactory.create<CountingState>(StringLogger())
-        val processor = StateProcessorFactory.create(holder, StringLogger(), testScope.coroutineContext)
-
-        processor.offerSetAction { copy(count = this.count + 1) }
-    }
 }

@@ -1,14 +1,15 @@
 # Vector
 
-[![Build Status](https://github.com/haroldadmin/vector/workflows/Android%20CI/badge.svg)](https://github.com/haroldadmin/Vector/actions)
+[![Build Status](https://travis-ci.com/haroldadmin/Vector.svg?branch=master)](https://travis-ci.com/haroldadmin/Vector)
 
 Vector is an Android library to help implement the MVI architecture pattern. 
 
 It is inspired from [MvRx](https://www.github.com/airbnb/mvrx) and [Roxie](https://github.com/ww-tech/roxie), but unlike them it is **built completely using Kotlin Coroutines** instead of RxJava. As such, it internally only uses Coroutine primitives, and has extensive support for Suspending functions.
 
-Vector works well with Android Architecture Components. It is 100% Kotlin, and is intended for use with Kotlin only.
+Vector is small, fast, and works well with Android Architecture Components. It is 100% Kotlin, and is intended for use with Kotlin only.
 
-## Building Blocks
+
+### Building Blocks
 
 Vector is based primarily around three classes: `VectorViewModel`, `VectorState`, and `VectorFragment`.
 
@@ -16,7 +17,7 @@ Vector is based primarily around three classes: `VectorViewModel`, `VectorState`
 
 The Vector ViewModel class is the heart of any screen built with Vector. It is an abstract class extending the Android Architecture Components ViewModel class, and therefore survives configuration changes. It is generic on a class implementing the `VectorState` interface. It is also the only class which can mutate state.
 
-It exposes the current state through a `Kotlin Flow`.
+It exposes the current state through a `LiveData` object.
 
 * **VectorState**
 
@@ -24,14 +25,15 @@ VectorState is an interface denoting a model class representing the view's state
 
 * **VectorFragment**
 
-Vector provides an abstract `VectorFragment` class extending from AndroidX's Fragment class. A `VectorFragment` has a convenient `fragmentScope` coroutine scope, which can be used to easily launch Coroutines from a Fragment.
+Vector provides an abstract `VectorFragment` class extending from AndroidX's Fragment class. A `VectorFragment` has a convenient `fragmentScope` coroutine scope, which can be used to easily launch Coroutines from a Fragment. 
 
-## Wiki
+*It is not necessary to use Fragments as Views in your projects. Subclassing VectorFragment is completely optional. While the provided sample app is built with Fragments, Vector does not assume the usage of Fragments as views.*
 
+### Wiki
 Please refer to the Wiki for more extensive documentation on the library.
 [Vector Wiki](https://github.com/haroldadmin/Vector/wiki)
 
-## Example
+### Example
 
 Here's a contrived example to show how an app written in Vector looks like.
 
@@ -46,13 +48,17 @@ data class MyState(val message: String): VectorState
 ```kotlin
 class MyFragment: VectorFragment() {
 
-    private val myViewModel: MyViewModel by fragmentViewModel()
+    private val myViewModel by viewModels<MyViewModel>() 
+    // 'by viewModels' delegate is a part of Fragment KTX
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        renderState(viewModel) { state ->
-            toast(state.message)
-        }
+
+        myViewModel.state.observe(viewLifecycleOwner, Observer { renderState() })
+    }
+
+    override fun renderState = withState(myViewModel) { state -> 
+        messageTextView.text = state.message
     }
 }
 ```
@@ -76,19 +82,18 @@ class MyViewModel(initState: MyState): VectorViewModel<MyState>(initState) {
 }
 ```
 
-When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Actor`. The reducers passed to this actor are processed sequentially to avoid race conditions.
+When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Channel`. The reducers passed to this channel are internally processed on a single background thread to avoid race conditions.
 
-## Projects using Vector
-
-* You can find a [sample app](https://github.com/haroldadmin/Vector/tree/master/sampleapp) along with the library in this repository.
+### Projects using Vector
+* You can find a sample app along with the library in this repository. 
 * [MoonShot](https://www.github.com/haroldadmin/MoonShot) is another project of mine. It's an app to help you keep up with SpaceX launches, and is built with Vector.
 
 If you would like your project using Vector to be featured here, please open an Issue on the repository. I shall take a look at it and add your project to the list.
 
-## Installation Instructions
+
+### Installation Instructions
 
 Add the Jitpack repository to your top level `build.gradle` file.
-
 ```groovy
 allprojects {
   repositories {
@@ -108,7 +113,6 @@ dependencies {
 
 [![Release](https://jitpack.io/v/haroldadmin/Vector.svg)](https://jitpack.io/#haroldadmin/Vector)
 
-## Contributing
-
+### Contributing
 If you like this project, or are using it in your app, consider starring the repository to show your support.
 Contributions from the community are very welcome.
