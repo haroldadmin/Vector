@@ -50,6 +50,7 @@ abstract class VectorViewModel<S : VectorState>(
      * This is useful when the ViewModel was created without an initial state.
      * [setState] function should **NOT** to set this state.
      */
+    @Suppress("DeprecatedCallableAddReplaceWith")
     @Deprecated(
         """
         This method should not be used anymore. Your ViewModel should implement a VectorViewModelFactory

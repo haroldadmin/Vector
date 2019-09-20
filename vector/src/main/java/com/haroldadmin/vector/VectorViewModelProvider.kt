@@ -1,104 +1,117 @@
 package com.haroldadmin.vector
 
-import android.os.Bundle
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import java.lang.NoSuchMethodException
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 /**
- * A class which is responsible for creating ViewModel instances
+ * A class which is responsible for creating ViewModel instances.
+ *
+ * Instantiation of a ViewModel is first attempted using its companion object if it implements [VectorViewModelFactory].
+ * If this fails, then the instantiation using the constructor is attempted. If this fails too, then an error is thrown.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 object VectorViewModelProvider {
 
+    /**
+     * Creates the requested ViewModel automatically using reflection, and returns it.
+     * The returned ViewModel is already registered with a [ViewModelProvider]
+     */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
-        vmClass: Class<out VM>,
-        stateClass: Class<out S>,
+        vmClass: KClass<out VM>,
+        stateClass: KClass<out S>,
         savedStateRegistryOwner: SavedStateRegistryOwner,
         viewModelOwner: ViewModelOwner,
-        defaultArgs: Bundle?,
-        stateFactory: VectorStateFactory = RealStateFactory()
+        stateStoreContext: CoroutineContext,
+        logger: Logger
     ): VM {
-
-        val factory = VectorSavedStateViewModelFactory(savedStateRegistryOwner, defaultArgs) { modelClass, handle ->
-            val initialState = stateFactory.createInitialState<S>(modelClass, stateClass, handle, viewModelOwner)
-            createViewModel<VM, S>(modelClass, stateClass, initialState, viewModelOwner, handle)
-        }
-
-        return when (viewModelOwner) {
-            is ActivityViewModelOwner -> ViewModelProvider(viewModelOwner.activity, factory)
-            is FragmentViewModelOwner -> ViewModelProvider(viewModelOwner.fragment, factory)
-        }.get(vmClass)
+        return createViewModel(vmClass, stateClass, viewModelOwner, savedStateRegistryOwner, stateStoreContext, logger)
     }
 
+    /**
+     * Creates and returns the requested ViewModel using the supplied [viewModelProducer] and returns it.
+     * The returned ViewModel is already registered with a [ViewModelProvider]
+     */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
-        vmClass: Class<out VM>,
-        stateClass: Class<out S>,
-        savedStateRegistryOwner: SavedStateRegistryOwner,
+        vmClass: KClass<out VM>,
+        stateClass: KClass<out S>,
         viewModelOwner: ViewModelOwner,
-        viewModelProducer: (initialState: S, handle: SavedStateHandle) -> VM,
-        stateFactory: VectorStateFactory = RealStateFactory(),
-        defaultArgs: Bundle? = null
+        savedStateRegistryOwner: SavedStateRegistryOwner,
+        viewModelProducer: (initialState: S, handle: SavedStateHandle) -> VM
     ): VM {
-        val factory = VectorSavedStateViewModelFactory(savedStateRegistryOwner, defaultArgs) { modelClass, handle ->
-            val initialState = stateFactory.createInitialState<S>(modelClass, stateClass, handle, viewModelOwner)
+
+        val stateFactory: VectorStateFactory = RealStateFactory()
+
+        val factory = VectorSavedStateViewModelFactory(savedStateRegistryOwner, null) { _, handle ->
+            val initialState = stateFactory.createInitialState(vmClass, stateClass, handle, viewModelOwner)
             viewModelProducer(initialState, handle)
         }
 
         return when (viewModelOwner) {
             is ActivityViewModelOwner -> ViewModelProvider(viewModelOwner.activity, factory)
             is FragmentViewModelOwner -> ViewModelProvider(viewModelOwner.fragment, factory)
-        }.get(vmClass)
+        }.get(vmClass.java)
     }
 
     @Suppress("UNCHECKED_CAST")
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> createViewModel(
-        vmClass: Class<*>,
-        stateClass: Class<*>,
-        initialState: S,
+        vmClass: KClass<out VM>,
+        stateClass: KClass<out S>,
         owner: ViewModelOwner,
-        handle: SavedStateHandle,
-        stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+        savedStateRegistryOwner: SavedStateRegistryOwner,
+        stateStoreContext: CoroutineContext,
         logger: Logger = androidLogger()
     ): VM {
-        return try {
-            vmClass.factoryCompanion().let { factoryClass ->
-                try {
-                    // Invoke companion factory method
-                    factoryClass
-                        .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
-                        .invoke(factoryClass.instance(), initialState, owner, handle) as VM
-                } catch (ex: NoSuchMethodException) {
-                    factoryClass
-                        .getMethod("create", stateClass, ViewModelOwner::class.java, SavedStateHandle::class.java)
-                        .invoke(null, initialState, owner, handle) as VM
-                }
-            }
+        val viewModelFactory = try {
+            FactoryStrategyVMFactoryCreator.create(
+                vmClass,
+                stateClass,
+                owner,
+                savedStateRegistryOwner,
+                stateStoreContext,
+                logger
+            )
         } catch (ex: DoesNotImplementVectorVMFactoryException) {
-            val constructor = vmClass.kotlin.constructors.first() // Using Kotlin constructor here to access parameters size
-            when (constructor.parameters.size) {
-                1 -> vmClass.instance(initialState) as VM
-                2 -> constructor.call(initialState, handle) as VM
-                3 -> constructor.call(initialState, stateStoreContext, logger) as VM
-                4 -> constructor.call(initialState, stateStoreContext, logger, handle) as VM
-                else -> throw UnInstantiableViewModelException(vmClass.simpleName)
-            }
+            ConstructorStrategyVMFactoryCreator.create(
+                vmClass,
+                stateClass,
+                owner,
+                savedStateRegistryOwner,
+                stateStoreContext,
+                logger
+            )
+        } catch (ex: NoSuitableViewModelConstructorException) {
+            throw UnInstantiableViewModelException()
         }
+
+        return when (owner) {
+            is ActivityViewModelOwner -> ViewModelProvider(owner.activity, viewModelFactory)
+            is FragmentViewModelOwner -> ViewModelProvider(owner.fragment, viewModelFactory)
+        }.get(vmClass.java)
     }
 }
 
-internal class UnInstantiableViewModelException(className: String) :
-    IllegalArgumentException("$className can not be instantiated with a proper companion factory method")
+internal class UnInstantiableViewModelException :
+    IllegalArgumentException(
+        """Your VectorViewModel should have one of the following constructors:
+        |1. ViewModel(initialState)
+        |2. ViewModel(initialState, savedStateHandle)
+        |3. ViewModel(initialState, stateStoreContext, logger)
+        |4. ViewModel(initialState, stateStoreContext, logger, savedStateHandle)
+        |
+        |Or it should implement a VectorViewModelFactory in its companion object.
+    """.trimMargin()
+    )
 
 internal class DoesNotImplementVectorVMFactoryException :
-    Exception("This class's companion object does not implement a VectorViewModel Factory")
+    Exception("This class's companion object does not implement a VectorViewModelFactory")
+
+internal class NoSuitableViewModelConstructorException : Exception()

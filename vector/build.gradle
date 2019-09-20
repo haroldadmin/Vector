@@ -31,6 +31,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -49,8 +57,8 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
     testImplementation libs.mockk
+    testImplementation libs.robolectric
 
     androidTestImplementation libs.androidxTestCore
-    androidTestImplementation libs.androidxTestExt
     androidTestImplementation libs.espressoCore
 }

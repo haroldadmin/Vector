@@ -23,16 +23,20 @@ internal class TestViewModelWithFactory(
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = systemOutLogger()
 ) : VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
+
     companion object : VectorViewModelFactory<TestViewModelWithFactory, TestStates> {
+
+        val initialStateForTesting = TestStates.TestState(0)
+
         override fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): TestStates? {
-            return TestStates.TestState(count = 0)
+            return initialStateForTesting
         }
 
         override fun create(
             initialState: TestStates,
             owner: ViewModelOwner,
             handle: SavedStateHandle
-        ): TestViewModelWithFactory? {
+        ): TestViewModelWithFactory {
             return TestViewModelWithFactory(initialState)
         }
     }
@@ -49,6 +53,14 @@ internal class TestViewModelWithFactoryAndDefaults(
             owner: ViewModelOwner
         ): TestStates.TestStateWithDefaults? {
             return TestStates.TestStateWithDefaults(count = 0)
+        }
+
+        override fun create(
+            initialState: TestStates.TestStateWithDefaults,
+            owner: ViewModelOwner,
+            handle: SavedStateHandle
+        ): TestViewModelWithFactoryAndDefaults {
+            return TestViewModelWithFactoryAndDefaults(initialState)
         }
     }
 }
@@ -69,7 +81,7 @@ internal class TestSavedStateViewModelWithFactory(
             initialState: CountingState,
             owner: ViewModelOwner,
             handle: SavedStateHandle
-        ): TestSavedStateViewModelWithFactory? {
+        ): TestSavedStateViewModelWithFactory {
             return TestSavedStateViewModelWithFactory(initialState, handle)
         }
     }

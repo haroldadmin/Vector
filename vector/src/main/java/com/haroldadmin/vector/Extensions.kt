@@ -1,7 +1,7 @@
 package com.haroldadmin.vector
 
-import androidx.annotation.RestrictTo
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlin.reflect.KClass
 
 /**
  * A convenience function to access current state and execute an action on it.
@@ -55,10 +55,9 @@ internal inline fun <T> ConflatedBroadcastChannel<T>.compute(crossinline newValu
  * Tries to find the companion object of a class that implements [VectorViewModelFactory] and
  * returns it. If no such companion object is found, it throws [DoesNotImplementVectorVMFactoryException]
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.factoryCompanion(): Class<*> {
     return companionObject()?.let { clazz ->
-        if (VectorViewModelFactory::class.java.isAssignableFrom(clazz)) {
+        if (clazz doesImplement VectorViewModelFactory::class.java) {
             clazz
         } else {
             null
@@ -67,10 +66,16 @@ internal fun Class<*>.factoryCompanion(): Class<*> {
 }
 
 /**
+ * Overloaded version of java class factoryCompanion method
+ */
+internal fun KClass<*>.factoryCompanion(): Class<*> {
+    return this.java.factoryCompanion()
+}
+
+/**
  * Tries to find the companion object of the given class, and returns it. If the class does not
  * have a companion object, returns null
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.companionObject(): Class<*>? {
     return try {
         Class.forName("$name\$Companion")
@@ -83,7 +88,13 @@ internal fun Class<*>.companionObject(): Class<*>? {
  * Creates a new instance of the given class using the constructor having one parameter only.
  * If no such constructor exists, returns null.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 internal fun Class<*>.instance(initArg: Any? = null): Any? {
     return declaredConstructors.firstOrNull { it.parameterTypes.size == 1 }?.newInstance(initArg)
+}
+
+/**
+ * Syntactic sugar for [Class.isAssignableFrom] method
+ */
+internal infix fun Class<*>.doesImplement(other: Class<*>): Boolean {
+    return other.isAssignableFrom(this)
 }

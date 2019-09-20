@@ -1,39 +1,43 @@
 package com.haroldadmin.vector
 
-import androidx.annotation.RestrictTo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelStoreOwner
+import kotlin.reflect.KClass
 
 /**
  * Creates an initial state for a ViewModel using either the [VectorViewModelFactory] or using
  * the default constructor
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-interface VectorStateFactory {
+internal interface VectorStateFactory {
 
     fun <S : VectorState> createInitialState(
-        vmClass: Class<*>,
-        stateClass: Class<*>,
+        vmClass: KClass<*>,
+        stateClass: KClass<out S>,
         handle: SavedStateHandle,
         owner: ViewModelOwner
     ): S
 }
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-class RealStateFactory : VectorStateFactory {
+internal class RealStateFactory : VectorStateFactory {
+
     override fun <S : VectorState> createInitialState(
-        vmClass: Class<*>,
-        stateClass: Class<*>,
+        vmClass: KClass<*>,
+        stateClass: KClass<out S>,
         handle: SavedStateHandle,
         owner: ViewModelOwner
     ): S {
-        return getStateFromVectorVMFactory<S>(vmClass, handle, owner)
-            ?: getDefaultStateFromConstructor(stateClass)
-            ?: throw UnInstantiableStateClassException(stateClass.simpleName)
+        return getStateFromVectorVMFactory(vmClass, handle, owner)
+            ?: getDefaultStateFromConstructor(stateClass) //
+            ?: throw UnInstantiableStateClassException(stateClass.java.simpleName)
     }
 
+    /**
+     * Checks if the ViewModel implements a [VectorViewModelFactory] in its companion object, and if so, uses it
+     * to create the initial state if the factory implements the corresponding function. If any of these conditions are not met,
+     * returns null
+     */
     private fun <S : VectorState> getStateFromVectorVMFactory(
-        vmClass: Class<*>,
+        vmClass: KClass<*>,
         handle: SavedStateHandle,
         owner: ViewModelOwner
     ): S? {
@@ -58,11 +62,15 @@ class RealStateFactory : VectorStateFactory {
         }
     }
 
-    private fun <S : VectorState> getDefaultStateFromConstructor(stateClass: Class<*>): S? {
+    /**
+     * Creates the initial state using the default constructor of the state class.
+     */
+    private fun <S : VectorState> getDefaultStateFromConstructor(stateClass: KClass<out S>): S? {
         return stateClass.let {
             try {
+                // Use Java reflection version for new instance creation as it is faster
                 @Suppress("UNCHECKED_CAST")
-                stateClass.newInstance() as S?
+                stateClass.java.newInstance()
             } catch (e: NoSuchMethodException) {
                 null
             } catch (e: InstantiationException) {

@@ -1,20 +1,26 @@
 package com.haroldadmin.vector
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
+import com.haroldadmin.vector.loggers.Logger
+import com.haroldadmin.vector.loggers.androidLogger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.fragmentViewModel(
-    defaultArgs: Bundle? = null
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+    logger: Logger = androidLogger()
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            VM::class.java,
-            S::class.java,
+            VM::class,
+            S::class,
             this,
             fragmentViewModelOwner(),
-            defaultArgs
+            stateStoreContext,
+            logger
         )
     }
 }
@@ -24,23 +30,27 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.f
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            VM::class.java,
-            S::class.java,
-            this,
-            fragmentViewModelOwner(),
-            viewModelCreator
+            vmClass = VM::class,
+            stateClass = S::class,
+            viewModelOwner = fragmentViewModelOwner(),
+            savedStateRegistryOwner = this,
+            viewModelProducer = viewModelCreator
         )
     }
 }
 
-inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.activityViewModel(): vectorLazy<VM> {
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.activityViewModel(
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+    logger: Logger = androidLogger()
+): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            vmClass = VM::class.java,
-            stateClass = S::class.java,
+            vmClass = VM::class,
+            stateClass = S::class,
             savedStateRegistryOwner = this,
             viewModelOwner = activityViewModelOwner(),
-            defaultArgs = null
+            stateStoreContext = stateStoreContext,
+            logger = logger
         )
     }
 }
@@ -50,8 +60,8 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            vmClass = VM::class.java,
-            stateClass = S::class.java,
+            vmClass = VM::class,
+            stateClass = S::class,
             savedStateRegistryOwner = this,
             viewModelOwner = activityViewModelOwner(),
             viewModelProducer = producer
@@ -59,25 +69,29 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
     }
 }
 
-inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> AppCompatActivity.viewModel(): vectorLazy<VM> {
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentActivity.viewModel(
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
+    logger: Logger = androidLogger()
+): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            vmClass = VM::class.java,
-            stateClass = S::class.java,
+            vmClass = VM::class,
+            stateClass = S::class,
             savedStateRegistryOwner = this,
             viewModelOwner = activityViewModelOwner(),
-            defaultArgs = null
+            stateStoreContext = stateStoreContext,
+            logger = logger
         )
     }
 }
 
-inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> AppCompatActivity.viewModel(
+inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentActivity.viewModel(
     noinline producer: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
-            vmClass = VM::class.java,
-            stateClass = S::class.java,
+            vmClass = VM::class,
+            stateClass = S::class,
             savedStateRegistryOwner = this,
             viewModelOwner = activityViewModelOwner(),
             viewModelProducer = producer

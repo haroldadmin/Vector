@@ -2,7 +2,7 @@ package com.haroldadmin.vector
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentActivity
 sealed class ViewModelOwner
 
 class ActivityViewModelOwner(
-    val activity: FragmentActivity
+    val activity: ComponentActivity
 ) : ViewModelOwner() {
 
     @Suppress("UNCHECKED_CAST")
@@ -54,6 +54,6 @@ fun Fragment.activityViewModelOwner(): ActivityViewModelOwner {
     return ActivityViewModelOwner(requireActivity())
 }
 
-fun AppCompatActivity.activityViewModelOwner(): ActivityViewModelOwner {
+fun ComponentActivity.activityViewModelOwner(): ActivityViewModelOwner {
     return ActivityViewModelOwner(this)
 }
