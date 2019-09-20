@@ -1,7 +1,7 @@
 package com.haroldadmin.vector.benchmark.regularStateStore
 
-import androidx.benchmark.BenchmarkRule
-import androidx.benchmark.measureRepeated
+import androidx.benchmark.junit4.BenchmarkRule
+import androidx.benchmark.junit4.measureRepeated
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.runBlocking

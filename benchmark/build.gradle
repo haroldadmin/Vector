@@ -9,7 +9,7 @@ android {
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.versionCode
         versionName buildConfig.versionName
-        testInstrumentationRunner 'androidx.benchmark.AndroidBenchmarkRunner'
+        testInstrumentationRunner 'androidx.benchmark.junit4.AndroidBenchmarkRunner'
     }
 
     buildTypes {
@@ -33,10 +33,11 @@ dependencies {
     implementation project(path: ':vector')
 
     implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
     androidTestImplementation libs.androidxTestRunner
     androidTestImplementation libs.androidxTestExt
     androidTestImplementation libs.junit
-    androidTestImplementation 'androidx.benchmark:benchmark:1.0.0-alpha01'
+    androidTestImplementation "androidx.benchmark:benchmark-junit4:1.0.0-alpha06"
 }
