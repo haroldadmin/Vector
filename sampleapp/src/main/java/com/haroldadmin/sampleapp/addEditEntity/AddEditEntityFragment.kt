@@ -35,7 +35,6 @@ class AddEditEntityFragment : VectorFragment() {
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
-//        inject()
         super.onAttach(context)
     }
 

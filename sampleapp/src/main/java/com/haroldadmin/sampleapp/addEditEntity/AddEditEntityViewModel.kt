@@ -1,5 +1,6 @@
 package com.haroldadmin.sampleapp.addEditEntity
 
+import android.os.Bundle
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.haroldadmin.sampleapp.CountingEntity
@@ -14,25 +15,13 @@ import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
 
 class AddEditEntityViewModel @AssistedInject constructor(
-    @Assisted initState: AddEditEntityState? = null,
+    @Assisted initState: AddEditEntityState,
     @Assisted handle: SavedStateHandle,
     private val entityRepository: EntitiesRepository
 ) : SavedStateVectorViewModel<AddEditEntityState>(
     initialState = initState,
     savedStateHandle = handle
 ) {
-
-    init {
-        if (initState is AddEditEntityState.EditEntity) {
-            viewModelScope.launch {
-                val entity = entityRepository.getEntity(initState.id)
-                setState {
-                    this as AddEditEntityState.EditEntity
-                    copy(name = entity.name, count = entity.counter)
-                }
-            }
-        }
-    }
 
     fun incrementCount() = viewModelScope.launch {
         withState { state ->
@@ -116,21 +105,42 @@ class AddEditEntityViewModel @AssistedInject constructor(
 
     companion object : VectorViewModelFactory<AddEditEntityViewModel, AddEditEntityState> {
 
+        override fun create(
+            initialState: AddEditEntityState,
+            owner: ViewModelOwner,
+            handle: SavedStateHandle
+        ): AddEditEntityViewModel {
+            throw IllegalStateException("This ViewModel should be created using the AssistedInject Factory only")
+        }
+
         override fun initialState(
             handle: SavedStateHandle,
             owner: ViewModelOwner
         ): AddEditEntityState? {
+
             val persistedState: AddEditEntityState? = handle[KEY_SAVED_STATE]
-            if (persistedState != null) return persistedState
 
-            owner as FragmentViewModelOwner
-            val entityId = owner.args()?.getString("entityId")
+            persistedState?.let {
+                return it
+            } ?: run {
 
-            return if (entityId == null) {
-                AddEditEntityState.AddEntity()
-            } else {
-                AddEditEntityState.EditEntity(id = entityId)
+                val args = (owner as FragmentViewModelOwner).args()
+                val (entityId, entityName, counter) = parseArgs(args!!)
+
+                return if (entityId.isBlank()) {
+                    AddEditEntityState.AddEntity()
+                } else {
+                    AddEditEntityState.EditEntity(entityId, entityName, counter)
+                }
             }
+        }
+
+        private fun parseArgs(args: Bundle): Triple<String, String, Long> {
+            val entityId = args.getString("entityId") ?: ""
+            val entityName = args.getString("entityName") ?: ""
+            val count = args.getLong("entityCount")
+
+            return Triple(entityId, entityName, count)
         }
     }
 }

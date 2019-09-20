@@ -31,5 +31,15 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="entityName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="entityCount"
+            app:argType="long"
+            app:nullable="false"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

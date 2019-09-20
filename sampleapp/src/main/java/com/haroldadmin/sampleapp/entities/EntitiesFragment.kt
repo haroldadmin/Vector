@@ -34,11 +34,11 @@ class EntitiesFragment : VectorFragment() {
     }
 
     private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback()) { entity ->
-        findNavController().navigate(EntitiesFragmentDirections.editEntity(entity.id))
+        findNavController()
+            .navigate(EntitiesFragmentDirections.editEntity(entity.id, entity.name, entity.counter))
     }
 
     override fun onAttach(context: Context) {
-//        inject()
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
