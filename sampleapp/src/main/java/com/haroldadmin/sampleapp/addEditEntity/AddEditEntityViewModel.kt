@@ -105,14 +105,6 @@ class AddEditEntityViewModel @AssistedInject constructor(
 
     companion object : VectorViewModelFactory<AddEditEntityViewModel, AddEditEntityState> {
 
-        override fun create(
-            initialState: AddEditEntityState,
-            owner: ViewModelOwner,
-            handle: SavedStateHandle
-        ): AddEditEntityViewModel {
-            throw IllegalStateException("This ViewModel should be created using the AssistedInject Factory only")
-        }
-
         override fun initialState(
             handle: SavedStateHandle,
             owner: ViewModelOwner
