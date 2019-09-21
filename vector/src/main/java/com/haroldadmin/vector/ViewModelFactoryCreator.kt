@@ -61,6 +61,7 @@ internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
 
             @Suppress("UNCHECKED_CAST")
             when (parametersSize) {
+                0 -> vmClass.java.newInstance()
                 1 -> vmClass.java.instance(initialState) as VM
                 2 -> constructor.call(initialState, handle)
                 3 -> constructor.call(initialState, stateStoreContext, logger)

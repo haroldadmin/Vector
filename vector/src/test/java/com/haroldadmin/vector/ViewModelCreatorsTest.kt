@@ -113,52 +113,52 @@ internal class ViewModelCreatorsTest {
             )
         }
     }
-}
 
-internal data class CreationTestState(val count: Int = 0) : VectorState
+    private data class CreationTestState(val count: Int = 0) : VectorState
 
-internal class OneParamViewModel(
-    initialState: CreationTestState
-) : VectorViewModel<CreationTestState>(initialState)
+    private class OneParamViewModel(
+        initialState: CreationTestState
+    ) : VectorViewModel<CreationTestState>(initialState)
 
-internal class TwoParamViewModel(
-    initialState: CreationTestState,
-    savedStateHandle: SavedStateHandle
-) : SavedStateVectorViewModel<CreationTestState>(initialState = initialState, savedStateHandle = savedStateHandle)
+    private class TwoParamViewModel(
+        initialState: CreationTestState,
+        savedStateHandle: SavedStateHandle
+    ) : SavedStateVectorViewModel<CreationTestState>(initialState = initialState, savedStateHandle = savedStateHandle)
 
-internal class ThreeParamViewModel(
-    initialState: CreationTestState,
-    stateStoreContext: CoroutineContext,
-    logger: Logger
-) : VectorViewModel<CreationTestState>(initialState, stateStoreContext, logger)
+    private class ThreeParamViewModel(
+        initialState: CreationTestState,
+        stateStoreContext: CoroutineContext,
+        logger: Logger
+    ) : VectorViewModel<CreationTestState>(initialState, stateStoreContext, logger)
 
-internal class FourParamViewModel(
-    initialState: CreationTestState,
-    stateStoreContext: CoroutineContext,
-    logger: Logger,
-    savedStateHandle: SavedStateHandle
-) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
+    private class FourParamViewModel(
+        initialState: CreationTestState,
+        stateStoreContext: CoroutineContext,
+        logger: Logger,
+        savedStateHandle: SavedStateHandle
+    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
 
-internal class FiveParamViewModel(
-    initialState: CreationTestState,
-    stateStoreContext: CoroutineContext,
-    logger: Logger,
-    savedStateHandle: SavedStateHandle,
-    ignore: Unit = Unit
-) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
+    private class FiveParamViewModel(
+        initialState: CreationTestState,
+        stateStoreContext: CoroutineContext,
+        logger: Logger,
+        savedStateHandle: SavedStateHandle,
+        ignore: Unit = Unit
+    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
 
-internal class ViewModelWithFactory(
-    initialState: CreationTestState
-) : VectorViewModel<CreationTestState>(initialState) {
-    companion object : VectorViewModelFactory<ViewModelWithFactory, CreationTestState> {
-        override fun create(
-            initialState: CreationTestState,
-            owner: ViewModelOwner,
-            handle: SavedStateHandle
-        ): ViewModelWithFactory {
-            return ViewModelWithFactory(initialState)
+    private class ViewModelWithFactory(
+        initialState: CreationTestState
+    ) : VectorViewModel<CreationTestState>(initialState) {
+        companion object : VectorViewModelFactory<ViewModelWithFactory, CreationTestState> {
+            override fun create(
+                initialState: CreationTestState,
+                owner: ViewModelOwner,
+                handle: SavedStateHandle
+            ): ViewModelWithFactory {
+                return ViewModelWithFactory(initialState)
+            }
         }
     }
-}
 
-internal class CreationTestActivity : FragmentActivity()
+    private class CreationTestActivity : FragmentActivity()
+}
