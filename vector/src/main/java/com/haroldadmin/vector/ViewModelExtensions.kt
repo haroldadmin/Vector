@@ -47,7 +47,7 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
         VectorViewModelProvider.get(
             vmClass = VM::class,
             stateClass = S::class,
-            savedStateRegistryOwner = this,
+            savedStateRegistryOwner = requireActivity(),
             viewModelOwner = activityViewModelOwner(),
             stateStoreContext = stateStoreContext,
             logger = logger
@@ -62,7 +62,7 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
         VectorViewModelProvider.get(
             vmClass = VM::class,
             stateClass = S::class,
-            savedStateRegistryOwner = this,
+            savedStateRegistryOwner = requireActivity(),
             viewModelOwner = activityViewModelOwner(),
             viewModelProducer = producer
         )
