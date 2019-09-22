@@ -87,16 +87,16 @@ internal object FactoryStrategyVMFactoryCreator : ViewModelFactoryCreator {
         logger: Logger
     ): ViewModelProvider.Factory {
 
-        val companionFactoryClass = vmClass.java.factoryCompanion()
+        val companionFactoryClass = vmClass.factoryKompanion()
 
-        if (companionFactoryClass doesImplement VectorViewModelFactory::class.java) {
+        if (companionFactoryClass doesImplement VectorViewModelFactory::class && companionFactoryClass doesOverride "create") {
 
             @Suppress("UNCHECKED_CAST")
             return VectorSavedStateViewModelFactory(savedStateRegistryOwner, null) { _, handle ->
-                val creationMethod = companionFactoryClass.getMethod("create", stateClass.java, ViewModelOwner::class.java, SavedStateHandle::class.java)
+                val creationMethod = companionFactoryClass.java.getMethod("create", stateClass.java, ViewModelOwner::class.java, SavedStateHandle::class.java)
                 val stateFactory: VectorStateFactory = RealStateFactory()
                 val initialState = stateFactory.createInitialState(vmClass, stateClass, handle, viewModelOwner)
-                creationMethod.invoke(companionFactoryClass.instance(), initialState, viewModelOwner, handle) as? VM
+                creationMethod.invoke(companionFactoryClass.java.instance(), initialState, viewModelOwner, handle) as? VM
             }
         } else {
             throw DoesNotImplementVectorVMFactoryException()

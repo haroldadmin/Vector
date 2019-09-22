@@ -112,6 +112,6 @@ internal class UnInstantiableViewModelException :
     )
 
 internal class DoesNotImplementVectorVMFactoryException :
-    Exception("This class's companion object does not implement a VectorViewModelFactory")
+    Exception("This class's companion object does not implement a VectorViewModelFactory, or it does not override the create method")
 
 internal class NoSuitableViewModelConstructorException : Exception()

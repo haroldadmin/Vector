@@ -100,6 +100,20 @@ internal class VectorViewModelProviderTest {
         val viewModel = activity.viewModel<VMWithProducer, CountingState> { initialState, handle -> VMWithProducer.produce(initialState, handle) }.value
         withState(viewModel) { state -> assert(state == CountingState()) }
     }
+
+    @Test
+    fun `ViewModel with companion factory without create method creation`() {
+        val vm = VectorViewModelProvider.get(
+            VMWithFactoryWithoutCreateMethod::class,
+            CountingState::class,
+            activity,
+            activity.activityViewModelOwner(),
+            stateStoreContext,
+            systemOutLogger()
+        )
+
+        withState(vm) { state -> assert(state.count == 42) }
+    }
 }
 
 private class ProviderTestActivity : FragmentActivity()
@@ -137,4 +151,8 @@ private class VMWithProducer(
             return VMWithProducer(initialState, handle)
         }
     }
+}
+
+private class VMWithFactoryWithoutCreateMethod : VectorViewModel<CountingState>(CountingState(42)) {
+    companion object: VectorViewModelFactory<VMWithFactoryWithoutCreateMethod, CountingState>
 }
