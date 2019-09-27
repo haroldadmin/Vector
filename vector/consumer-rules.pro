@@ -1,4 +1,6 @@
-# Credits to MvRx's proguard rules for helping me create this file
+# Kotlin reflection sometimes throws errors when Metadata is absent
+-dontwarn org.jetbrains.annotations.**
+-keep class kotlin.Metadata { *; }
 
 # Keep the Companion object of classes extending VectorViewModel
 -keepclassmembers class ** extends com.haroldadmin.vector.VectorViewModel {
@@ -7,8 +9,8 @@
 
 # Classes extending VectorViewModel are recreated using reflection, which assumes that a one argument
 # constructor accepting a data class holding the state exists. Need to make sure to keep the constructor
-# around. Additionally, a static create / inital state method will be generated in the case a
-# companion object factory is used with JvmStatic. This is accessed via reflection.
+# around. `create` and `initialState` methods are here in case the companion object is marked with
+# @JvmStatic
 -keepclassmembers class ** extends com.haroldadmin.vector.VectorViewModel {
     public <init>(...);
     public static *** create(...);

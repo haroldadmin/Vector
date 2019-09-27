@@ -49,6 +49,7 @@ internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
     ): ViewModelProvider.Factory {
 
         val stateFactory: VectorStateFactory = RealStateFactory()
+        // Using constructors.first() instead of primaryConstructor because it doesn't play well with ProGuard/R8
         val constructor = vmClass.constructors.first()
         val parametersSize = constructor.parameters.size
 

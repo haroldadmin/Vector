@@ -92,3 +92,7 @@ app/release
 .settings
 .project
 .classpath
+
+*.py
+*.keystore
+*.apks
