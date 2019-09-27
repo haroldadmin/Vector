@@ -49,10 +49,10 @@ internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
     ): ViewModelProvider.Factory {
 
         val stateFactory: VectorStateFactory = RealStateFactory()
-        val constructor = vmClass.primaryConstructor
-        val parametersSize = constructor?.parameters?.size ?: Int.MAX_VALUE
+        val constructor = vmClass.constructors.first()
+        val parametersSize = constructor.parameters.size
 
-        if (constructor == null || parametersSize > 4) {
+        if (parametersSize > 4) {
             throw NoSuitableViewModelConstructorException()
         }
 

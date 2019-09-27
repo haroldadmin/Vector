@@ -31,6 +31,20 @@ internal class ViewModelCreatorsTest {
     }
 
     @Test
+    fun `ViewModel with zero params creation using constructor`() {
+        with(activity) {
+            constructorCreator.create(
+                ZeroParamViewModel::class,
+                CreationTestState::class,
+                activityViewModelOwner(),
+                this,
+                testScope.coroutineContext,
+                systemOutLogger()
+            )
+        }
+    }
+
+    @Test
     fun `ViewModel with only initial state param creation using constructor`() {
         with(activity) {
             constructorCreator.create(
@@ -115,6 +129,8 @@ internal class ViewModelCreatorsTest {
     }
 
     private data class CreationTestState(val count: Int = 0) : VectorState
+
+    private class ZeroParamViewModel: VectorViewModel<CreationTestState>(CreationTestState())
 
     private class OneParamViewModel(
         initialState: CreationTestState
