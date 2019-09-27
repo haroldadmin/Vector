@@ -94,5 +94,4 @@ app/release
 .classpath
 
 *.py
-*.keystore
 *.apks
