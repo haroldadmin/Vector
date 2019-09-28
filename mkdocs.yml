@@ -1,0 +1,48 @@
+site_name: My Docs
+
+site_name: 'Vector'
+site_description: 'Kotlin Coroutines based MVI Architecture Library'
+site_author: 'Kshitij Chauhan'
+site_url: 'https://haroldadmin.github.io/vector/'
+remote_branch: gh-pages
+
+repo_name: 'Vector'
+repo_url: 'https://github.com/haroldadmin/Vector'
+
+nav:
+  - 'Overview': 'index.md'
+  - 'Introduction': 'introduction.md'
+  - 'Usage':
+    - 'Vector State': 'vector-state.md'
+    - 'Vector Fragment': 'vector-fragment.md'
+    - 'Vector ViewModel': 'vector-viewmodel.md'
+    - 'SavedState VectorViewModel': 'saved-state-vectorviewmodel.md'
+    - 'Logging': 'logging.md'
+  - 'Advanced':
+      - 'Automatic ViewModel Creation': 'automatic-viewmodel-creation.md'
+      - 'Coroutine Context for State Store': 'state-store-context.md'
+
+theme:
+  name: 'material'
+  palette:
+    primary: 'teal'
+    accent: 'blue'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/haroldadmin'
+    - type: 'twitter'
+      link: 'https://twitter.com/haroldadmin'
+    - type: 'reddit'
+      link: 'https://reddut.com/u/theharolddev'
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true

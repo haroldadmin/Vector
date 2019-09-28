@@ -95,3 +95,4 @@ app/release
 
 *.py
 *.apks
+site/
