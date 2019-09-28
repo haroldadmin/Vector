@@ -10,22 +10,15 @@ An example of how the `renderState` function should look like:
 
 ```kotlin
 class UsersListFragment: VectorFragment() {
-    
-    private val viewModel by viewModels<UsersViewModel>
 
-    onActivityCreated(savedInstanceState: Bundle?) {
-        fragmentScope.launch {
-            viewModel.state.collect { state -> 
-                renderState(state, this@UsersListFragment::renderer)
-            }
+    private val viewModel: UserViewModel by viewModel()
+
+    override fun onCreate(...) {
+        renderState(viewModel) { state ->
+            // Update your views here
         }
-    }
-
-    private fun renderer(state: UsersListState) {        
-        usersListAdapter.submitList(state.usersList)
     }
 }
 ```
 
-Vector is not opinionated about what should be used as Views in an app, so please feel free to use whatever you like.
-However, the `VectorViewModel` class exposes the current state observable as a `Kotlin Flow` object, so it helps if your View object is a `CoroutineScope`.
+Vector is not opinionated about what should be used as Views in an app, so please feel free to use whatever you like. However, the `VectorViewModel` class exposes the current state observable as a `Kotlin Flow` object, so it helps if your View object is a `CoroutineScope`.
