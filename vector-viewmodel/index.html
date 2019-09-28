@@ -1,0 +1,882 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Kotlin Coroutines based MVI Architecture Library">
+      
+      
+        <link rel="canonical" href="https://haroldadmin.github.io/vector/vector-viewmodel/">
+      
+      
+        <meta name="author" content="Kshitij Chauhan">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Vector ViewModel - Vector</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="blue">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#vector-viewmodel" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://haroldadmin.github.io/vector/" title="Vector" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Vector
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Vector ViewModel
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/haroldadmin/Vector/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Vector
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://haroldadmin.github.io/vector/" title="Vector" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Vector
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/haroldadmin/Vector/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Vector
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../introduction/" title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Usage
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Usage
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector-state/" title="Vector State" class="md-nav__link">
+      Vector State
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector-fragment/" title="Vector Fragment" class="md-nav__link">
+      Vector Fragment
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Vector ViewModel
+      </label>
+    
+    <a href="./" title="Vector ViewModel" class="md-nav__link md-nav__link--active">
+      Vector ViewModel
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-viewmodel" class="md-nav__link">
+    Creating a ViewModel
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewmodels-with-additional-dependencies" class="md-nav__link">
+    ViewModels with additional dependencies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-for-assistedinject-factories" class="md-nav__link">
+    Support for AssistedInject factories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-state" class="md-nav__link">
+    Managing State
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mutating-state" class="md-nav__link">
+    Mutating State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-state" class="md-nav__link">
+    Accessing State
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observing-state-changes" class="md-nav__link">
+    Observing state changes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-persistence" class="md-nav__link">
+    State Persistence
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
+      SavedState VectorViewModel
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../logging/" title="Logging" class="md-nav__link">
+      Logging
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Advanced
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Advanced
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
+      Automatic ViewModel Creation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
+      Coroutine Context for State Store
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-viewmodel" class="md-nav__link">
+    Creating a ViewModel
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewmodels-with-additional-dependencies" class="md-nav__link">
+    ViewModels with additional dependencies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-for-assistedinject-factories" class="md-nav__link">
+    Support for AssistedInject factories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-state" class="md-nav__link">
+    Managing State
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mutating-state" class="md-nav__link">
+    Mutating State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-state" class="md-nav__link">
+    Accessing State
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observing-state-changes" class="md-nav__link">
+    Observing state changes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-persistence" class="md-nav__link">
+    State Persistence
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/haroldadmin/Vector/edit/master/docs/vector-viewmodel.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="vector-viewmodel">Vector ViewModel<a class="headerlink" href="#vector-viewmodel" title="Permanent link">&para;</a></h1>
+<p>The <code>VectorViewModel</code> class is the place where the UI state is stored. It is also the only place which can perform changes to the UI state. You must extend this class in your own ViewModels. It is generic on a state class implementing the <code>VectorState</code> interface.</p>
+<div class="codehilite"><pre><span></span><span class="k">data</span> <span class="k">class</span> <span class="nc">UserState</span><span class="p">(...):</span> <span class="n">VectorState</span>
+
+<span class="k">class</span> <span class="nc">UserViewModel</span><span class="p">(</span>
+    <span class="n">initialState</span><span class="p">:</span> <span class="n">UsersState</span>
+<span class="p">):</span> <span class="n">VectorViewModel</span><span class="p">&lt;</span><span class="n">UsersState</span><span class="p">&gt;(</span><span class="n">initialState</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+</pre></div>
+
+
+<h2 id="creating-a-viewmodel">Creating a ViewModel<a class="headerlink" href="#creating-a-viewmodel" title="Permanent link">&para;</a></h2>
+<p>A <code>ViewModel</code> is scoped to the Lifecycle of its owning Fragment or Activity. An Activity can access Activity-scoped ViewModels, whereas Fragments can create both Fragment-scoped and Activity-scoped ViewModels.</p>
+<p>The library ships with a few <a href="https://kotlinlang.org/docs/reference/delegated-properties.html">Kotlin property delegates</a> which make it easy to create a <code>VectorViewModel</code> for whichever scope you need.</p>
+<ul>
+<li>From a Fragment:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span><span class="p">()</span> <span class="c1">// Scoped to this fragment</span>
+<span class="c1">// OR</span>
+<span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">activityViewModel</span><span class="p">()</span> <span class="c1">// Scoped to the parent activity</span>
+</pre></div>
+
+
+<ul>
+<li>From an Activity:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">viewModel</span><span class="p">()</span> <span class="c1">// Scoped to this activity</span>
+</pre></div>
+
+
+<p>These delegates automatically create the ViewModel for you, as long as they do not have any external dependencies.</p>
+<h3 id="viewmodels-with-additional-dependencies">ViewModels with additional dependencies<a class="headerlink" href="#viewmodels-with-additional-dependencies" title="Permanent link">&para;</a></h3>
+<p>If your ViewModel has external dependencies, then you should use an alternative version of these delegates which accepts a trailing lambda that should contain the code to create your ViewModel.</p>
+<div class="codehilite"><pre><span></span><span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span> <span class="p">{</span> <span class="n">initialState</span><span class="p">,</span> <span class="n">savedStateHandle</span> <span class="p">-&gt;</span>
+    <span class="n">UserViewModel</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">UserRepository</span><span class="p">())</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Alternatively, you can choose to implement the <code>VectorViewModelFactory</code> interface in your ViewModel's companion object to provide your own implementation for its <code>create</code> and <code>initialState</code> methods.</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">UserViewModel</span><span class="p">(</span><span class="n">initialState</span><span class="p">:</span> <span class="n">UserState</span><span class="p">,</span> <span class="k">val</span> <span class="py">repository</span><span class="p">:</span> <span class="n">UserRepository</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="k">companion</span> <span class="k">object</span><span class="p">:</span> <span class="n">VectorViewModelFactory</span><span class="p">&lt;</span><span class="n">UserViewModel</span><span class="p">,</span> <span class="n">UserState</span><span class="p">&gt;</span> <span class="p">{</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">initialState</span><span class="p">(</span><span class="n">handle</span><span class="p">:</span> <span class="n">SavedStateHandle</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="n">ViewModelOwner</span><span class="p">):</span> <span class="n">UserState</span><span class="p">?</span> <span class="p">{</span>
+            <span class="c1">// Create state object directly or restore it using `SavedStateHandle`</span>
+        <span class="p">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">create</span><span class="p">(</span><span class="n">initialState</span><span class="p">:</span> <span class="n">UserState</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="n">ViewModelOwner</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="n">SavedStateHandle</span><span class="p">):</span> <span class="n">UserViewModel</span><span class="p">?</span> <span class="p">{</span> 
+            <span class="c1">// Create and return your ViewModel</span>
+            <span class="c1">// the `owner` parameter can be used to access your DI graph</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3 id="support-for-assistedinject-factories">Support for AssistedInject factories<a class="headerlink" href="#support-for-assistedinject-factories" title="Permanent link">&para;</a></h3>
+<p>If you use <a href="https://github.com/google/dagger">Dagger</a> and <a href="https://github.com/square/AssistedInject">AssistedInject</a> in your project, then you can create ViewModels in this way:</p>
+<div class="codehilite"><pre><span></span><span class="n">@Inject</span> <span class="k">val</span> <span class="py">usersViewModelFactory</span><span class="p">:</span> <span class="n">UsersViewModel</span><span class="p">.</span><span class="n">Factory</span> <span class="c1">// The AssistedInject factory</span>
+
+<span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span> <span class="p">{</span> <span class="n">initialState</span><span class="p">,</span> <span class="n">savedStateHandle</span> <span class="p">-&gt;</span>
+    <span class="n">userViewModelFactory</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="p">...)</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2 id="managing-state">Managing State<a class="headerlink" href="#managing-state" title="Permanent link">&para;</a></h2>
+<h3 id="mutating-state">Mutating State<a class="headerlink" href="#mutating-state" title="Permanent link">&para;</a></h3>
+<p>State mutation is done through the <code>setState</code> function, which accepts regular lambdas as well as <strong>suspending lambdas</strong>. The supplied lambda is given the current state as <a href="https://kotlinlang.org/docs/reference/lambdas.html#function-literals-with-receiver">the receiver</a>, and it is responsible for creating a new state and returning it.</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">UserViewModel</span><span class="p">(...):</span> <span class="n">VectorViewModel</span><span class="p">&lt;</span><span class="n">UserState</span><span class="p">&gt;(...)</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">greetUser</span><span class="p">()</span> <span class="p">=</span> <span class="n">setState</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">currentState</span> <span class="p">=</span> <span class="k">this</span> <span class="c1">// this = current state</span>
+        <span class="k">val</span> <span class="py">newState</span> <span class="p">=</span> <span class="n">UsersState</span><span class="p">(</span><span class="n">greeting</span> <span class="p">=</span> <span class="s">&quot;Hello!&quot;</span><span class="p">,</span> <span class="n">user</span> <span class="p">=</span> <span class="n">currentState</span><span class="p">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">newState</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>If the state class is a <a href="https://kotlinlang.org/docs/reference/data-classes.html#data-classes">Kotlin Data class</a>, then this can be expressed succintly as:</p>
+<div class="codehilite"><pre><span></span><span class="k">fun</span> <span class="nf">greetUser</span><span class="p">()</span> <span class="p">=</span> <span class="n">setState</span> <span class="p">{</span>
+    <span class="n">copy</span><span class="p">(</span><span class="n">greeting</span> <span class="p">=</span> <span class="s">&quot;Hello!&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>This works because the <code>this</code> received in the <code>setState</code> block is the current state, which has a <code>copy</code> method define for it by virtue of being a data class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>State mutations are processed asynchronously. You should not rely on the state to be updated immediately after you call the <code>setState</code> function. Every state mutation is enqueued to a <code>Channel</code> on a background thread, which processes them sequentially to avoid race conditions.</p>
+</div>
+<h3 id="accessing-state">Accessing State<a class="headerlink" href="#accessing-state" title="Permanent link">&para;</a></h3>
+<p>If you need to access the current state and perform some action based on it, you should use the <code>withState</code> function. It receives the current state as a parameter, and can then use it to perform decisions based on it.</p>
+<div class="codehilite"><pre><span></span><span class="k">fun</span> <span class="nf">greetUser</span><span class="p">()</span> <span class="p">=</span> <span class="n">withState</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">isUserPremium</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">setState</span> <span class="p">{</span> <span class="n">copy</span><span class="p">(</span><span class="n">greeting</span> <span class="p">=</span> <span class="s">&quot;Hello, premium user!&quot;</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">setState</span> <span class="p">{</span> <span class="n">copy</span><span class="p">(</span><span class="n">greeting</span> <span class="p">=</span> <span class="s">&quot;Hello!&quot;</span><span class="p">)}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><code>withState</code> blocks, just like <code>setState</code> blocks, are processed on a background thread asynchronously.
+The state parameter supplied to <code>withState</code> is guaranteed to be the latest state at the time of processing the lambda. Any nested <code>setState</code> blocks are processed immediately, before any other <code>withState</code> blocks can be processed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While there are other ways to access the state in your ViewModel, using the <code>withState</code> function is the safest way to do so. Since state updates are processed asynchronously, other methods are not guaranteed to have the latest state when you access it. The <code>withState</code> block always receives the latest state as a parameter when it is processed.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There's also a <code>currentState</code> property in a <code>VectorViewModel</code>, but it should not be used in place of a <code>withState</code> block. <code>currentState</code> only provides a convenient way for external classes to access the current state without subscribing to it.</p>
+</div>
+<h2 id="observing-state-changes">Observing state changes<a class="headerlink" href="#observing-state-changes" title="Permanent link">&para;</a></h2>
+<p>A <code>VectorViewModel</code> exposes state to fragments and activities through a <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Kotlin Flow</a>.</p>
+<p>A Flow is a cold stream of values, which is active only while there is someone subscribing to it.</p>
+<p>You can subscribe to state changes like this:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">UserActivity</span><span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">val</span> <span class="py">userViewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">viewModel</span><span class="p">()</span>
+    <span class="k">private</span> <span class="k">val</span> <span class="py">coroutineScope</span> <span class="p">=</span> <span class="n">MainScope</span><span class="p">()</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(...)</span> <span class="p">{</span>
+        <span class="n">coroutineScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
+            <span class="n">userViewModel</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span> <span class="n">updateState</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">fun</span> <span class="nf">updateState</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">UserState</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onDestroy</span><span class="p">(...)</span> <span class="p">{</span> <span class="n">coroutineScope</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<p>Here's an example of how to use the VectorViewModel:</p>
+<div class="codehilite"><pre><span></span><span class="k">data</span> <span class="k">class</span> <span class="nc">UserState</span><span class="p">(</span>
+    <span class="k">val</span> <span class="py">user</span><span class="p">:</span> <span class="n">User</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+    <span class="n">isError</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+    <span class="n">isLoading</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span>
+<span class="p">):</span> <span class="n">VectorState</span>
+
+<span class="k">class</span> <span class="nc">UserViewModel</span><span class="p">(</span>
+    <span class="n">initState</span><span class="p">:</span> <span class="n">UserState</span><span class="p">,</span>
+    <span class="k">private</span> <span class="k">val</span> <span class="py">repository</span><span class="p">:</span> <span class="n">UserRepository</span>
+<span class="p">):</span> <span class="n">VectorViewModel</span><span class="p">&lt;</span><span class="n">UsersState</span><span class="p">&gt;(</span><span class="n">initState</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">init</span> <span class="p">{</span>
+        <span class="n">viewModelScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span> <span class="n">getUserDetails</span><span class="p">()</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">suspend</span> <span class="k">fun</span> <span class="nf">getUserDetails</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">setState</span> <span class="p">{</span> <span class="n">copy</span><span class="p">(</span><span class="n">isLoading</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">}</span>
+        <span class="k">val</span> <span class="py">users</span> <span class="p">=</span> <span class="n">repository</span><span class="p">.</span><span class="n">getUser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">user</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">setState</span> <span class="p">{</span> <span class="n">copy</span><span class="p">(</span><span class="n">user</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">isError</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">isLoading</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">setState</span> <span class="p">{</span> <span class="n">copy</span><span class="p">(</span><span class="n">usersList</span> <span class="p">=</span> <span class="n">users</span><span class="p">,</span> <span class="n">isLoading</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">UserFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span> <span class="p">{</span> <span class="n">initialState</span><span class="p">,</span> <span class="n">savedStateHandle</span> <span class="p">-&gt;</span>
+        <span class="n">UserViewModel</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">savedStateHandle</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(...)</span> <span class="p">{</span>
+        <span class="n">renderState</span><span class="p">(</span><span class="n">viewModel</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>ViewModels only survive configuration changes such as screen rotations. They do NOT survive process death.</p>
+</div>
+<h2 id="state-persistence">State Persistence<a class="headerlink" href="#state-persistence" title="Permanent link">&para;</a></h2>
+<p>While ViewModels are great for storing UI state because they survive configuration changes, you still need to take care of persisting your UI state in the event of a process death.</p>
+<p>To make this process easier, the library ships with a specialized version of <code>VectorViewModel</code>, named the <a href="../saved-state-vectorviewmodel/"><code>SavedStateVectorViewModel</code></a> which leverages the <a href="https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate">ViewModel SavedState Module</a> for state persistence.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../vector-fragment/" title="Vector Fragment" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Vector Fragment
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                SavedState VectorViewModel
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/haroldadmin" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/haroldadmin" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://reddut.com/u/theharolddev" class="md-footer-social__link fa fa-reddit"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+  </body>
+</html>
