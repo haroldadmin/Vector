@@ -426,25 +426,18 @@
 <p>An example of how the <code>renderState</code> function should look like:</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">UsersListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
 
-    <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span> <span class="k">by</span> <span class="n">viewModels</span><span class="p">&lt;</span><span class="n">UsersViewModel</span><span class="p">&gt;</span>
+    <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">UserViewModel</span> <span class="k">by</span> <span class="n">viewModel</span><span class="p">()</span>
 
-    <span class="n">onActivityCreated</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
-        <span class="n">fragmentScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
-            <span class="n">viewModel</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span> 
-                <span class="n">renderState</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="k">this</span><span class="n">@UsersListFragment</span><span class="o">::</span><span class="n">renderer</span><span class="p">)</span>
-            <span class="p">}</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(...)</span> <span class="p">{</span>
+        <span class="n">renderState</span><span class="p">(</span><span class="n">viewModel</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
+            <span class="c1">// Update your views here</span>
         <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">private</span> <span class="k">fun</span> <span class="nf">renderer</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">UsersListState</span><span class="p">)</span> <span class="p">{</span>        
-        <span class="n">usersListAdapter</span><span class="p">.</span><span class="n">submitList</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">usersList</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
 
-<p>Vector is not opinionated about what should be used as Views in an app, so please feel free to use whatever you like.
-However, the <code>VectorViewModel</code> class exposes the current state observable as a <code>Kotlin Flow</code> object, so it helps if your View object is a <code>CoroutineScope</code>.</p>
+<p>Vector is not opinionated about what should be used as Views in an app, so please feel free to use whatever you like. However, the <code>VectorViewModel</code> class exposes the current state observable as a <code>Kotlin Flow</code> object, so it helps if your View object is a <code>CoroutineScope</code>.</p>
                 
                   
                 
