@@ -2,47 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://haroldadmin.github.io/vector/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/introduction/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://haroldadmin.github.io/vector/usage/</loc>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/vector-state/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/vector-fragment/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/vector-viewmodel/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/saved-state-vectorviewmodel/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/logging/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/automatic-viewmodel-creation/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/state-store-context/</loc>
-     <lastmod>2019-09-28</lastmod>
+     <lastmod>2019-09-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
