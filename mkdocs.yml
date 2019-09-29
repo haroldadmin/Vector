@@ -12,7 +12,8 @@ repo_url: 'https://github.com/haroldadmin/Vector'
 nav:
   - 'Overview': 'index.md'
   - 'Introduction': 'introduction.md'
-  - 'Usage':
+  - 'Usage': 'usage.md'
+  - 'Components':
     - 'Vector State': 'vector-state.md'
     - 'Vector Fragment': 'vector-fragment.md'
     - 'Vector ViewModel': 'vector-viewmodel.md'
