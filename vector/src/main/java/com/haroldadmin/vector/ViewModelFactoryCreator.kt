@@ -6,7 +6,6 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.haroldadmin.vector.loggers.Logger
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 /**
  * Creates and returns an instance of a [ViewModelProvider.Factory] which can instantiate a [VectorViewModel].

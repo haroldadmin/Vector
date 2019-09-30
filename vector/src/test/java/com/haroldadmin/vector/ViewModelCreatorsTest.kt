@@ -130,7 +130,7 @@ internal class ViewModelCreatorsTest {
 
     private data class CreationTestState(val count: Int = 0) : VectorState
 
-    private class ZeroParamViewModel: VectorViewModel<CreationTestState>(CreationTestState())
+    private class ZeroParamViewModel : VectorViewModel<CreationTestState>(CreationTestState())
 
     private class OneParamViewModel(
         initialState: CreationTestState

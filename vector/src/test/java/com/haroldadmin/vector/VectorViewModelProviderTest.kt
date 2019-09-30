@@ -154,5 +154,5 @@ private class VMWithProducer(
 }
 
 private class VMWithFactoryWithoutCreateMethod : VectorViewModel<CountingState>(CountingState(42)) {
-    companion object: VectorViewModelFactory<VMWithFactoryWithoutCreateMethod, CountingState>
+    companion object : VectorViewModelFactory<VMWithFactoryWithoutCreateMethod, CountingState>
 }
