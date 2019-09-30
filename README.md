@@ -1,5 +1,7 @@
 # Vector
 
+![logo](docs/images/logo-full-coloured.svg)
+
 [![Build Status](https://github.com/haroldadmin/vector/workflows/Android%20CI/badge.svg)](https://github.com/haroldadmin/Vector/actions)
 
 Vector is an Android library to help implement the MVI architecture pattern. 
@@ -25,11 +27,6 @@ VectorState is an interface denoting a model class representing the view's state
 * **VectorFragment**
 
 Vector provides an abstract `VectorFragment` class extending from AndroidX's Fragment class. A `VectorFragment` has a convenient `fragmentScope` coroutine scope, which can be used to easily launch Coroutines from a Fragment.
-
-## Wiki
-
-Please refer to the Wiki for more extensive documentation on the library.
-[Vector Wiki](https://github.com/haroldadmin/Vector/wiki)
 
 ## Example
 
@@ -63,20 +60,21 @@ class MyFragment: VectorFragment() {
 class MyViewModel(initState: MyState): VectorViewModel<MyState>(initState) {
 
     init {
-        viewModelScope.launch {
-            getMessage()
-        }
+        viewModelScope.launch { getMessage() }
     }
 
     suspend fun getMessage() {
         val newMessage = MessageProvider.getMessage()
         setState { copy(message = newMessage) }
     }
-
 }
 ```
 
 When the `setState()` function is given a state reducer, it internally enqueues it to a Kotlin `Actor`. The reducers passed to this actor are processed sequentially to avoid race conditions.
+
+## Documentation
+
+The docs can be found at the project's [documentation website](https://haroldadmin.github.io/Vector).
 
 ## Projects using Vector
 

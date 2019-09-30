@@ -1,4 +1,6 @@
-# Vector
+# Overview
+
+![Vector](images/logo-full-coloured.svg)
 
 Vector is a Kotlin Coroutines based MVI Architecture library for Android.
 
