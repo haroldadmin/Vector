@@ -39,7 +39,7 @@ extra:
     - type: 'twitter'
       link: 'https://twitter.com/haroldadmin'
     - type: 'reddit'
-      link: 'https://reddut.com/u/theharolddev'
+      link: 'https://reddit.com/u/theharolddev'
 
 markdown_extensions:
   - admonition
