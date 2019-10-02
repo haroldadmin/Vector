@@ -9,6 +9,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * Lazy delegate for creating a [VectorViewModel] from a Fragment
+ *
+ * Creates and returns the requested [VectorViewModel] automatically using reflection.
+ * The returned ViewModel is scoped to this Fragment.
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param stateStoreContext The [CoroutineContext] to be used in the ViewModel's state store
+ * @param logger The [Logger] to be used in the ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.fragmentViewModel(
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = androidLogger()
@@ -25,6 +37,17 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.f
     }
 }
 
+/**
+ * Lazy delegate for creating a [VectorViewModel] from a Fragment using the given producer lambda
+ *
+ * Creates and returns the requested [VectorViewModel] automatically using reflection.
+ * The returned ViewModel is scoped to this Fragment.
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param viewModelCreator The lambda which creates and returns the requested ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.fragmentViewModel(
     noinline viewModelCreator: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
@@ -39,6 +62,16 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.f
     }
 }
 
+/**
+ * Lazy delegate for creating an activity scoped [VectorViewModel] from a Fragment. Creates and returns the requested
+ * [VectorViewModel] automatically using reflection. The returned ViewModel is scoped to this Fragment's parent activity.
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param stateStoreContext The [CoroutineContext] to be used in the ViewModel's state store
+ * @param logger The [Logger] to be used in the ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.activityViewModel(
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = androidLogger()
@@ -55,8 +88,19 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
     }
 }
 
+/**
+ * Lazy delegate for creating a parent activity scoped [VectorViewModel] from a Fragment using the given producer lambda
+ *
+ * Creates and returns the requested [VectorViewModel] automatically using reflection.
+ * The returned ViewModel is scoped to this Fragment's parent activity.
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param viewModelCreator The lambda which creates and returns the requested ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.activityViewModel(
-    noinline producer: (initialState: S, handle: SavedStateHandle) -> VM
+    noinline viewModelCreator: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
@@ -64,11 +108,23 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> Fragment.a
             stateClass = S::class,
             savedStateRegistryOwner = requireActivity(),
             viewModelOwner = activityViewModelOwner(),
-            viewModelProducer = producer
+            viewModelProducer = viewModelCreator
         )
     }
 }
 
+/**
+ * Lazy delegate for creating a [VectorViewModel] from an Activity
+ *
+ * Creates and returns the requested [VectorViewModel] automatically using reflection.
+ * The returned ViewModel is scoped to this activity
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param stateStoreContext The [CoroutineContext] to be used in the ViewModel's state store
+ * @param logger The [Logger] to be used in the ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentActivity.viewModel(
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = androidLogger()
@@ -85,8 +141,19 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentA
     }
 }
 
+/**
+ * Lazy delegate for creating a [VectorViewModel] from an Activity using the given producer lambda
+ *
+ * Creates and returns the requested [VectorViewModel] automatically using reflection.
+ * The returned ViewModel is scoped to this activity.
+ *
+ * @param VM The type of the [VectorViewModel] being requested
+ * @param S The type of State class bound to the requested ViewModel
+ * @param viewModelCreator The lambda which creates and returns the requested ViewModel
+ *
+ */
 inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentActivity.viewModel(
-    noinline producer: (initialState: S, handle: SavedStateHandle) -> VM
+    noinline viewModelCreator: (initialState: S, handle: SavedStateHandle) -> VM
 ): vectorLazy<VM> {
     return vectorLazy {
         VectorViewModelProvider.get(
@@ -94,7 +161,7 @@ inline fun <reified VM : VectorViewModel<S>, reified S : VectorState> ComponentA
             stateClass = S::class,
             savedStateRegistryOwner = this,
             viewModelOwner = activityViewModelOwner(),
-            viewModelProducer = producer
+            viewModelProducer = viewModelCreator
         )
     }
 }

@@ -5,6 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 /**
  * A Factory meant to be implemented using the Companion object of a [VectorViewModel] to provide
  * ways to create the initial state, as well as the creation of the ViewModel itself.
+ *
+ * @param VM The type of the [VectorViewModel] being created by this factory
+ * @param S The state class bound to the given [VectorViewModel] type
+ *
  */
 interface VectorViewModelFactory<VM : VectorViewModel<S>, S : VectorState> {
 
@@ -17,21 +21,21 @@ interface VectorViewModelFactory<VM : VectorViewModel<S>, S : VectorState> {
      * context etc.
      *
      * @return Initial state to be used for creation of the ViewModel
+     *
      */
     fun initialState(handle: SavedStateHandle, owner: ViewModelOwner): S? { return null }
 
     /**
-     * Used to create the ViewModel itself. This method needs to be implemented if your ViewModel
-     * has dependencies other than those of a [VectorViewModel] or a [SavedStateVectorViewModel].
-     *
-     * However, if you are using a different kind of factory to create your ViewModel, you might skip implementing
-     * this function.
+     * Used to create the requested ViewModel. This method needs to be implemented if your ViewModel
+     * has dependencies other than those of a [VectorViewModel] or a [SavedStateVectorViewModel]. However, if you are
+     * using a different kind of factory to create your ViewModel, you might skip implementing this method.
      *
      * @param initialState The initial state to be given to the ViewModel
      * @param owner The [ViewModelOwner] for this ViewModel. Can be used to access context, dependency graph, etc.
      * @param handle The saved state handle to be given to the ViewModel, if needed.
      *
      * @return The ViewModel to be created using this function.
+     *
      */
     fun create(initialState: S, owner: ViewModelOwner, handle: SavedStateHandle): VM? { return null }
 }

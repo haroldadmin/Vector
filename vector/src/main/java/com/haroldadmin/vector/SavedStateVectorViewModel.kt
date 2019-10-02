@@ -10,6 +10,11 @@ import kotlin.coroutines.CoroutineContext
 /**
  * A Subclass of [VectorViewModel] that has access to a [SavedStateHandle] to easily
  * persist state properties in case of process death
+ *
+ * @param initialState The initial state for this ViewModel
+ * @param stateStoreContext The [CoroutineContext] to be used with the contained State Store
+ * @param logger The logger to be used for writing debug logs
+ * @param savedStateHandle The [SavedStateHandle] to be used for persisting state across process deaths
  */
 abstract class SavedStateVectorViewModel<S : VectorState>(
     initialState: S,
@@ -29,6 +34,9 @@ abstract class SavedStateVectorViewModel<S : VectorState>(
     /**
      * A convenience wrapper around the [setState] function which runs the given reducer, and then
      * persists the newly created state
+     *
+     * @param reducer The state reducer to create a new state from the current state
+     *
      */
     protected fun setStateAndPersist(reducer: suspend S.() -> S) {
         setState(reducer)

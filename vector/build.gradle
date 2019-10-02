@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.dokka-android'
 
 group = "com.github.haroldadmin"
 
@@ -38,6 +39,15 @@ android {
     }
     androidExtensions {
         experimental = true
+    }
+}
+
+dokka {
+    outputFormat = "gfm"
+    outputDirectory = "$rootDir/docs/api/"
+    externalDocumentationLink {
+        url = new URL("https://developer.android.com/reference/")
+        packageListUrl = new URL("https://developer.android.com/reference/androidx/package-list")
     }
 }
 

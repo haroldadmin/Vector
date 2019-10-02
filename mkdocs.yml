@@ -1,5 +1,3 @@
-site_name: My Docs
-
 site_name: 'Vector'
 site_description: 'Kotlin Coroutines based MVI Architecture Library'
 site_author: 'Kshitij Chauhan'
@@ -22,6 +20,7 @@ nav:
   - 'Advanced':
       - 'Automatic ViewModel Creation': 'automatic-viewmodel-creation.md'
       - 'Coroutine Context for State Store': 'state-store-context.md'
+  - 'API Reference': 'api/vector/index.md'
 
 theme:
   name: 'material'
@@ -32,6 +31,7 @@ theme:
     text: 'Roboto'
     code: 'Roboto Mono'
   logo: 'images/logo-monochrome.svg'
+  favicon: 'images/logo-monochrome.svg'
 
 extra:
   social:

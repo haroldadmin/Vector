@@ -3,8 +3,10 @@ package com.haroldadmin.vector
 import androidx.annotation.RestrictTo
 
 /**
- * A lazy delegate class, which takes in an [initializer] to initialize its underlying
+ * A lazy delegate class, which takes in an initializer to initialize its underlying
  * property. Implements the double-checked locking algorithm.
+ *
+ * @property initializer The method which creates an instance of the requested type
  */
 @Suppress("ClassName")
 @RestrictTo(RestrictTo.Scope.LIBRARY)

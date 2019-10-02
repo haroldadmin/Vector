@@ -20,7 +20,7 @@ object VectorViewModelProvider {
 
     /**
      * Creates the requested ViewModel automatically using reflection, and returns it.
-     * The returned ViewModel is already registered with a [ViewModelProvider]
+     * The returned ViewModel is already registered with a ViewModelProvider
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
@@ -36,7 +36,7 @@ object VectorViewModelProvider {
 
     /**
      * Creates and returns the requested ViewModel using the supplied [viewModelProducer] and returns it.
-     * The returned ViewModel is already registered with a [ViewModelProvider]
+     * The returned ViewModel is already registered with a ViewModelProvider
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun <VM : VectorViewModel<S>, S : VectorState> get(
