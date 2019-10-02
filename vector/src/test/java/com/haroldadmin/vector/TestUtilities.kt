@@ -16,10 +16,10 @@ internal sealed class TestStates : VectorState {
     data class TestStateWithDefaults(override val count: Int = 42) : TestStates()
 }
 
-internal class TestViewModel(initialState: TestStates?) : VectorViewModel<TestStates>(initialState)
+internal class TestViewModel(initialState: TestStates) : VectorViewModel<TestStates>(initialState)
 
 internal class TestViewModelWithFactory(
-    initialState: TestStates?,
+    initialState: TestStates,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = systemOutLogger()
 ) : VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
@@ -43,7 +43,7 @@ internal class TestViewModelWithFactory(
 }
 
 internal class TestViewModelWithFactoryAndDefaults(
-    initialState: TestStates.TestStateWithDefaults?,
+    initialState: TestStates.TestStateWithDefaults,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = systemOutLogger()
 ) : VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext, logger) {
@@ -88,7 +88,7 @@ internal class TestSavedStateViewModelWithFactory(
 }
 
 internal class TestViewModelWithMultipleParams(
-    initialState: CountingState?,
+    initialState: CountingState,
     stateStoreContext: CoroutineContext,
     logger: Logger,
     savedStateHandle: SavedStateHandle

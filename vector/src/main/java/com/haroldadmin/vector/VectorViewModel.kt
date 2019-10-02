@@ -23,45 +23,35 @@ import kotlin.coroutines.CoroutineContext
  * to provide ways to create the initial state, as well as the ViewModel itself.
  */
 abstract class VectorViewModel<S : VectorState>(
-    initialState: S?,
+    initialState: S,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     protected val logger: Logger = androidLogger()
 ) : ViewModel() {
 
-    protected open val stateStore = if (initialState != null) {
-        StateStoreFactory.create(initialState, logger, stateStoreContext)
-    } else {
-        StateStoreFactory.create(logger, stateStoreContext)
-    }
+    /**
+     * The state store associated with this ViewModel
+     */
+    protected open val stateStore = StateStoreFactory.create(initialState, logger, stateStoreContext)
 
+    /**
+     * A [Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
+     */
     val state: Flow<S> by lazy {
         stateStore
             .stateObservable
             .asFlow()
-            .filterNotNull()
     }
-
-    val currentState: S
-        get() = stateStore.state
 
     /**
-     * Allows setting an initial state after the ViewModel has been constructed.
+     * Access the current value of state stored in the [stateStore].
      *
-     * This is useful when the ViewModel was created without an initial state.
-     * [setState] function should **NOT** to set this state.
+     * **THIS VALUE OF STATE IS NOT GUARANTEED TO BE UP TO DATE**
+     * This property is only meant to be used by external classes who need to get hold of the current state
+     * without having to subscribe to it. For use cases where the current state is needed to be accessed inside the
+     * ViewModel, the [withState] method should be used
      */
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated(
-        """
-        This method should not be used anymore. Your ViewModel should implement a VectorViewModelFactory
-        in its companion object, and override the initialState() method to get the initial state.
-        
-        THIS METHOD WILL BE REMOVED BEFORE 1.0 release.
-        """
-    )
-    protected fun setInitialState(state: S) {
-        stateStore.setInitialState(state)
-    }
+    val currentState: S
+        get() = stateStore.state
 
     /**
      * The only method through which state mutation is allowed in subclasses.
@@ -70,6 +60,7 @@ abstract class VectorViewModel<S : VectorState>(
      * the state store, but not necessarily immediately
      *
      * @param action The state reducer to create a new state from the current state
+     *
      */
     protected fun setState(action: suspend S.() -> S) {
         stateStore.offerSetAction(action)
@@ -81,11 +72,15 @@ abstract class VectorViewModel<S : VectorState>(
      * latest value at the time of processing of this action
      *
      * @param action The action to be performed with the current state
+     *
      */
     protected fun withState(action: suspend (S) -> Unit) {
         stateStore.offerGetAction(action)
     }
 
+    /**
+     * Clears this ViewModel as well as its [stateStore].
+     */
     @CallSuper
     override fun onCleared() {
         logger.log("Clearing ViewModel")

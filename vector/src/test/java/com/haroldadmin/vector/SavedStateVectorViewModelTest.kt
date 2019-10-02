@@ -37,7 +37,7 @@ internal class SavedStateVectorViewModelTest {
 }
 
 private class TestSavedStateVM(
-    initialState: CountingState?,
+    initialState: CountingState,
     stateStoreContext: CoroutineContext,
     logger: Logger,
     savedStateHandle: SavedStateHandle

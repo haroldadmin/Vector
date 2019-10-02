@@ -6,5 +6,12 @@ package com.haroldadmin.vector
  *
  * Can be used with Kotlin data classes to allow for easy mutation
  * using the generated `copy` function.
+ *
+ * Example:
+ * ```kotlin
+ * data class NotesListState(
+ *  val notes: List<Note> = listOf()
+ * ): VectorState
+ * ```
  */
 interface VectorState

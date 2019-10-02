@@ -108,11 +108,4 @@ class StateProcessorTest {
             }
         }
 
-    @Test(expected = IllegalStateException::class)
-    fun givenStateProcessorWithoutInitialStateInStateHolder_whenStateIsMutated_thenShouldThrowError() = testScope.runBlockingTest {
-        val holder = StateHolderFactory.create<CountingState>(StringLogger())
-        val processor = StateProcessorFactory.create(holder, StringLogger(), testScope.coroutineContext)
-
-        processor.offerSetAction { copy(count = this.count + 1) }
-    }
 }

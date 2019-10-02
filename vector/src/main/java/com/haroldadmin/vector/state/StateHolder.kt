@@ -22,8 +22,7 @@ interface StateHolder<S : VectorState> {
      * A convenient way to access the current state value in the [stateObservable]
      */
     val state: S
-        get() = stateObservable.valueOrNull
-            ?: throw IllegalStateException("StateHolder was not created with a state value. Are you sure you set an initial state later before accessing the current state?")
+        get() = stateObservable.value
 
     /**
      * This method is expected to be called when this state holder is no longer being used

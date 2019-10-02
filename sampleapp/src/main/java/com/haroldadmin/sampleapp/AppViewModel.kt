@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 data class AppState(val numberOfEntities: Long = 0) : VectorState
 
 class AppViewModel @AssistedInject constructor(
-    @Assisted initialState: AppState?,
+    @Assisted initialState: AppState,
     private val repository: EntitiesRepository
 ) : VectorViewModel<AppState>(initialState) {
 

@@ -12,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
  * persist state properties in case of process death
  */
 abstract class SavedStateVectorViewModel<S : VectorState>(
-    initialState: S?,
+    initialState: S,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
     logger: Logger = androidLogger(),
     protected val savedStateHandle: SavedStateHandle
