@@ -1,5 +1,9 @@
 package com.haroldadmin.vector
 
+/**
+ * Singleton object to configure the library
+ *
+ */
 object Vector {
 
     /**
@@ -8,7 +12,7 @@ object Vector {
      * If true, then all loggers shall write their logs.
      * If false, then no loggers shall write any logs.
      *
-     * Can be dynamically changed at runtime.
+     * Can be changed at runtime.
      */
     var enableLogging: Boolean = false
 }

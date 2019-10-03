@@ -18,6 +18,7 @@ import kotlin.coroutines.CoroutineContext
  * @param S The state class for this ViewModel implementing [VectorState]
  * @param initialState The initial state for this ViewModel
  * @param stateStoreContext The [CoroutineContext] to be used with the state store
+ * @param logger The [Logger] to use for debug logs
  *
  * A [VectorViewModel] can implement the [VectorViewModelFactory] in its Companion object
  * to provide ways to create the initial state, as well as the ViewModel itself.
@@ -34,7 +35,7 @@ abstract class VectorViewModel<S : VectorState>(
     protected open val stateStore = StateStoreFactory.create(initialState, logger, stateStoreContext)
 
     /**
-     * A [Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
+     * A [kotlinx.coroutines.flow.Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
      */
     val state: Flow<S> by lazy {
         stateStore

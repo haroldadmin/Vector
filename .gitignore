@@ -93,6 +93,7 @@ app/release
 .project
 .classpath
 
-*.py
+bundleToApk.py
 *.apks
 site/
+docs/api/
