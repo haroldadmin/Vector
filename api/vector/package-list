@@ -1,14 +1,14 @@
 $dokka.format:gfm
 $dokka.linkExtension:md
 $dokka.location:com.haroldadmin.vector$activityViewModel(androidx.fragment.app.Fragment, kotlin.Function2((com.haroldadmin.vector.activityViewModel.S, androidx.lifecycle.SavedStateHandle, com.haroldadmin.vector.activityViewModel.VM)))com.haroldadmin.vector/androidx.fragment.app.-fragment/activity-view-model.md
-$dokka.location:com.haroldadmin.vector$activityViewModel(androidx.fragment.app.Fragment, kotlin.coroutines.CoroutineContext, com.haroldadmin.vector.loggers.Logger)com.haroldadmin.vector/androidx.fragment.app.-fragment/activity-view-model.md
+$dokka.location:com.haroldadmin.vector$activityViewModel(androidx.fragment.app.Fragment, kotlin.coroutines.CoroutineContext)com.haroldadmin.vector/androidx.fragment.app.-fragment/activity-view-model.md
 $dokka.location:com.haroldadmin.vector$activityViewModelOwner(androidx.activity.ComponentActivity)com.haroldadmin.vector/androidx.activity.-component-activity/activity-view-model-owner.md
 $dokka.location:com.haroldadmin.vector$activityViewModelOwner(androidx.fragment.app.Fragment)com.haroldadmin.vector/androidx.fragment.app.-fragment/activity-view-model-owner.md
 $dokka.location:com.haroldadmin.vector$fragmentViewModel(androidx.fragment.app.Fragment, kotlin.Function2((com.haroldadmin.vector.fragmentViewModel.S, androidx.lifecycle.SavedStateHandle, com.haroldadmin.vector.fragmentViewModel.VM)))com.haroldadmin.vector/androidx.fragment.app.-fragment/fragment-view-model.md
-$dokka.location:com.haroldadmin.vector$fragmentViewModel(androidx.fragment.app.Fragment, kotlin.coroutines.CoroutineContext, com.haroldadmin.vector.loggers.Logger)com.haroldadmin.vector/androidx.fragment.app.-fragment/fragment-view-model.md
+$dokka.location:com.haroldadmin.vector$fragmentViewModel(androidx.fragment.app.Fragment, kotlin.coroutines.CoroutineContext)com.haroldadmin.vector/androidx.fragment.app.-fragment/fragment-view-model.md
 $dokka.location:com.haroldadmin.vector$fragmentViewModelOwner(androidx.fragment.app.Fragment)com.haroldadmin.vector/androidx.fragment.app.-fragment/fragment-view-model-owner.md
 $dokka.location:com.haroldadmin.vector$viewModel(androidx.activity.ComponentActivity, kotlin.Function2((com.haroldadmin.vector.viewModel.S, androidx.lifecycle.SavedStateHandle, com.haroldadmin.vector.viewModel.VM)))com.haroldadmin.vector/androidx.activity.-component-activity/view-model.md
-$dokka.location:com.haroldadmin.vector$viewModel(androidx.activity.ComponentActivity, kotlin.coroutines.CoroutineContext, com.haroldadmin.vector.loggers.Logger)com.haroldadmin.vector/androidx.activity.-component-activity/view-model.md
+$dokka.location:com.haroldadmin.vector$viewModel(androidx.activity.ComponentActivity, kotlin.coroutines.CoroutineContext)com.haroldadmin.vector/androidx.activity.-component-activity/view-model.md
 com.haroldadmin.vector
 com.haroldadmin.vector.loggers
 com.haroldadmin.vector.state

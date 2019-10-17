@@ -251,46 +251,22 @@
       
 
 
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
-    
-    <label class="md-nav__link" for="nav-3">
-      Usage
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Usage
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
   <li class="md-nav__item">
-    <a href="../../../../../usage/" title="Simple" class="md-nav__link">
-      Simple
+    <a href="../../../../../usage/basics/" title="Basics" class="md-nav__link">
+      Basics
     </a>
   </li>
 
-        
-          
-          
-          
+    
+      
+      
+      
 
 
   <li class="md-nav__item">
-    <a href="../../../../../advanced-usage/" title="Advanced" class="md-nav__link">
-      Advanced
+    <a href="../../../../../usage/advanced/" title="Advanced Usage" class="md-nav__link">
+      Advanced Usage
     </a>
-  </li>
-
-        
-      </ul>
-    </nav>
   </li>
 
     
@@ -301,13 +277,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
-    <label class="md-nav__link" for="nav-4">
+    <label class="md-nav__link" for="nav-5">
       Components
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
+      <label class="md-nav__title" for="nav-5">
         Components
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -319,7 +295,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-state/" title="Vector State" class="md-nav__link">
+    <a href="../../../../../components/vector-state/" title="Vector State" class="md-nav__link">
       Vector State
     </a>
   </li>
@@ -331,7 +307,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-fragment/" title="Vector Fragment" class="md-nav__link">
+    <a href="../../../../../components/vector-fragment/" title="Vector Fragment" class="md-nav__link">
       Vector Fragment
     </a>
   </li>
@@ -343,7 +319,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
+    <a href="../../../../../components/vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
       Vector ViewModel
     </a>
   </li>
@@ -355,7 +331,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
+    <a href="../../../../../components/saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
       SavedState VectorViewModel
     </a>
   </li>
@@ -367,7 +343,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../logging/" title="Logging" class="md-nav__link">
+    <a href="../../../../../components/logging/" title="Logging" class="md-nav__link">
       Logging
     </a>
   </li>
@@ -385,14 +361,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
-    <label class="md-nav__link" for="nav-5">
-      Advanced
+    <label class="md-nav__link" for="nav-6">
+      Miscellaneous
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
-        Advanced
+      <label class="md-nav__title" for="nav-6">
+        Miscellaneous
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -403,7 +379,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
+    <a href="../../../../../misc/automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
       Automatic ViewModel Creation
     </a>
   </li>
@@ -415,7 +391,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
+    <a href="../../../../../misc/state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
       Coroutine Context for State Store
     </a>
   </li>
@@ -493,15 +469,14 @@
                 
                 <p><a href="../../../">vector</a> / <a href="../../">com.haroldadmin.vector</a> / <a href="../">androidx.fragment.app.Fragment</a> / <a href="./">fragmentViewModel</a></p>
 <h1 id="fragmentviewmodel">fragmentViewModel<a class="headerlink" href="#fragmentviewmodel" title="Permanent link">&para;</a></h1>
-<p><code>inline fun &lt;reified VM :</code><a href="../../-vector-view-model/"><code>VectorViewModel</code></a><code>&lt;</code><a href="./#S"><code>S</code></a><code>&gt;, reified S :</code><a href="../../-vector-state/"><code>VectorState</code></a><code>&gt;</code><a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html"><code>Fragment</code></a><code>.fragmentViewModel(stateStoreContext:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html"><code>CoroutineContext</code></a><code>= Dispatchers.Default + Job(), logger:</code><a href="../../../com.haroldadmin.vector.loggers/-logger/"><code>Logger</code></a><code>= androidLogger()):</code><a href="../../vector-lazy/"><code>vectorLazy</code></a><code>&lt;</code><a href="./#VM"><code>VM</code></a><code>&gt;</code></p>
+<p><code>inline fun &lt;reified VM :</code><a href="../../-vector-view-model/"><code>VectorViewModel</code></a><code>&lt;</code><a href="./#S"><code>S</code></a><code>&gt;, reified S :</code><a href="../../-vector-state/"><code>VectorState</code></a><code>&gt;</code><a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html"><code>Fragment</code></a><code>.fragmentViewModel(stateStoreContext:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html"><code>CoroutineContext</code></a><code>= Dispatchers.Default + Job()):</code><a href="../../vector-lazy/"><code>vectorLazy</code></a><code>&lt;</code><a href="./#VM"><code>VM</code></a><code>&gt;</code></p>
 <p>Lazy delegate for creating a <a href="../../-vector-view-model/">VectorViewModel</a> from a Fragment</p>
 <p>Creates and returns the requested <a href="../../-vector-view-model/">VectorViewModel</a> automatically using reflection.
 The returned ViewModel is scoped to this Fragment.</p>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <p><code>VM</code> - The type of the <a href="../../-vector-view-model/">VectorViewModel</a> being requested</p>
 <p><code>S</code> - The type of State class bound to the requested ViewModel</p>
-<p><code>stateStoreContext</code> - The <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a> to be used in the ViewModel's state store</p>
-<p><code>logger</code> - The <a href="../../../com.haroldadmin.vector.loggers/-logger/">Logger</a> to be used in the ViewModel<code>inline fun &lt;reified VM :</code><a href="../../-vector-view-model/"><code>VectorViewModel</code></a><code>&lt;</code><a href="./#S"><code>S</code></a><code>&gt;, reified S :</code><a href="../../-vector-state/"><code>VectorState</code></a><code>&gt;</code><a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html"><code>Fragment</code></a><code>.fragmentViewModel(noinline viewModelCreator: (initialState:</code><a href="./#S"><code>S</code></a><code>, handle:</code><a href="https://developer.android.com/reference/androidx/lifecycle/SavedStateHandle.html"><code>SavedStateHandle</code></a><code>) -&gt;</code><a href="./#VM"><code>VM</code></a><code>):</code><a href="../../vector-lazy/"><code>vectorLazy</code></a><code>&lt;</code><a href="./#VM"><code>VM</code></a><code>&gt;</code></p>
+<p><code>stateStoreContext</code> - The <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a> to be used in the ViewModel's state store<code>inline fun &lt;reified VM :</code><a href="../../-vector-view-model/"><code>VectorViewModel</code></a><code>&lt;</code><a href="./#S"><code>S</code></a><code>&gt;, reified S :</code><a href="../../-vector-state/"><code>VectorState</code></a><code>&gt;</code><a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html"><code>Fragment</code></a><code>.fragmentViewModel(noinline viewModelCreator: (initialState:</code><a href="./#S"><code>S</code></a><code>, handle:</code><a href="https://developer.android.com/reference/androidx/lifecycle/SavedStateHandle.html"><code>SavedStateHandle</code></a><code>) -&gt;</code><a href="./#VM"><code>VM</code></a><code>):</code><a href="../../vector-lazy/"><code>vectorLazy</code></a><code>&lt;</code><a href="./#VM"><code>VM</code></a><code>&gt;</code></p>
 <p>Lazy delegate for creating a <a href="../../-vector-view-model/">VectorViewModel</a> from a Fragment using the given producer lambda</p>
 <p>Creates and returns the requested <a href="../../-vector-view-model/">VectorViewModel</a> automatically using reflection.
 The returned ViewModel is scoped to this Fragment.</p>

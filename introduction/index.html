@@ -330,46 +330,22 @@
       
 
 
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
-    
-    <label class="md-nav__link" for="nav-3">
-      Usage
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Usage
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
   <li class="md-nav__item">
-    <a href="../usage/" title="Simple" class="md-nav__link">
-      Simple
+    <a href="../usage/basics/" title="Basics" class="md-nav__link">
+      Basics
     </a>
   </li>
 
-        
-          
-          
-          
+    
+      
+      
+      
 
 
   <li class="md-nav__item">
-    <a href="../advanced-usage/" title="Advanced" class="md-nav__link">
-      Advanced
+    <a href="../usage/advanced/" title="Advanced Usage" class="md-nav__link">
+      Advanced Usage
     </a>
-  </li>
-
-        
-      </ul>
-    </nav>
   </li>
 
     
@@ -380,13 +356,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
-    <label class="md-nav__link" for="nav-4">
+    <label class="md-nav__link" for="nav-5">
       Components
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
+      <label class="md-nav__title" for="nav-5">
         Components
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -398,7 +374,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../vector-state/" title="Vector State" class="md-nav__link">
+    <a href="../components/vector-state/" title="Vector State" class="md-nav__link">
       Vector State
     </a>
   </li>
@@ -410,7 +386,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../vector-fragment/" title="Vector Fragment" class="md-nav__link">
+    <a href="../components/vector-fragment/" title="Vector Fragment" class="md-nav__link">
       Vector Fragment
     </a>
   </li>
@@ -422,7 +398,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
+    <a href="../components/vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
       Vector ViewModel
     </a>
   </li>
@@ -434,7 +410,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
+    <a href="../components/saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
       SavedState VectorViewModel
     </a>
   </li>
@@ -446,7 +422,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../logging/" title="Logging" class="md-nav__link">
+    <a href="../components/logging/" title="Logging" class="md-nav__link">
       Logging
     </a>
   </li>
@@ -464,14 +440,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
-    <label class="md-nav__link" for="nav-5">
-      Advanced
+    <label class="md-nav__link" for="nav-6">
+      Miscellaneous
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
-        Advanced
+      <label class="md-nav__title" for="nav-6">
+        Miscellaneous
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -482,7 +458,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
+    <a href="../misc/automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
       Automatic ViewModel Creation
     </a>
   </li>
@@ -494,7 +470,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
+    <a href="../misc/state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
       Coroutine Context for State Store
     </a>
   </li>
@@ -637,15 +613,15 @@
 <p>Vector borrows from the design of both MvRx and Roxie, and I would like to sincerely thank the developers of both of them.</p>
 <h2 id="vectors-approach-to-mvi">Vector's approach to MVI<a class="headerlink" href="#vectors-approach-to-mvi" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Vector recommends using a Kotlin Data Class to represent the UI Model. Your model class should implement the <a href="../vector-state/">VectorState</a> interface.</li>
+<li>Vector recommends using a Kotlin Data Class to represent the UI Model. Your model class should implement the <a href="../components/vector-state/">VectorState</a> interface.</li>
 <li>Intents are regular lambdas in Vector. State reducers are of the type <code>S.() -&gt; S</code>, where S is a model class implementing the <code>VectorState</code> interface.</li>
 <li>Vector does not have an opinion regarding what <code>Views</code> should be in your app. We supply a convenient <code>VectorFragment</code> abstract class in the library, but it is not necessary to use it. While the sample app in the repository uses <code>Fragments</code>, you are free to choose whatever you like. The current state is exposed to the View through a <code>Kotlin Flow</code> object, so it helps if your View class is a <code>CoroutineScope</code> with.</li>
 </ul>
 <h3 id="building-blocks">Building Blocks<a class="headerlink" href="#building-blocks" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="../vector-state/">Vector State</a></li>
-<li><a href="../vector-fragment/">Vector Fragment</a></li>
-<li><a href="../vector-viewmodel/">Vector ViewModel</a></li>
+<li><a href="../components/vector-state/">Vector State</a></li>
+<li><a href="../components/vector-fragment/">Vector Fragment</a></li>
+<li><a href="../components/vector-viewmodel/">Vector ViewModel</a></li>
 </ul>
 <h2 id="further-reading">Further Reading<a class="headerlink" href="#further-reading" title="Permanent link">&para;</a></h2>
 <ul>
@@ -687,13 +663,13 @@
           </a>
         
         
-          <a href="../usage/" title="Simple" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../usage/basics/" title="Basics" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Simple
+                Basics
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

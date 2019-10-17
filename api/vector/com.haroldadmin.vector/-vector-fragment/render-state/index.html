@@ -251,46 +251,22 @@
       
 
 
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
-    
-    <label class="md-nav__link" for="nav-3">
-      Usage
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Usage
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
   <li class="md-nav__item">
-    <a href="../../../../../usage/" title="Simple" class="md-nav__link">
-      Simple
+    <a href="../../../../../usage/basics/" title="Basics" class="md-nav__link">
+      Basics
     </a>
   </li>
 
-        
-          
-          
-          
+    
+      
+      
+      
 
 
   <li class="md-nav__item">
-    <a href="../../../../../advanced-usage/" title="Advanced" class="md-nav__link">
-      Advanced
+    <a href="../../../../../usage/advanced/" title="Advanced Usage" class="md-nav__link">
+      Advanced Usage
     </a>
-  </li>
-
-        
-      </ul>
-    </nav>
   </li>
 
     
@@ -301,13 +277,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
-    <label class="md-nav__link" for="nav-4">
+    <label class="md-nav__link" for="nav-5">
       Components
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
+      <label class="md-nav__title" for="nav-5">
         Components
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -319,7 +295,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-state/" title="Vector State" class="md-nav__link">
+    <a href="../../../../../components/vector-state/" title="Vector State" class="md-nav__link">
       Vector State
     </a>
   </li>
@@ -331,7 +307,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-fragment/" title="Vector Fragment" class="md-nav__link">
+    <a href="../../../../../components/vector-fragment/" title="Vector Fragment" class="md-nav__link">
       Vector Fragment
     </a>
   </li>
@@ -343,7 +319,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
+    <a href="../../../../../components/vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
       Vector ViewModel
     </a>
   </li>
@@ -355,7 +331,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
+    <a href="../../../../../components/saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
       SavedState VectorViewModel
     </a>
   </li>
@@ -367,7 +343,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../logging/" title="Logging" class="md-nav__link">
+    <a href="../../../../../components/logging/" title="Logging" class="md-nav__link">
       Logging
     </a>
   </li>
@@ -385,14 +361,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
-    <label class="md-nav__link" for="nav-5">
-      Advanced
+    <label class="md-nav__link" for="nav-6">
+      Miscellaneous
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
-        Advanced
+      <label class="md-nav__title" for="nav-6">
+        Miscellaneous
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -403,7 +379,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
+    <a href="../../../../../misc/automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
       Automatic ViewModel Creation
     </a>
   </li>
@@ -415,7 +391,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../../../state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
+    <a href="../../../../../misc/state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
       Coroutine Context for State Store
     </a>
   </li>
@@ -501,7 +477,13 @@ input parameter.</p>
 <p><code>state</code> - The state instance using which the UI should be rendered</p>
 <p><code>renderer</code> - The method which updates the UI state<code>protected inline fun &lt;S :</code><a href="../../-vector-state/"><code>VectorState</code></a><code>&gt; renderState(viewModel:</code><a href="../../-vector-view-model/"><code>VectorViewModel</code></a><code>&lt;</code><a href="./#S"><code>S</code></a><code>&gt;, crossinline renderer: (</code><a href="./#S"><code>S</code></a><code>) -&gt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a></p>
 <p>Renders the UI based on emitted state updates from the given <a href="./#com.haroldadmin.vector.VectorFragment$renderState(com.haroldadmin.vector.VectorViewModel((com.haroldadmin.vector.VectorFragment.renderState.S)), kotlin.Function1((com.haroldadmin.vector.VectorFragment.renderState.S, kotlin.Unit)))/viewModel">viewModel</a> using the <a href="./#com.haroldadmin.vector.VectorFragment$renderState(com.haroldadmin.vector.VectorViewModel((com.haroldadmin.vector.VectorFragment.renderState.S)), kotlin.Function1((com.haroldadmin.vector.VectorFragment.renderState.S, kotlin.Unit)))/renderer">renderer</a>
-block.</p>
+block. <strong>MUST BE CALLED IN onViewCreated()</strong></p>
+<p>Launches a coroutine in <a href="../view-scope/">viewScope</a> which collects state updates from the given <a href="./#com.haroldadmin.vector.VectorFragment$renderState(com.haroldadmin.vector.VectorViewModel((com.haroldadmin.vector.VectorFragment.renderState.S)), kotlin.Function1((com.haroldadmin.vector.VectorFragment.renderState.S, kotlin.Unit)))/viewModel">viewModel</a> and calls
+the <a href="./#com.haroldadmin.vector.VectorFragment$renderState(com.haroldadmin.vector.VectorViewModel((com.haroldadmin.vector.VectorFragment.renderState.S)), kotlin.Function1((com.haroldadmin.vector.VectorFragment.renderState.S, kotlin.Unit)))/renderer">renderer</a> method on it. Since the renderer method might contain references to views, and also since
+this method should only run while the view of the fragment is available, it is launched in the <a href="../view-scope/">viewScope</a>
+rather than the <a href="../fragment-scope/">fragmentScope</a>. As such, it must be called in <a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onViewCreated(android.view.View, android.os.Bundle)">onViewCreated</a> after the <a href="../view-scope/">viewScope</a> is
+available and the view can be updated. The collection of state updates automatically stops when
+<a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onDestroyView()">onDestroyView</a> is called.</p>
 <h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
 <p><code>viewModel</code> - The ViewModel whose <a href="../../-vector-view-model/state/">VectorViewModel.state</a> flow is used to receive state updates and
 render the UI</p>

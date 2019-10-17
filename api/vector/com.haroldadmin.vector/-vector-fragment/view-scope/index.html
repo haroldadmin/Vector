@@ -13,7 +13,7 @@
         <meta name="description" content="Kotlin Coroutines based MVI Architecture Library">
       
       
-        <link rel="canonical" href="https://haroldadmin.github.io/vector/logging/">
+        <link rel="canonical" href="https://haroldadmin.github.io/vector/api/vector/com.haroldadmin.vector/-vector-fragment/view-scope/">
       
       
         <meta name="author" content="Kshitij Chauhan">
@@ -37,18 +37,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../images/logo-monochrome.svg">
+      <link rel="shortcut icon" href="../../../../../images/logo-monochrome.svg">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
-        <title>Logging - Vector</title>
+        <title>View scope - Vector</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/application.30686662.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -57,7 +57,7 @@
       
     
     
-      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../../../../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
@@ -66,7 +66,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../../../../assets/fonts/material-icons.css">
     
     
     
@@ -91,7 +91,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#logging" tabindex="1" class="md-skip">
+      <a href="#viewscope" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -102,7 +102,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="https://haroldadmin.github.io/vector/" title="Vector" class="md-header-nav__button md-logo">
           
-            <img src="../images/logo-monochrome.svg" width="24" height="24">
+            <img src="../../../../../images/logo-monochrome.svg" width="24" height="24">
           
         </a>
       </div>
@@ -117,7 +117,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Logging
+                View scope
               
             </span>
           
@@ -194,7 +194,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://haroldadmin.github.io/vector/" title="Vector" class="md-nav__button md-logo">
       
-        <img src="../images/logo-monochrome.svg" width="48" height="48">
+        <img src="../../../../../images/logo-monochrome.svg" width="48" height="48">
       
     </a>
     Vector
@@ -228,7 +228,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Overview" class="md-nav__link">
+    <a href="../../../../.." title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -240,7 +240,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../introduction/" title="Introduction" class="md-nav__link">
+    <a href="../../../../../introduction/" title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -251,170 +251,22 @@
       
 
 
-  <li class="md-nav__item md-nav__item--nested">
+  <li class="md-nav__item">
+    <a href="../../../../../usage/basics/" title="Basics" class="md-nav__link">
+      Basics
+    </a>
+  </li>
+
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
-    
-    <label class="md-nav__link" for="nav-3">
-      Usage
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Usage
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
+      
+      
+      
 
 
   <li class="md-nav__item">
-    <a href="../usage/" title="Simple" class="md-nav__link">
-      Simple
+    <a href="../../../../../usage/advanced/" title="Advanced Usage" class="md-nav__link">
+      Advanced Usage
     </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../advanced-usage/" title="Advanced" class="md-nav__link">
-      Advanced
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-  
-
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
-    
-    <label class="md-nav__link" for="nav-4">
-      Components
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
-        Components
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../vector-state/" title="Vector State" class="md-nav__link">
-      Vector State
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../vector-fragment/" title="Vector Fragment" class="md-nav__link">
-      Vector Fragment
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
-      Vector ViewModel
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
-      SavedState VectorViewModel
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-  
-
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Logging
-      </label>
-    
-    <a href="./" title="Logging" class="md-nav__link md-nav__link--active">
-      Logging
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#enabledisable-logging" class="md-nav__link">
-    Enable/Disable Logging
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
-  </li>
-
-        
-      </ul>
-    </nav>
   </li>
 
     
@@ -428,11 +280,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
     <label class="md-nav__link" for="nav-5">
-      Advanced
+      Components
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-5">
-        Advanced
+        Components
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -443,7 +295,91 @@
 
 
   <li class="md-nav__item">
-    <a href="../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
+    <a href="../../../../../components/vector-state/" title="Vector State" class="md-nav__link">
+      Vector State
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../../../components/vector-fragment/" title="Vector Fragment" class="md-nav__link">
+      Vector Fragment
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../../../components/vector-viewmodel/" title="Vector ViewModel" class="md-nav__link">
+      Vector ViewModel
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../../../components/saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-nav__link">
+      SavedState VectorViewModel
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../../../components/logging/" title="Logging" class="md-nav__link">
+      Logging
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Miscellaneous
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Miscellaneous
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../../../misc/automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-nav__link">
       Automatic ViewModel Creation
     </a>
   </li>
@@ -455,7 +391,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
+    <a href="../../../../../misc/state-store-context/" title="Coroutine Context for State Store" class="md-nav__link">
       Coroutine Context for State Store
     </a>
   </li>
@@ -472,7 +408,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/vector/" title="API Reference" class="md-nav__link">
+    <a href="../../../" title="API Reference" class="md-nav__link">
       API Reference
     </a>
   </li>
@@ -495,22 +431,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#enabledisable-logging" class="md-nav__link">
-    Enable/Disable Logging
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -521,18 +441,15 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/haroldadmin/Vector/edit/master/docs/logging.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/haroldadmin/Vector/edit/master/docs/api/vector/com.haroldadmin.vector/-vector-fragment/view-scope.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h1>
-<p>Vector can log state related actions. It ships with two different loggers:</p>
-<ul>
-<li>AndroidLogger: Writes log statements to Android log (<code>Log.*</code>). Can be created using the <code>androidLogger()</code> factory function.</li>
-<li>SystemOutLogger: Writes log statements to STDOUT (<code>println</code>). Can be created using the <code>systemOutLogger()</code> factory function.</li>
-</ul>
-<p>By default, the <code>AndroidLogger</code> is used, but you can customize which ever one you want based on your needs. The <code>Logger</code> interface is very simple, and you can use it to create your custom implementations as well.</p>
-<h2 id="enabledisable-logging">Enable/Disable Logging<a class="headerlink" href="#enabledisable-logging" title="Permanent link">&para;</a></h2>
-<p>You can enable or disable logging by setting <code>Vector.enableLogging</code>.</p>
+                <p><a href="../../../">vector</a> / <a href="../../">com.haroldadmin.vector</a> / <a href="../">VectorFragment</a> / <a href="./">viewScope</a></p>
+<h1 id="viewscope">viewScope<a class="headerlink" href="#viewscope" title="Permanent link">&para;</a></h1>
+<p><code>protected open val viewScope: CoroutineScope</code></p>
+<p>A <a href="#">CoroutineScope</a> associated with the view-lifecycle of this fragment. The scope is cancelled
+when <a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onDestroyView()">onDestroyView</a> of this Fragment has been called, and created when <a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)">onCreateView</a> is called.</p>
+<p>It delegates to the lifecycle-runtime library's <a href="#">androidx.lifecycle.lifecycleScope</a> extension</p>
                 
                   
                 
@@ -550,41 +467,6 @@
         
 <footer class="md-footer">
   
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid">
-        
-          <a href="../saved-state-vectorviewmodel/" title="SavedState VectorViewModel" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
-            </div>
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                SavedState VectorViewModel
-              </span>
-            </div>
-          </a>
-        
-        
-          <a href="../automatic-viewmodel-creation/" title="Automatic ViewModel Creation" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Automatic ViewModel Creation
-              </span>
-            </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
-          </a>
-        
-      </nav>
-    </div>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
@@ -597,7 +479,7 @@
       </div>
       
   <div class="md-footer-social">
-    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    <link rel="stylesheet" href="../../../../../assets/fonts/font-awesome.css">
     
       <a href="https://github.com/haroldadmin" class="md-footer-social__link fa fa-github"></a>
     
@@ -613,9 +495,9 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.c648116f.js"></script>
+      <script src="../../../../../assets/javascripts/application.c648116f.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../../../../.."}})</script>
       
     
   </body>
