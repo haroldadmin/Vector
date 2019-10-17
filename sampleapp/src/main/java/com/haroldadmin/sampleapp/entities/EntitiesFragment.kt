@@ -15,6 +15,7 @@ import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
+import com.haroldadmin.vector.loggers.logd
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -43,8 +44,26 @@ class EntitiesFragment : VectorFragment() {
         super.onAttach(context)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentEntitiesBinding.inflate(inflater, container, false)
+
+        binding.rvEntities.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = entitiesAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        }
+
+        binding.addEntity.setOnClickListener {
+            findNavController().navigate(EntitiesFragmentDirections.addEntity())
+        }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        viewModel.getAllEntities()
+
         renderState(viewModel) { state ->
             entitiesAdapter.submitList(state.entities)
             if (state.entities.isNullOrEmpty()) {
@@ -60,22 +79,5 @@ class EntitiesFragment : VectorFragment() {
             }
             appViewModel.updateNumberOfEntities()
         }
-        viewModel.getAllEntities()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentEntitiesBinding.inflate(inflater, container, false)
-
-        binding.rvEntities.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = entitiesAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
-        }
-
-        binding.addEntity.setOnClickListener {
-            findNavController().navigate(EntitiesFragmentDirections.addEntity())
-        }
-
-        return binding.root
     }
 }

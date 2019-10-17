@@ -170,9 +170,9 @@ Now that we have our ViewModel, we can start observing state changes. To do this
 class NotesListFragment: VectorFragment() {
   private val viewModel: NotesListViewModel by fragmentViewModel()
 
-  override fun onCreate() {
+  override fun onViewCreated() {
     ...
-    fragmentScope.launch {
+    viewScope.launch {
       viewModel.state.collect { state ->
         recyclerViewAdapter.submitList(state.notes)
       }
@@ -181,7 +181,7 @@ class NotesListFragment: VectorFragment() {
 }
 ```
 
-The `fragmentScope` property is a Coroutine Scope which is cancelled when the Fragment's `onDestroy()` callback is called.
+The `viewScope` property is a Coroutine Scope which is tied to the Fragment's view-lifecycle.
 
 This action of subscribing to state changes can be done more concisely using the `renderState()` method in the `VectorFragment` class.
 
@@ -189,7 +189,7 @@ This action of subscribing to state changes can be done more concisely using the
 class NotesListFragment: VectorFragment() {
   private val viewModel: NotesListViewModel by fragmentViewModel()
 
-  override fun onCreate() {
+  override fun onViewCreated() {
     ...
     renderState(viewModel) { state ->
       recyclerViewAdapter.submitList(state.notes)
