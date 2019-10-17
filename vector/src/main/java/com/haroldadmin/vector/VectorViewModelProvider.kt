@@ -4,8 +4,6 @@ import androidx.annotation.RestrictTo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.androidLogger
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -28,10 +26,9 @@ object VectorViewModelProvider {
         stateClass: KClass<out S>,
         savedStateRegistryOwner: SavedStateRegistryOwner,
         viewModelOwner: ViewModelOwner,
-        stateStoreContext: CoroutineContext,
-        logger: Logger
+        stateStoreContext: CoroutineContext
     ): VM {
-        return createViewModel(vmClass, stateClass, viewModelOwner, savedStateRegistryOwner, stateStoreContext, logger)
+        return createViewModel(vmClass, stateClass, viewModelOwner, savedStateRegistryOwner, stateStoreContext)
     }
 
     /**
@@ -67,8 +64,7 @@ object VectorViewModelProvider {
         stateClass: KClass<out S>,
         owner: ViewModelOwner,
         savedStateRegistryOwner: SavedStateRegistryOwner,
-        stateStoreContext: CoroutineContext,
-        logger: Logger = androidLogger()
+        stateStoreContext: CoroutineContext
     ): VM {
         val viewModelFactory = try {
             FactoryStrategyVMFactoryCreator.create(
@@ -76,8 +72,7 @@ object VectorViewModelProvider {
                 stateClass,
                 owner,
                 savedStateRegistryOwner,
-                stateStoreContext,
-                logger
+                stateStoreContext
             )
         } catch (ex: DoesNotImplementVectorVMFactoryException) {
             ConstructorStrategyVMFactoryCreator.create(
@@ -85,8 +80,7 @@ object VectorViewModelProvider {
                 stateClass,
                 owner,
                 savedStateRegistryOwner,
-                stateStoreContext,
-                logger
+                stateStoreContext
             )
         } catch (ex: NoSuitableViewModelConstructorException) {
             throw UnInstantiableViewModelException()

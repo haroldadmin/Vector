@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -18,21 +18,25 @@ import kotlin.coroutines.CoroutineContext
  * @param S The state class for this ViewModel implementing [VectorState]
  * @param initialState The initial state for this ViewModel
  * @param stateStoreContext The [CoroutineContext] to be used with the state store
- * @param logger The [Logger] to use for debug logs
  *
  * A [VectorViewModel] can implement the [VectorViewModelFactory] in its Companion object
  * to provide ways to create the initial state, as well as the ViewModel itself.
  */
 abstract class VectorViewModel<S : VectorState>(
     initialState: S,
-    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    protected val logger: Logger = androidLogger()
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job()
 ) : ViewModel() {
+
+    protected val logger: Logger by lazy { androidLogger(tag = this::class.java.simpleName) }
 
     /**
      * The state store associated with this ViewModel
      */
-    protected open val stateStore = StateStoreFactory.create(initialState, logger, stateStoreContext)
+    protected open val stateStore = StateStoreFactory.create(
+        initialState,
+        androidLogger(this::class.java.simpleName + "StateStore"),
+        stateStoreContext
+    )
 
     /**
      * A [kotlinx.coroutines.flow.Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
@@ -41,6 +45,9 @@ abstract class VectorViewModel<S : VectorState>(
         stateStore
             .stateObservable
             .asFlow()
+            .onEach {
+                logger.log("State: $it")
+            }
     }
 
     /**

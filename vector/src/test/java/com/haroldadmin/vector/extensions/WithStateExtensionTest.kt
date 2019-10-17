@@ -1,7 +1,6 @@
 package com.haroldadmin.vector.extensions
 
 import com.haroldadmin.vector.VectorViewModel
-import com.haroldadmin.vector.loggers.StringLogger
 import com.haroldadmin.vector.state.CountingState
 import com.haroldadmin.vector.withState
 import kotlinx.coroutines.CompletableDeferred
@@ -34,7 +33,6 @@ class WithStateExtensionTest {
 
         val viewModel = object : VectorViewModel<CountingState>(
             initialState = initState,
-            logger = StringLogger(),
             stateStoreContext = testScope.coroutineContext + Job()
         ) {
             fun incrementCount() = setState {

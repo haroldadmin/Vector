@@ -3,8 +3,6 @@ package com.haroldadmin.vector
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Before
 import org.junit.Test
@@ -38,8 +36,7 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
@@ -52,8 +49,7 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
@@ -66,8 +62,7 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
@@ -80,13 +75,12 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
 
-    @Test
+    @Test(expected = NoSuitableViewModelConstructorException::class)
     fun `ViewModel with four params creation using constructor`() {
         with(activity) {
             constructorCreator.create(
@@ -94,22 +88,7 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
-            )
-        }
-    }
-
-    @Test(expected = NoSuitableViewModelConstructorException::class)
-    fun `ViewModel with five params creation using constructor`() {
-        with(activity) {
-            constructorCreator.create(
-                FiveParamViewModel::class,
-                CreationTestState::class,
-                activityViewModelOwner(),
-                this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
@@ -122,8 +101,7 @@ internal class ViewModelCreatorsTest {
                 CreationTestState::class,
                 activityViewModelOwner(),
                 this,
-                testScope.coroutineContext,
-                systemOutLogger()
+                testScope.coroutineContext
             )
         }
     }
@@ -144,23 +122,15 @@ internal class ViewModelCreatorsTest {
     private class ThreeParamViewModel(
         initialState: CreationTestState,
         stateStoreContext: CoroutineContext,
-        logger: Logger
-    ) : VectorViewModel<CreationTestState>(initialState, stateStoreContext, logger)
+        savedStateHandle: SavedStateHandle
+    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, savedStateHandle)
 
     private class FourParamViewModel(
         initialState: CreationTestState,
         stateStoreContext: CoroutineContext,
-        logger: Logger,
-        savedStateHandle: SavedStateHandle
-    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
-
-    private class FiveParamViewModel(
-        initialState: CreationTestState,
-        stateStoreContext: CoroutineContext,
-        logger: Logger,
         savedStateHandle: SavedStateHandle,
         ignore: Unit = Unit
-    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, logger, savedStateHandle)
+    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, savedStateHandle)
 
     private class ViewModelWithFactory(
         initialState: CreationTestState

@@ -7,8 +7,7 @@ import com.haroldadmin.vector.Vector
  *
  * Logs are only written if logging is enabled.
  */
-internal class SystemOutLogger : Logger {
-    override val tag: String = "Vector"
+internal class SystemOutLogger(override val tag: String) : Logger {
 
     override fun log(message: String) {
         if (Vector.enableLogging) {
@@ -17,4 +16,4 @@ internal class SystemOutLogger : Logger {
     }
 }
 
-fun systemOutLogger(): Logger = SystemOutLogger()
+fun systemOutLogger(tag: String = "Vector"): Logger = SystemOutLogger(tag)

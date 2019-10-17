@@ -1,6 +1,5 @@
 package com.haroldadmin.vector.state
 
-import com.haroldadmin.vector.loggers.StringLogger
 import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
@@ -107,5 +106,4 @@ class StateProcessorTest {
                 assert(stateCount == i)
             }
         }
-
 }

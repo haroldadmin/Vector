@@ -1,8 +1,6 @@
 package com.haroldadmin.vector
 
 import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.androidLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
@@ -13,15 +11,13 @@ import kotlin.coroutines.CoroutineContext
  *
  * @param initialState The initial state for this ViewModel
  * @param stateStoreContext The [CoroutineContext] to be used with the contained State Store
- * @param logger The logger to be used for writing debug logs
  * @param savedStateHandle The [SavedStateHandle] to be used for persisting state across process deaths
  */
 abstract class SavedStateVectorViewModel<S : VectorState>(
     initialState: S,
     stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    logger: Logger = androidLogger(),
     protected val savedStateHandle: SavedStateHandle
-) : VectorViewModel<S>(initialState, stateStoreContext, logger) {
+) : VectorViewModel<S>(initialState, stateStoreContext) {
 
     companion object {
         /**

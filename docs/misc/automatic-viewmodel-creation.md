@@ -23,10 +23,10 @@ These delegates use Reflection to instantiate your ViewModels. The process goes 
     * If the delegate has been supplied a trailing lambda which tells us how to produce the ViewModel, we invoke it, register the ViewModel with the `ViewModelProvider` for the calling Activity/Fragment and return it.
     * Otherwise, we check if the ViewModel implements `VectorViewModelFactory` in its companion object. If so, we attempt to create the ViewModel using its `create` method.
     * If the ViewModel does not implement that interface or if the returned ViewModel is null, we try to create the ViewModel using its constructor. For this to succeed, the ViewModel must have one of the following constructors:
-        1. ViewModel(initialState)
-        2. ViewModel(initialState, savedStateHandle)
-        3. ViewModel(initialState, stateStoreContext, logger)
-        4. ViewModel(initialState, stateStoreContext, logger, savedStateHandle)
+        1. ViewModel()
+        2. ViewModel(initialState)
+        3. ViewModel(initialState, savedStateHandle)
+        4. ViewModel(initialState, stateStoreContext, savedStateHandle)
   
   * If these conditions can not be met, we throw an exception and crash.
 

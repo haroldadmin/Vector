@@ -3,7 +3,6 @@ package com.haroldadmin.vector
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.systemOutLogger
 import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,8 +32,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity.activityViewModelOwner(),
             activity,
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
 
         withState(vm) { state -> assert(state == VMWithFactoryImplementingInitialState.initialStateForTesting) }
@@ -47,8 +45,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity.activityViewModelOwner(),
             activity,
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
         withState(vm) { state -> assert(state == CountingState()) }
     }
@@ -60,8 +57,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity.activityViewModelOwner(),
             activity,
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
 
         assert(vm.currentState == CountingState())
@@ -74,8 +70,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity.activityViewModelOwner(),
             activity,
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
 
         assert(vm.currentState == CountingState())
@@ -88,8 +83,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity.activityViewModelOwner(),
             activity,
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
 
         assert(vm.currentState == CountingState())
@@ -108,8 +102,7 @@ internal class VectorViewModelProviderTest {
             CountingState::class,
             activity,
             activity.activityViewModelOwner(),
-            stateStoreContext,
-            systemOutLogger()
+            stateStoreContext
         )
 
         withState(vm) { state -> assert(state.count == 42) }

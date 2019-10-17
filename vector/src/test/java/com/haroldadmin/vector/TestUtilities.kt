@@ -3,8 +3,6 @@ package com.haroldadmin.vector
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.systemOutLogger
 import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,9 +18,8 @@ internal class TestViewModel(initialState: TestStates) : VectorViewModel<TestSta
 
 internal class TestViewModelWithFactory(
     initialState: TestStates,
-    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    logger: Logger = systemOutLogger()
-) : VectorViewModel<TestStates>(initialState, stateStoreContext, logger) {
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job()
+) : VectorViewModel<TestStates>(initialState, stateStoreContext) {
 
     companion object : VectorViewModelFactory<TestViewModelWithFactory, TestStates> {
 
@@ -44,9 +41,8 @@ internal class TestViewModelWithFactory(
 
 internal class TestViewModelWithFactoryAndDefaults(
     initialState: TestStates.TestStateWithDefaults,
-    stateStoreContext: CoroutineContext = Dispatchers.Default + Job(),
-    logger: Logger = systemOutLogger()
-) : VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext, logger) {
+    stateStoreContext: CoroutineContext = Dispatchers.Default + Job()
+) : VectorViewModel<TestStates.TestStateWithDefaults>(initialState, stateStoreContext) {
     companion object : VectorViewModelFactory<TestViewModelWithFactoryAndDefaults, TestStates.TestStateWithDefaults> {
         override fun initialState(
             handle: SavedStateHandle,
@@ -90,12 +86,10 @@ internal class TestSavedStateViewModelWithFactory(
 internal class TestViewModelWithMultipleParams(
     initialState: CountingState,
     stateStoreContext: CoroutineContext,
-    logger: Logger,
     savedStateHandle: SavedStateHandle
 ) : SavedStateVectorViewModel<CountingState>(
     initialState,
     stateStoreContext,
-    logger,
     savedStateHandle
 )
 

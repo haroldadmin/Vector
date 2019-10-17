@@ -3,7 +3,6 @@ package com.haroldadmin.vector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
-import com.haroldadmin.vector.loggers.Logger
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -18,8 +17,7 @@ internal interface ViewModelFactoryCreator {
         stateClass: KClass<out S>,
         viewModelOwner: ViewModelOwner,
         savedStateRegistryOwner: SavedStateRegistryOwner,
-        stateStoreContext: CoroutineContext,
-        logger: Logger
+        stateStoreContext: CoroutineContext
     ): ViewModelProvider.Factory
 }
 
@@ -28,23 +26,29 @@ internal interface ViewModelFactoryCreator {
  * instantiate it from its constructor
  *
  * The [VectorViewModel] must have one of the following constructors for it to be instantiated automatically:
- * 1. ViewModel(initialState)
- * 2. ViewModel(initialState, savedStateHandle)
- * 3. ViewModel(initialState, stateStoreContext, logger)
- * 4. ViewModel(initialState, stateStoreContext, logger, savedStateHandle)
+ * 1. ViewModel()
+ * 2. ViewModel(initialState)
+ * 3. ViewModel(initialState, savedStateHandle)
+ * 4. ViewModel(initialState, stateStoreContext, savedStateHandle)
  *
  * If it does not have one of these constructors, it should implement a [VectorViewModelFactory] in its companion object
  * which creates this view model and returns it.
  */
 internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
 
+//    private val supportedParameterTypes = arrayOf<Array<Class<*>>>(
+//        arrayOf(),
+//        arrayOf(VectorState::class.java),
+//        arrayOf(VectorState::class.java, SavedStateHandle::class.java),
+//        arrayOf(VectorState::class.java, CoroutineContext::class.java, SavedStateHandle::class.java)
+//    )
+
     override fun <VM : VectorViewModel<S>, S : VectorState> create(
         vmClass: KClass<out VM>,
         stateClass: KClass<out S>,
         viewModelOwner: ViewModelOwner,
         savedStateRegistryOwner: SavedStateRegistryOwner,
-        stateStoreContext: CoroutineContext,
-        logger: Logger
+        stateStoreContext: CoroutineContext
     ): ViewModelProvider.Factory {
 
         val stateFactory: VectorStateFactory = RealStateFactory()
@@ -52,7 +56,7 @@ internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
         val constructor = vmClass.constructors.first()
         val parametersSize = constructor.parameters.size
 
-        if (parametersSize > 4) {
+        if (parametersSize > 3) {
             throw NoSuitableViewModelConstructorException()
         }
 
@@ -64,8 +68,7 @@ internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
                 0 -> vmClass.java.newInstance()
                 1 -> vmClass.java.instance(initialState) as VM
                 2 -> constructor.call(initialState, handle)
-                3 -> constructor.call(initialState, stateStoreContext, logger)
-                4 -> constructor.call(initialState, stateStoreContext, logger, handle)
+                3 -> constructor.call(initialState, stateStoreContext, handle)
                 else -> throw IllegalStateException("Unable to satisfy given ViewModel's constructor")
             }
         }
@@ -83,8 +86,7 @@ internal object FactoryStrategyVMFactoryCreator : ViewModelFactoryCreator {
         stateClass: KClass<out S>,
         viewModelOwner: ViewModelOwner,
         savedStateRegistryOwner: SavedStateRegistryOwner,
-        stateStoreContext: CoroutineContext,
-        logger: Logger
+        stateStoreContext: CoroutineContext
     ): ViewModelProvider.Factory {
 
         val companionFactoryClass = vmClass.factoryKompanion()

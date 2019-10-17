@@ -3,8 +3,6 @@ package com.haroldadmin.vector
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.SavedStateHandle
-import com.haroldadmin.vector.loggers.Logger
-import com.haroldadmin.vector.loggers.systemOutLogger
 import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -23,7 +21,7 @@ internal class SavedStateVectorViewModelTest {
     private val job = Job()
     private val activity: ComponentActivity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()
     private val viewModel: TestSavedStateVM by activity.viewModel { initialState, handle ->
-        TestSavedStateVM(initialState, testScope.coroutineContext + job, systemOutLogger(), handle)
+        TestSavedStateVM(initialState, testScope.coroutineContext + job, handle)
     }
 
     @Test
@@ -39,9 +37,8 @@ internal class SavedStateVectorViewModelTest {
 private class TestSavedStateVM(
     initialState: CountingState,
     stateStoreContext: CoroutineContext,
-    logger: Logger,
     savedStateHandle: SavedStateHandle
-) : SavedStateVectorViewModel<CountingState>(initialState, stateStoreContext, logger, savedStateHandle) {
+) : SavedStateVectorViewModel<CountingState>(initialState, stateStoreContext, savedStateHandle) {
 
     fun incrementCount() = setStateAndPersist {
         copy(count = this.count + 1)

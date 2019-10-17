@@ -8,9 +8,7 @@ import com.haroldadmin.vector.Vector
  *
  * Logs are only written if logging is enabled.
  */
-internal class AndroidLogger : Logger {
-
-    override val tag: String = "Vector"
+internal class AndroidLogger(override val tag: String) : Logger {
 
     override fun log(message: String) {
         if (Vector.enableLogging) {
@@ -22,4 +20,4 @@ internal class AndroidLogger : Logger {
 /**
  * A utility function to create instances of [AndroidLogger]
  */
-fun androidLogger(): Logger = AndroidLogger()
+fun androidLogger(tag: String): Logger = AndroidLogger(tag)
