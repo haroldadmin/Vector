@@ -2,6 +2,7 @@ package com.haroldadmin.vector.state
 
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
+import com.haroldadmin.vector.loggers.logv
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -52,12 +53,12 @@ internal class StateProcessorActor<S : VectorState>(
         consumeEach { actionToBeRouted ->
             when (actionToBeRouted) {
                 is SetStateAction -> {
-                    logger.log("Enqueueing Set-State action")
+                    logger.logv { "Enqueueing Set-State action" }
                     setStateQueue.offer(actionToBeRouted)
                 }
 
                 is GetStateAction -> {
-                    logger.log("Enqueueing Get-State action")
+                    logger.logv { "Enqueueing Get-State action" }
                     getStateQueue.offer(actionToBeRouted)
                 }
             }
@@ -69,8 +70,9 @@ internal class StateProcessorActor<S : VectorState>(
                  * scheduling algorithm where priority of waiting actions is increased everytime
                  * an action is processed.
                  */
-                val actionToBeProcessed = setStateQueue.poll() ?: getStateQueue.poll() ?: throw IllegalStateException("Queues are empty but there's no action to be processed")
-                logger.log("Sending element to be processed")
+                val actionToBeProcessed = setStateQueue.poll() ?: getStateQueue.poll()
+                ?: throw IllegalStateException("Queues are empty but there's no action to be processed")
+                logger.logv { "Sending element to be processed" }
                 stateProcessingActor.offer(actionToBeProcessed)
             }
         }
@@ -89,13 +91,13 @@ internal class StateProcessorActor<S : VectorState>(
 
             when (sentAction) {
                 is SetStateAction -> {
-                    logger.log("Processing Set-State action")
+                    logger.logv { "Processing Set-State action" }
                     val newState = sentAction.reducer.invoke(currentState)
                     stateChannel.offer(newState)
                 }
 
                 is GetStateAction -> {
-                    logger.log("Processing Get-State action")
+                    logger.logv { "Processing Get-State action" }
                     sentAction.block.invoke(currentState)
                 }
             }
@@ -111,7 +113,7 @@ internal class StateProcessorActor<S : VectorState>(
     }
 
     override fun clearProcessor() {
-        logger.log("Clearing State Processor")
+        logger.logv { "Clearing State Processor" }
         stateProcessingActor.close()
         routingActor.close()
         this.cancel()

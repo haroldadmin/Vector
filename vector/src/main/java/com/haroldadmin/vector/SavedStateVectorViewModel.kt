@@ -1,6 +1,7 @@
 package com.haroldadmin.vector
 
 import androidx.lifecycle.SavedStateHandle
+import com.haroldadmin.vector.loggers.logd
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
@@ -44,7 +45,7 @@ abstract class SavedStateVectorViewModel<S : VectorState>(
      * Subclasses can override this method for custom behaviour.
      */
     protected open fun persistState() = withState { state ->
-        logger.log("Persisting state: $state")
+        logger.logd { "Persisting state: $state" }
         savedStateHandle.set(KEY_SAVED_STATE, state)
     }
 }

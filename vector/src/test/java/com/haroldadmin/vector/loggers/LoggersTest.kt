@@ -25,4 +25,17 @@ internal class LoggersTest {
 
         assert(logger.getLog().contains(message))
     }
+
+    @Test
+    fun `Logging level test`() {
+        Vector.enableLogging = true
+        val message = "Hello, world!"
+        logger.logd { message }
+        assert(logger.getLog().contains(Regex("""^D/${logger.tag}.+""")))
+
+        logger.clear()
+
+        logger.logv { message }
+        assert(logger.getLog().contains(Regex("""^V/${logger.tag}.+""")))
+    }
 }

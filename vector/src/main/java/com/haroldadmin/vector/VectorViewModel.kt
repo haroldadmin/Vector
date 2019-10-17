@@ -4,6 +4,8 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
+import com.haroldadmin.vector.loggers.logd
+import com.haroldadmin.vector.loggers.logv
 import com.haroldadmin.vector.state.StateStoreFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,7 +48,7 @@ abstract class VectorViewModel<S : VectorState>(
             .stateObservable
             .asFlow()
             .onEach {
-                logger.log("State: $it")
+                logger.logd { "State: $it" }
             }
     }
 
@@ -91,7 +93,7 @@ abstract class VectorViewModel<S : VectorState>(
      */
     @CallSuper
     override fun onCleared() {
-        logger.log("Clearing ViewModel")
+        logger.logv { "Clearing ViewModel" }
         super.onCleared()
         stateStore.clear()
     }

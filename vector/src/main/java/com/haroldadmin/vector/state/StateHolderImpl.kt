@@ -2,6 +2,7 @@ package com.haroldadmin.vector.state
 
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
+import com.haroldadmin.vector.loggers.logv
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 /**
@@ -19,7 +20,7 @@ internal class StateHolderImpl<S : VectorState>(
     override val stateObservable = ConflatedBroadcastChannel(initialState)
 
     override fun clearHolder() {
-        logger.log("Clearing State Holder")
+        logger.logv { "Clearing State Holder" }
         stateObservable.close()
     }
 }

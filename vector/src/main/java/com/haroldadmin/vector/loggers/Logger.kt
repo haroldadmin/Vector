@@ -8,6 +8,10 @@ package com.haroldadmin.vector.loggers
  */
 interface Logger {
 
+    enum class Level {
+        DEBUG, VERBOSE
+    }
+
     /**
      * A name tag associated with this logger for identification and filtering
      */
@@ -18,5 +22,14 @@ interface Logger {
      *
      * @param message The message to be logged
      */
-    fun log(message: String)
+    fun log(message: String, level: Level = Level.DEBUG)
+
+}
+
+inline fun Logger.logd(crossinline messageProducer: () -> String) {
+    log(messageProducer(), Logger.Level.DEBUG)
+}
+
+inline fun Logger.logv(crossinline messageProducer: () -> String) {
+    log(messageProducer(), Logger.Level.VERBOSE)
 }

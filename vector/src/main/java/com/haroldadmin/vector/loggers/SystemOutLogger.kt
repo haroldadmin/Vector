@@ -1,6 +1,7 @@
 package com.haroldadmin.vector.loggers
 
 import com.haroldadmin.vector.Vector
+import com.haroldadmin.vector.loggers.Logger.*
 
 /**
  * An implementation of [Logger] which writes logs to [System.out]
@@ -9,9 +10,13 @@ import com.haroldadmin.vector.Vector
  */
 internal class SystemOutLogger(override val tag: String) : Logger {
 
-    override fun log(message: String) {
-        if (Vector.enableLogging) {
-            println("$tag: $message")
+    override fun log(message: String, level: Level) {
+        if (!Vector.enableLogging) {
+            return
+        }
+        when (level) {
+            Level.DEBUG -> println("D/$tag: $message")
+            Level.VERBOSE -> println("V/$tag: $message")
         }
     }
 }
