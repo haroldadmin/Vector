@@ -41,15 +41,15 @@ Vector borrows from the design of both MvRx and Roxie, and I would like to since
 
 ## Vector's approach to MVI
 
-* Vector recommends using a Kotlin Data Class to represent the UI Model. Your model class should implement the [VectorState](vector-state.md) interface.
+* Vector recommends using a Kotlin Data Class to represent the UI Model. Your model class should implement the [VectorState](components/vector-state.md) interface.
 * Intents are regular lambdas in Vector. State reducers are of the type `S.() -> S`, where S is a model class implementing the `VectorState` interface.
 * Vector does not have an opinion regarding what `Views` should be in your app. We supply a convenient `VectorFragment` abstract class in the library, but it is not necessary to use it. While the sample app in the repository uses `Fragments`, you are free to choose whatever you like. The current state is exposed to the View through a `Kotlin Flow` object, so it helps if your View class is a `CoroutineScope` with.
 
 ### Building Blocks
 
-* [Vector State](vector-state.md)
-* [Vector Fragment](vector-fragment.md)
-* [Vector ViewModel](vector-viewmodel.md)
+* [Vector State](components/vector-state.md)
+* [Vector Fragment](components/vector-fragment.md)
+* [Vector ViewModel](components/vector-viewmodel.md)
 
 ## Further Reading
 

@@ -1,4 +1,4 @@
-# Usage
+# Basics
 
 To demonstrate the usage of Vector, let us build an imaginary note taking app. We are going to build the screen where we show all the notes saved by our user.
 
@@ -27,11 +27,11 @@ enum class Filter {
 
 Vector requires that you implement the `VectorState` interface in your state classes. It is an empty interface, and serves only as a marker for these classes.
 
-For an in-depth look at defining state, please read [Vector State](vector-state.md).
+For an in-depth look at defining state, please read [Vector State](../components/vector-state.md).
 
 ## The ViewModel class
 
-The ViewModel class serves as a holder for UI state, and also manages mutations/access to it. It survives configuration changes, and is tied to the logical lifecycle of a Fragment or Activity. Vector provides a [`VectorViewModel`](vector-viewmodel.md) component for this. You should extend this class in your own ViewModels. Let's use it to build our `NotesListViewModel`.
+The ViewModel class serves as a holder for UI state, and also manages mutations/access to it. It survives configuration changes, and is tied to the logical lifecycle of a Fragment or Activity. Vector provides a [`VectorViewModel`](../components/vector-viewmodel.md) component for this. You should extend this class in your own ViewModels. Let's use it to build our `NotesListViewModel`.
 
 ### Initial State
 
@@ -139,7 +139,7 @@ class NotesListViewModel(
 
 ## The Presenter class
 
-The presenter class serves as the UI for your application. Vector provides a simple [`VectorFragment`](vector-fragment.md) component for this. It is a subclass of the AndroidX Fragment, and has a convenient [`CoroutineScope`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/) to launch coroutines. Let's use it to build our `NotesListFragment` class.
+The presenter class serves as the UI for your application. Vector provides a simple [`VectorFragment`](../components/vector-fragment.md) component for this. It is a subclass of the AndroidX Fragment, and has a convenient [`CoroutineScope`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/) to launch coroutines. Let's use it to build our `NotesListFragment` class.
 
 ```kotlin
 class NotesListFragment: VectorFragment()
@@ -160,7 +160,7 @@ class NotesListFragment: VectorFragment() {
 This will lazily instantiate the ViewModel for you! 🎉🎉🎉
 
 !!! note
-    ViewModel delegates supplied by Vector can only create ViewModels with the same dependencies as the `VectorViewModel` class. If you have other dependencies in your ViewModel's constructor, please take a look at the "ViewModels with additional dependencies" section in the [documentation for VectorViewModel](vector-viewmodel.md).
+    ViewModel delegates supplied by Vector can only create ViewModels with the same dependencies as the `VectorViewModel` class. If you have other dependencies in your ViewModel's constructor, please take a look at the "ViewModels with additional dependencies" section in the [documentation for VectorViewModel](../components/vector-viewmodel.md).
 
 ### Observing state
 

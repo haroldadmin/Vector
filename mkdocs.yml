@@ -10,18 +10,17 @@ repo_url: 'https://github.com/haroldadmin/Vector'
 nav:
   - 'Overview': 'index.md'
   - 'Introduction': 'introduction.md'
-  - 'Usage': 
-    - 'Simple': 'usage.md'
-    - 'Advanced': 'advanced-usage.md'
+  - 'Basics': 'usage/basics.md'
+  - 'Advanced Usage': 'usage/advanced.md'
   - 'Components':
-    - 'Vector State': 'vector-state.md'
-    - 'Vector Fragment': 'vector-fragment.md'
-    - 'Vector ViewModel': 'vector-viewmodel.md'
-    - 'SavedState VectorViewModel': 'saved-state-vectorviewmodel.md'
-    - 'Logging': 'logging.md'
-  - 'Advanced':
-      - 'Automatic ViewModel Creation': 'automatic-viewmodel-creation.md'
-      - 'Coroutine Context for State Store': 'state-store-context.md'
+    - 'Vector State': 'components/vector-state.md'
+    - 'Vector Fragment': 'components/vector-fragment.md'
+    - 'Vector ViewModel': 'components/vector-viewmodel.md'
+    - 'SavedState VectorViewModel': 'components/saved-state-vectorviewmodel.md'
+    - 'Logging': 'components/logging.md'
+  - 'Miscellaneous':
+      - 'Automatic ViewModel Creation': 'misc/automatic-viewmodel-creation.md'
+      - 'Coroutine Context for State Store': 'misc/state-store-context.md'
   - 'API Reference': 'api/vector/index.md'
 
 theme:

@@ -1,10 +1,10 @@
 # Advanced Usage
 
-Let us continue with the example described in the [Usage](usage.md) page.
+Let us continue with the example described in the [Basics](basics.md) page.
 
 ## Dependency Injection support
 
-Our ViewModel needs access to a Repository or a Use-Case class in order to be able to fetch the user's notes. In the [Usage](usage.md) section, we setup the repository as a singleton Kotlin `object`, so that we could access it without creating an instance of it.
+Our ViewModel needs access to a Repository or a Use-Case class in order to be able to fetch the user's notes. In the [Usage](basics.md) section, we setup the repository as a singleton Kotlin `object`, so that we could access it without creating an instance of it.
 
 This is rarely the case in real applications, and it is much more common to split your business logic into different Use-Case classes. Let us create a `GetNotesUseCase` class for our notes app:
 
