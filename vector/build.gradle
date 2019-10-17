@@ -63,6 +63,7 @@ dependencies {
     implementation libs.appCompat
     implementation libs.vmSavedState
     implementation libs.viewModel
+    implementation libs.lifecycleRuntime
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest

@@ -26,7 +26,7 @@ VectorState is an interface denoting a model class representing the view's state
 
 * **VectorFragment**
 
-Vector provides an abstract `VectorFragment` class extending from AndroidX's Fragment class. A `VectorFragment` has a convenient `fragmentScope` coroutine scope, which can be used to easily launch Coroutines from a Fragment.
+Vector provides an abstract `VectorFragment` class extending from AndroidX's Fragment class. A `VectorFragment` has a convenient coroutine scope, which can be used to easily launch Coroutines from a Fragment.
 
 ## Example
 
@@ -45,8 +45,7 @@ class MyFragment: VectorFragment() {
 
     private val myViewModel: MyViewModel by fragmentViewModel()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         renderState(viewModel) { state ->
             toast(state.message)
         }

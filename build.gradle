@@ -47,6 +47,7 @@ buildscript {
             "liveData"          : "androidx.lifecycle:lifecycle-livedata:${versions.lifecycle}",
             "lifecycle"         : "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}",
             "lifecycleTest"     : "androidx.arch.core:core-testing:${versions.lifecycleTest}",
+            "lifecycleRuntime"  : "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycle}",
             "vmSavedState"      : "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions.vmSavedState}",
             "ktxCore"           : "androidx.core:core-ktx:${versions.ktxCore}",
             "recyclerView"      : "androidx.recyclerview:recyclerview:${versions.recyclerView}",
