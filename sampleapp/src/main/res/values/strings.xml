@@ -7,4 +7,7 @@
     <string name="entitiesFragmentEmptyListMessage">This list is empty.\nAdd some entities by tapping the button below!
     </string>
     <string name="entityChangesSavedMessage">Changes saved!</string>
+    <string name="subtitleText">Built with Vector</string>
+    <string name="descriptionLogo">Library logo</string>
+    <string name="debugInformation">"App Version: %1$s \nLibrary Version: %2$s</string>
 </resources>

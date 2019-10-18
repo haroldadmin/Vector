@@ -42,4 +42,9 @@
             app:nullable="false"
             android:defaultValue="0L" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.haroldadmin.sampleapp.about.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about"/>
 </navigation>
