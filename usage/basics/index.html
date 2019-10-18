@@ -812,9 +812,9 @@
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">NotesListViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span><span class="p">()</span>
 
-  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onViewCreated</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">()</span> <span class="p">{</span>
     <span class="p">...</span>
-    <span class="n">viewScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
+    <span class="n">fragmentScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
       <span class="n">viewModel</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
         <span class="n">recyclerViewAdapter</span><span class="p">.</span><span class="n">submitList</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">notes</span><span class="p">)</span>
       <span class="p">}</span>
@@ -824,12 +824,12 @@
 </pre></div>
 
 
-<p>The <code>viewScope</code> property is a Coroutine Scope which is tied to the Fragment's view-lifecycle.</p>
+<p>The <code>fragmentScope</code> property is a Coroutine Scope which is cancelled when the Fragment's <code>onDestroy()</code> callback is called.</p>
 <p>This action of subscribing to state changes can be done more concisely using the <code>renderState()</code> method in the <code>VectorFragment</code> class.</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">NotesListViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span><span class="p">()</span>
 
-  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onViewCreated</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">()</span> <span class="p">{</span>
     <span class="p">...</span>
     <span class="n">renderState</span><span class="p">(</span><span class="n">viewModel</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
       <span class="n">recyclerViewAdapter</span><span class="p">.</span><span class="n">submitList</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">notes</span><span class="p">)</span>
