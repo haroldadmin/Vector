@@ -3,9 +3,12 @@ package com.haroldadmin.vector
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.haroldadmin.vector.loggers.androidLogger
-import com.haroldadmin.vector.loggers.logd
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * A Fragment which has a convenient fragmentScope property

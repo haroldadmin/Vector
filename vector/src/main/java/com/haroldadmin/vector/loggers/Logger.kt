@@ -23,7 +23,6 @@ interface Logger {
      * @param message The message to be logged
      */
     fun log(message: String, level: Level = Level.DEBUG)
-
 }
 
 inline fun Logger.logd(crossinline messageProducer: () -> String) {

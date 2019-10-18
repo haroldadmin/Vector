@@ -15,7 +15,6 @@ import com.haroldadmin.sampleapp.utils.show
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
-import com.haroldadmin.vector.loggers.logd
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
