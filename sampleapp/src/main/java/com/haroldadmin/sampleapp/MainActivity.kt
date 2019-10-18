@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.haroldadmin.sampleapp.databinding.ActivityMainBinding
 
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val appBarConfig = AppBarConfiguration(navController.graph)
-        binding.toolbar.setupWithNavController(navController, appBarConfig)
+        binding.toolbar.apply {
+            setupWithNavController(navController, appBarConfig)
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener { item -> item.onNavDestinationSelected(navController)}
+        }
     }
 }

@@ -37,7 +37,7 @@ abstract class VectorFragment : Fragment() {
     /**
      * Renders the UI based on the given [state] parameter using the [renderer] block. If your fragment is tied to a
      * [VectorViewModel] then consider using the overloaded version of the method which takes in a viewModel as an
-     * input parameter.
+     * input parameter. **Must be called after the Fragment view has been created ([onViewCreated])**
      *
      * @param state The state instance using which the UI should be rendered
      * @param renderer The method which updates the UI state

@@ -76,7 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_round_check_24px" />
+            app:srcCompat="@drawable/ic_round_check_24px" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
