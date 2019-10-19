@@ -28,7 +28,7 @@ class AboutFragment : VectorFragment() {
                     repeatCount = ObjectAnimator.INFINITE
                     interpolator = LinearInterpolator()
                 }
-                .also { it.start()}
+                .also { it.start() }
 
             binding.debugInfo.text = getString(R.string.debugInformation, state.appVersion, state.libraryVersion)
         }

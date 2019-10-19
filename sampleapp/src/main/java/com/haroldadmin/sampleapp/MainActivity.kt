@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.apply {
             setupWithNavController(navController, appBarConfig)
             inflateMenu(R.menu.menu_main)
-            setOnMenuItemClickListener { item -> item.onNavDestinationSelected(navController)}
+            setOnMenuItemClickListener { item -> item.onNavDestinationSelected(navController) }
         }
     }
 }
