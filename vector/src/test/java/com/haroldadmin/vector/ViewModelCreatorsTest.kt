@@ -3,6 +3,7 @@ package com.haroldadmin.vector
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.SavedStateHandle
+import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +21,7 @@ internal class ViewModelCreatorsTest {
     private val constructorCreator: ViewModelFactoryCreator = ConstructorStrategyVMFactoryCreator
     private val factoryCreator: ViewModelFactoryCreator = FactoryStrategyVMFactoryCreator
 
-    private lateinit var activity: CreationTestActivity
+    lateinit var activity: CreationTestActivity
 
     @Before
     fun setup() {
@@ -33,11 +34,11 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             constructorCreator.create(
                 ZeroParamViewModel::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(ZeroParamViewModel::class.java)
         }
     }
 
@@ -46,11 +47,11 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             constructorCreator.create(
                 OneParamViewModel::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(OneParamViewModel::class.java)
         }
     }
 
@@ -59,11 +60,11 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             constructorCreator.create(
                 TwoParamViewModel::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(TwoParamViewModel::class.java)
         }
     }
 
@@ -72,11 +73,11 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             constructorCreator.create(
                 ThreeParamViewModel::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(ThreeParamViewModel::class.java)
         }
     }
 
@@ -85,11 +86,11 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             constructorCreator.create(
                 FourParamViewModel::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(FourParamViewModel::class.java)
         }
     }
 
@@ -98,46 +99,44 @@ internal class ViewModelCreatorsTest {
         with(activity) {
             factoryCreator.create(
                 ViewModelWithFactory::class,
-                CreationTestState::class,
+                CountingState::class,
                 activityViewModelOwner(),
                 this,
                 testScope.coroutineContext
-            )
+            ).create(ViewModelWithFactory::class.java)
         }
     }
 
-    private data class CreationTestState(val count: Int = 0) : VectorState
+    class ZeroParamViewModel : VectorViewModel<CountingState>(CountingState())
 
-    private class ZeroParamViewModel : VectorViewModel<CreationTestState>(CreationTestState())
+    class OneParamViewModel(
+        initialState: CountingState
+    ) : VectorViewModel<CountingState>(initialState)
 
-    private class OneParamViewModel(
-        initialState: CreationTestState
-    ) : VectorViewModel<CreationTestState>(initialState)
-
-    private class TwoParamViewModel(
-        initialState: CreationTestState,
+    class TwoParamViewModel(
+        initialState: CountingState,
         savedStateHandle: SavedStateHandle
-    ) : SavedStateVectorViewModel<CreationTestState>(initialState = initialState, savedStateHandle = savedStateHandle)
+    ) : SavedStateVectorViewModel<CountingState>(initialState = initialState, savedStateHandle = savedStateHandle)
 
-    private class ThreeParamViewModel(
-        initialState: CreationTestState,
+    class ThreeParamViewModel(
+        initialState: CountingState,
         stateStoreContext: CoroutineContext,
         savedStateHandle: SavedStateHandle
-    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, savedStateHandle)
+    ) : SavedStateVectorViewModel<CountingState>(initialState, stateStoreContext, savedStateHandle)
 
-    private class FourParamViewModel(
-        initialState: CreationTestState,
+    class FourParamViewModel(
+        initialState: CountingState,
         stateStoreContext: CoroutineContext,
         savedStateHandle: SavedStateHandle,
         ignore: Unit = Unit
-    ) : SavedStateVectorViewModel<CreationTestState>(initialState, stateStoreContext, savedStateHandle)
+    ) : SavedStateVectorViewModel<CountingState>(initialState, stateStoreContext, savedStateHandle)
 
-    private class ViewModelWithFactory(
-        initialState: CreationTestState
-    ) : VectorViewModel<CreationTestState>(initialState) {
-        companion object : VectorViewModelFactory<ViewModelWithFactory, CreationTestState> {
+    class ViewModelWithFactory(
+        initialState: CountingState
+    ) : VectorViewModel<CountingState>(initialState) {
+        companion object : VectorViewModelFactory<ViewModelWithFactory, CountingState> {
             override fun create(
-                initialState: CreationTestState,
+                initialState: CountingState,
                 owner: ViewModelOwner,
                 handle: SavedStateHandle
             ): ViewModelWithFactory {
@@ -146,5 +145,5 @@ internal class ViewModelCreatorsTest {
         }
     }
 
-    private class CreationTestActivity : FragmentActivity()
+    class CreationTestActivity : FragmentActivity()
 }

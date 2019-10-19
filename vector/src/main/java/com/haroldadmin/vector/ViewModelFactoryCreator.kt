@@ -36,13 +36,6 @@ internal interface ViewModelFactoryCreator {
  */
 internal object ConstructorStrategyVMFactoryCreator : ViewModelFactoryCreator {
 
-//    private val supportedParameterTypes = arrayOf<Array<Class<*>>>(
-//        arrayOf(),
-//        arrayOf(VectorState::class.java),
-//        arrayOf(VectorState::class.java, SavedStateHandle::class.java),
-//        arrayOf(VectorState::class.java, CoroutineContext::class.java, SavedStateHandle::class.java)
-//    )
-
     override fun <VM : VectorViewModel<S>, S : VectorState> create(
         vmClass: KClass<out VM>,
         stateClass: KClass<out S>,
