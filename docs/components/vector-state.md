@@ -73,21 +73,6 @@ data class ProfilePageState(
 
 When needed, this state can be directly put as a `Serializable` into a `SavedInstanceState` bundle or a `SavedStateHandle` in a ViewModel.
 
-For members in your state class which should not be persisted, `@Transient` annotation can be used.
-
-```kotlin
-@Parcelize
-data class ProfilePageState(
-  val userId: Long,
-  @Transient val user: User
-): VectorState
-```
-
-Doing this ensures that the transient values in the state object are not persisted.
-
-!!! info
-    Your state object should only persist the minimum amount of information required to rebuild it fully after a process death.
-
 ## Automatic State Restoration
 
 If you use the lazy ViewModel delegates shipped with Vector, you must ensure that either:
