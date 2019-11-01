@@ -603,20 +603,6 @@
 
 
 <p>When needed, this state can be directly put as a <code>Serializable</code> into a <code>SavedInstanceState</code> bundle or a <code>SavedStateHandle</code> in a ViewModel.</p>
-<p>For members in your state class which should not be persisted, <code>@Transient</code> annotation can be used.</p>
-<div class="codehilite"><pre><span></span><span class="n">@Parcelize</span>
-<span class="k">data</span> <span class="k">class</span> <span class="nc">ProfilePageState</span><span class="p">(</span>
-  <span class="k">val</span> <span class="py">userId</span><span class="p">:</span> <span class="n">Long</span><span class="p">,</span>
-  <span class="n">@Transient</span> <span class="k">val</span> <span class="py">user</span><span class="p">:</span> <span class="n">User</span>
-<span class="p">):</span> <span class="n">VectorState</span>
-</pre></div>
-
-
-<p>Doing this ensures that the transient values in the state object are not persisted.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>Your state object should only persist the minimum amount of information required to rebuild it fully after a process death.</p>
-</div>
 <h2 id="automatic-state-restoration">Automatic State Restoration<a class="headerlink" href="#automatic-state-restoration" title="Permanent link">&para;</a></h2>
 <p>If you use the lazy ViewModel delegates shipped with Vector, you must ensure that either:</p>
 <ul>
