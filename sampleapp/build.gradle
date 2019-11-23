@@ -64,7 +64,8 @@ dependencies {
 
     implementation libs.appCompat
     implementation libs.lifecycle
-    implementation libs.ktxCore
+    implementation libs.lifecycleRuntime
+    implementation libs.coreKtx
     implementation libs.fragmentKtx
     implementation libs.constraintLayout
     implementation libs.recyclerView
