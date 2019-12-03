@@ -104,8 +104,8 @@ internal class StateProcessorActor<S : VectorState>(
         }
     }
 
-    override fun offerSetAction(action: suspend S.() -> S) {
-        routingActor.offer(SetStateAction(action))
+    override fun offerSetAction(reducer: suspend S.() -> S) {
+        routingActor.offer(SetStateAction(reducer))
     }
 
     override fun offerGetAction(action: suspend (S) -> Unit) {

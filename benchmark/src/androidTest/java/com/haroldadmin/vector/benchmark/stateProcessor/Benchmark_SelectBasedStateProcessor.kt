@@ -47,10 +47,10 @@ internal class Benchmark_SelectBasedStateProcessor<S : VectorState>(
     }
 
     /**
-     * Enqueues the given [action] to an internal queue
+     * Enqueues the given [reducer] to an internal queue
      */
-    override fun offerSetAction(action: suspend S.() -> S) {
-        setStateChannel.offer(Benchmark_SetStateAction(action))
+    override fun offerSetAction(reducer: suspend S.() -> S) {
+        setStateChannel.offer(Benchmark_SetStateAction(reducer))
     }
 
     /**

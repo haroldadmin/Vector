@@ -39,9 +39,9 @@ interface StateProcessor<S : VectorState> : CoroutineScope {
      * Offer a [SetStateAction] to this processor. This action will be processed as soon as
      * possible, before all existing [GetStateAction], if any.
      *
-     * @param action The action to be offered
+     * @param reducer The action to be offered
      */
-    fun offerSetAction(action: suspend S.() -> S)
+    fun offerSetAction(reducer: suspend S.() -> S)
 
     /**
      * Offer a [GetStateAction] to this processor. This action will be processed after any existing

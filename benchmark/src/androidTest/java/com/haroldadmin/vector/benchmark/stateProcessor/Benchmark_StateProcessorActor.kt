@@ -76,8 +76,8 @@ internal class Benchmark_StateProcessorActor<S : VectorState>(
         }
     }
 
-    override fun offerSetAction(action: suspend S.() -> S) {
-        routingActor.offer(Benchmark_SetStateAction(action))
+    override fun offerSetAction(reducer: suspend S.() -> S) {
+        routingActor.offer(Benchmark_SetStateAction(reducer))
     }
 
     override fun offerGetAction(action: suspend (S) -> Unit) {

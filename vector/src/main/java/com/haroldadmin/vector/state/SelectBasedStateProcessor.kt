@@ -36,13 +36,13 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * Queue for state reducers.
      * Has unlimited capacity so that sending new elements to it is not a blocking operation
      **/
-    private val setStateChannel: Channel<SetStateAction<S>> = Channel(Channel.UNLIMITED)
+    private val setStateChannel: Channel<reducer<S>> = Channel(Channel.UNLIMITED)
 
     /**
      * Queue for actions on the current state.
      * Has unlimited capacity so that sending new elements to it is not a blocking operation
      **/
-    private val getStateChannel: Channel<GetStateAction<S>> = Channel(Channel.UNLIMITED)
+    private val getStateChannel: Channel<action<S>> = Channel(Channel.UNLIMITED)
 
     init {
         if (isLazy) {
@@ -53,17 +53,17 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     }
 
     /**
-     * Enqueues the given [action] to an internal queue
+     * Enqueues the given [reducer] to an internal queue
      */
-    override fun offerSetAction(action: suspend S.() -> S) {
-        setStateChannel.offer(SetStateAction(action))
+    override fun offerSetAction(reducer: suspend S.() -> S) {
+        setStateChannel.offer(reducer)
     }
 
     /**
      * Enqueues the given [action] to an internal queue
      */
     override fun offerGetAction(action: suspend (S) -> Unit) {
-        getStateChannel.offer(GetStateAction(action))
+        getStateChannel.offer(action)
     }
 
     /**
@@ -77,19 +77,21 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     /**
      * Launches a coroutine to start processing jobs sent to it.
      */
-    internal fun start() {
-        launch {
-            while (isActive) {
-                select<Unit> {
-                    setStateChannel.onReceive { action ->
-                        val newState = action.reducer(stateHolder.state)
-                        stateHolder.stateObservable.offer(newState)
-                    }
-                    getStateChannel.onReceive { action ->
-                        action.block(stateHolder.state)
-                    }
+    internal fun start() = launch {
+        while (isActive) {
+            select<Unit> {
+                setStateChannel.onReceive { action ->
+                    val newState = action.invoke(stateHolder.state)
+                    stateHolder.stateObservable.offer(newState)
+                }
+                getStateChannel.onReceive { action ->
+                    action.invoke(stateHolder.state)
                 }
             }
         }
     }
 }
+
+private typealias reducer<S> = suspend S.() -> S
+
+private typealias action<S> = suspend (S) -> Unit
