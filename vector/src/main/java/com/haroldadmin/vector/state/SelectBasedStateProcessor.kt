@@ -68,10 +68,16 @@ internal class SelectBasedStateProcessor<S : VectorState>(
 
     /**
      * Cancels this processor's coroutine scope and stops processing of jobs.
+     *
+     * Repeated invocations have no effect.
      */
     override fun clearProcessor() {
-        logger.logd { "Clearing StateProcessor $this" }
+        if (isActive && !setStateChannel.isClosedForSend && !getStateChannel.isClosedForSend) {
+            logger.logd { "Clearing StateProcessor $this" }
+        }
         this.cancel()
+        setStateChannel.close()
+        getStateChannel.close()
     }
 
     /**
