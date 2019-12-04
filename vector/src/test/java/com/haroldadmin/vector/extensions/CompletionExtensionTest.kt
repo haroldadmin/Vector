@@ -20,5 +20,4 @@ internal class CompletionExtensionTest {
         }
         assert(isCompleted)
     }
-
 }

@@ -1,7 +1,6 @@
 package com.haroldadmin.vector.extensions
 
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
 
 /**
