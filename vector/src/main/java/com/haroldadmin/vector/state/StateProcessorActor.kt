@@ -20,6 +20,7 @@ import kotlin.coroutines.CoroutineContext
  * @param logger A [Logger] which can be used to log debug statements
  * @param coroutineContext The context of execution of this state processor
  */
+@Deprecated("Deprecated in favour of SelectBasedStateProcessor")
 internal class StateProcessorActor<S : VectorState>(
     private val stateHolder: StateHolder<S>,
     private val logger: Logger,

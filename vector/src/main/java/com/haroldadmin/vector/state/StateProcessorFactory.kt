@@ -23,6 +23,11 @@ internal object StateProcessorFactory {
         logger: Logger,
         coroutineContext: CoroutineContext
     ): StateProcessor<S> {
-        return StateProcessorActor(stateHolder, logger, coroutineContext)
+        return SelectBasedStateProcessor(
+            isLazy = false,
+            stateHolder = stateHolder,
+            logger = logger,
+            coroutineContext = coroutineContext
+        )
     }
 }
