@@ -3,6 +3,7 @@ package com.haroldadmin.vector.benchmark.reflection
 import androidx.benchmark.junit4.BenchmarkRule
 import androidx.benchmark.junit4.measureRepeated
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +12,7 @@ import kotlin.reflect.full.isSuperclassOf
 internal interface SuperTypeInterface
 internal class ImplementingClass : SuperTypeInterface
 
-// @Ignore("Don't run benchmarks for regular builds")
+@Ignore("Don't run benchmarks for regular builds")
 @RunWith(AndroidJUnit4::class)
 internal class SuperClassCheckBenchMark {
 
