@@ -1,2 +1,5 @@
-include ':sampleapp', ':vector', ':benchmark'
+include ':vector'
+include ':sampleapp'
+include ':benchmark'
+include ':hello-vector'
 rootProject.name='Vector'

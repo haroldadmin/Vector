@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Hello Vector</string>
+    <string name="message_button_text">Get Message</string>
+</resources>

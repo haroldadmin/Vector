@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        versionCode buildConfig.versionCode
+        versionName buildConfig.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'vector'
+            keyAlias 'vector'
+            keyPassword 'vector'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(path: ':vector')
+
+    implementation libs.kotlinStdLib
+    implementation libs.coroutinesCore
+    implementation libs.coroutinesAndroid
+
+    implementation libs.appCompat
+    implementation libs.lifecycle
+    implementation libs.lifecycleRuntime
+    implementation libs.coreKtx
+    implementation libs.fragmentKtx
+    implementation libs.constraintLayout
+    implementation libs.vmSavedState
+
+    testImplementation libs.junit
+    testImplementation libs.coroutinesTest
+
+    androidTestImplementation libs.androidxTestCore
+    androidTestImplementation libs.androidxTestExt
+    androidTestImplementation libs.espressoCore
+}
