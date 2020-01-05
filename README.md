@@ -59,12 +59,11 @@ class MyFragment: VectorFragment() {
 class MyViewModel(initState: MyState): VectorViewModel<MyState>(initState) {
 
     init {
-        viewModelScope.launch { getMessage() }
+        getMessage()
     }
 
-    suspend fun getMessage() {
-        val newMessage = MessageProvider.getMessage()
-        setState { copy(message = newMessage) }
+    fun getMessage() = setState { 
+        copy(message = "Hello, world!") 
     }
 }
 ```
