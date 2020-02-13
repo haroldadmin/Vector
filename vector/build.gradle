@@ -54,15 +54,15 @@ dokka {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation libs.kotlinStdLib
+    api libs.kotlinStdLib
+    api libs.coroutinesCore
+    api libs.coroutinesAndroid
     implementation libs.kotlinReflect
-    implementation libs.coroutinesCore
-    implementation libs.coroutinesAndroid
 
-    implementation libs.fragmentKtx
+    api libs.fragmentKtx
+    api libs.vmSavedState
+    api libs.viewModel
     implementation libs.appCompat
-    implementation libs.vmSavedState
-    implementation libs.viewModel
     implementation libs.lifecycleRuntime
 
     testImplementation libs.junit
