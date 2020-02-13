@@ -36,6 +36,12 @@ android {
         experimental = true
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -65,8 +71,11 @@ dependencies {
 
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
+    testImplementation libs.mockk
+    testImplementation libs.robolectric
+    debugImplementation libs.fragmentTest
+    testImplementation libs.espressoCore
 
-    androidTestImplementation libs.androidxTestCore
     androidTestImplementation libs.androidxTestExt
-    androidTestImplementation libs.espressoCore
+    androidTestImplementation libs.androidxTestCore
 }

@@ -17,10 +17,14 @@ class HelloViewModel(
     savedStateHandle: SavedStateHandle
 ) : SavedStateVectorViewModel<HelloState>(initialState, coroutineContext, savedStateHandle) {
 
-    fun getMessage(delayDuration: Long = 1000) = viewModelScope.launch {
-        setStateAndPersist { copy(message = "Loading...") }
+    companion object {
+        const val defaultDelay = 1000L
+    }
+
+    fun getMessage(delayDuration: Long = defaultDelay) = viewModelScope.launch {
+        setStateAndPersist { copy(message = HelloState.loadingMessage) }
         delay(delayDuration)
-        setStateAndPersist { copy(message = "Hello, World!") }
+        setStateAndPersist { copy(message = HelloState.helloMessage) }
     }
 
 }

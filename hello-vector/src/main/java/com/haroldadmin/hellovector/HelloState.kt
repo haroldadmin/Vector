@@ -6,5 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class HelloState(
-    val message: String = "Loading..."
-) : VectorState, Parcelable
+    val message: String = loadingMessage
+) : VectorState, Parcelable {
+    companion object {
+        const val loadingMessage = "Loading..."
+        const val helloMessage = "Hello, World!"
+    }
+}

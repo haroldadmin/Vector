@@ -59,7 +59,7 @@ dependencies {
     implementation libs.coroutinesCore
     implementation libs.coroutinesAndroid
 
-    implementation libs.fragment
+    implementation libs.fragmentKtx
     implementation libs.appCompat
     implementation libs.vmSavedState
     implementation libs.viewModel
@@ -69,6 +69,7 @@ dependencies {
     testImplementation libs.coroutinesTest
     testImplementation libs.mockk
     testImplementation libs.robolectric
+    debugImplementation libs.fragmentTest
 
     androidTestImplementation libs.androidxTestCore
     androidTestImplementation libs.espressoCore

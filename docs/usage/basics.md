@@ -2,7 +2,7 @@
 
 To demonstrate the usage of Vector, let us build an imaginary note taking app. We are going to build the screen where we show all the notes saved by our user.
 
-A screen written using Vector typically has three components: A presenter, a state class, and a ViewModel.
+A screen written using Vector typically has three components: A view (such as a fragment), a state class, and a ViewModel.
 
 ## The State class
 
@@ -41,7 +41,7 @@ class NotesListViewModel(
 ): VectorViewModel<NotesListState>(initialState)
 ```
 
-Our ViewModel has a dependency on an `initialState` object. Therefore, this ViewModel can **not** be handled directly with the `ViewModelProviders` class in the AndroidX Lifecycle library. We shall see how to get a hold of this ViewModel in the section on the [presenter class](#getting-hold-of-the-viewmodel).
+Our ViewModel has a dependency on an `initialState` object. Therefore, this ViewModel can **not** be instantiated automatically with the `ViewModelProviders` class in the AndroidX Lifecycle library. We shall see how to get a hold of this ViewModel in the section on the [presenter class](#getting-hold-of-the-viewmodel).
 
 The `initialState` parameter represents the default state of UI. Our ViewModel needs this in order to be able to tell the presenter what to show the user when it first loads.
 
@@ -49,7 +49,7 @@ The `initialState` parameter represents the default state of UI. Our ViewModel n
 
 A `VectorViewModel` exposes a [Kotlin Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html) of UI State to its owning Fragment/Activity. The owner can subscribe to this state flow, and render the UI according to whatever value is contained in it.
 
-From our ViewModel, whenever we produce a new state it should be pushed to this Flow, so that the UI can be informed that a new state has been created, and that it should re-render itself. When the ViewModel is first created, it sets the `initialState` object to the state flow.
+From our ViewModel, whenever we produce a new state it should be pushed to this Flow, so that the UI can be informed that a new state has been created, and that it should re-render itself. When the ViewModel is first created, it pushes the `initialState` object to the state flow.
 
 Our ViewModel is ready to get all the notes from our Repository, so let us fetch them as soon as the ViewModel is created.
 
@@ -93,6 +93,7 @@ So when our `setState` block has finished processing, our UI will be notified th
 
 !!! warning
     Since state updates are processed asynchronously, you should not assume that you shall get the updated state immediately after the `setState` block.
+    To get access to the latest state within a ViewModel, *always* use `withState` method.
 
 #### Accessing State
 
@@ -137,9 +138,10 @@ class NotesListViewModel(
 }
 ```
 
-## The Presenter class
+## The View class
 
-The presenter class serves as the UI for your application. Vector provides a simple [`VectorFragment`](../components/vector-fragment.md) component for this. It is a subclass of the AndroidX Fragment, and has a convenient [`CoroutineScope`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/) to launch coroutines. Let's use it to build our `NotesListFragment` class.
+The view class serves as the UI for your application. Vector provides a simple [`VectorFragment`](../components/vector-fragment.md) component for this. It is a subclass of the AndroidX Fragment, and has a convenient `renderState` to collect state updates and render the UI. 
+Let's use it to build our `NotesListFragment` class.
 
 ```kotlin
 class NotesListFragment: VectorFragment()
@@ -168,37 +170,24 @@ Now that we have our ViewModel, we can start observing state changes. To do this
 
 ```kotlin
 class NotesListFragment: VectorFragment() {
+
   private val viewModel: NotesListViewModel by fragmentViewModel()
 
-  override fun onViewCreated() {
-    ...
-    viewScope.launch {
-      viewModel.state.collect { state ->
-        recyclerViewAdapter.submitList(state.notes)
-      }
-    }
-  }
-}
-```
-
-The `viewScope` property is a Coroutine Scope which is tied to the Fragment's view-lifecycle.
-
-This action of subscribing to state changes can be done more concisely using the `renderState()` method in the `VectorFragment` class.
-
-```kotlin
-class NotesListFragment: VectorFragment() {
-  private val viewModel: NotesListViewModel by fragmentViewModel()
-
-  override fun onViewCreated() {
-    ...
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val root = inflater.inflate(R.layout.fragment_message, container, false)
+    
     renderState(viewModel) { state ->
       recyclerViewAdapter.submitList(state.notes)
     }
+    
+    return root
   }
 }
 ```
 
-Now whenever we get a new state object from our ViewModel, we automaticall update the user interface! 🎉🎉🎉
+The `renderState` block is lifecycle aware. State updates are rendered only while the View lifecycle is active.
+
+Now whenever we get a new state object from our ViewModel, we automatically update the user interface! 🎉🎉🎉
 
 ### Sending Actions to the ViewModel
 

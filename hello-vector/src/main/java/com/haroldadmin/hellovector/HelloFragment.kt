@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.fragmentViewModel
-import kotlinx.android.synthetic.main.fragment_message.messageTextView
 import kotlinx.android.synthetic.main.fragment_message.view.messageButton
+import kotlinx.android.synthetic.main.fragment_message.view.messageTextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -17,17 +17,17 @@ class HelloFragment : VectorFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_message, container, false)
+
         root.messageButton.setOnClickListener {
             viewModel.getMessage()
         }
-        return root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.getMessage()
         renderState(viewModel) { state ->
-            messageTextView.text = state.message
+            root.messageTextView.text = state.message
         }
+
+        viewModel.getMessage()
+
+        return root
     }
 }

@@ -4,16 +4,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.haroldadmin.vector.loggers.androidLogger
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * A Fragment which has a convenient fragmentScope property
  * to easily launch coroutines in it.
- *
  */
 abstract class VectorFragment : Fragment() {
 
@@ -21,27 +17,39 @@ abstract class VectorFragment : Fragment() {
      * A [CoroutineScope] associated with the lifecycle of this fragment. The scope is cancelled when
      * [onDestroy] of this Fragment has been called.
      */
-    protected open val fragmentScope: CoroutineScope by lazy { CoroutineScope(Dispatchers.Main + Job()) }
+    @Deprecated(
+        message = "Use the AndroidX provided lifecycleScope extension instead",
+        replaceWith = ReplaceWith(
+            "lifecycleScope",
+            "androidx.lifecycle.lifecycleScope"
+        )
+    )
+    protected open val fragmentScope: CoroutineScope
+        get() = lifecycleScope
 
     /**
      * A [CoroutineScope] associated with the view-lifecycle of this fragment. The scope is cancelled
      * when [onDestroyView] of this Fragment has been called, and created when [onCreateView] is called.
      *
-     * It delegates to the lifecycle-runtime library's [androidx.lifecycle.lifecycleScope] extension
+     * This is deprecated, and simply delegates to the lifecycle library's [androidx.lifecycle.lifecycleScope] property
      */
+    @Deprecated(
+        message = "Use the AndroidX provided lifecycle scope extension instead",
+        replaceWith = ReplaceWith(
+            "viewLifecycleOwner.lifecycleScope",
+            "androidx.lifecycle.lifecycleScope"
+        )
+    )
     protected open val viewScope: CoroutineScope
         get() = viewLifecycleOwner.lifecycleScope
-
-    protected open val logger by lazy { androidLogger(this::class.java.simpleName) }
 
     /**
      * Renders the UI based on the given [state] parameter using the [renderer] block. If your fragment is tied to a
      * [VectorViewModel] then consider using the overloaded version of the method which takes in a viewModel as an
-     * input parameter. **Must be called after the Fragment view has been created ([onViewCreated])**
+     * input parameter.
      *
      * @param state The state instance using which the UI should be rendered
      * @param renderer The method which updates the UI state
-     *
      */
     protected inline fun <reified S : VectorState> renderState(state: S, renderer: (S) -> Unit) {
         renderer(state)
@@ -49,32 +57,29 @@ abstract class VectorFragment : Fragment() {
 
     /**
      * Renders the UI based on emitted state updates from the given [viewModel] using the [renderer]
-     * block. **MUST BE CALLED IN onViewCreated()**
+     * block.
      *
-     * Launches a coroutine in [viewScope] which collects state updates from the given [viewModel] and calls
-     * the [renderer] method on it. Since the renderer method might contain references to views, and also since
-     * this method should only run while the view of the fragment is available, it is launched in the [viewScope]
-     * rather than the [fragmentScope]. As such, it must be called in [onViewCreated] after the [viewScope] is
-     * available and the view can be updated. The collection of state updates automatically stops when
-     * [onDestroyView] is called.
+     * Launches a coroutine in the view's lifecycle scope which collects state updates from the given
+     * [viewModel] and calls the [renderer] method on it. The renderer method interacts with the Fragment's views, and
+     * therefore must only be called within the lifecycle of the view. As such, use it in or after [onCreateView].
+     *
+     * The [renderer] parameter is a suspending function with a CoroutineScope of the Fragment's view lifecycle.
+     * It can be used to safely run coroutines which affect the UI.
      *
      * @param viewModel The ViewModel whose [VectorViewModel.state] flow is used to receive state updates and
      * render the UI
      * @param renderer The method which updates the UI
      */
-    protected inline fun <S : VectorState> renderState(viewModel: VectorViewModel<S>, crossinline renderer: (S) -> Unit) {
-        viewScope.launch {
+    protected inline fun <S : VectorState> renderState(
+        viewModel: VectorViewModel<S>,
+        crossinline renderer: suspend CoroutineScope.(S) -> Unit
+    ) {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
                 renderer(state)
             }
         }
     }
 
-    /**
-     * Cancels the [fragmentScope]
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        fragmentScope.cancel()
-    }
+    protected open val logger by lazy { androidLogger(this::class.java.simpleName) }
 }

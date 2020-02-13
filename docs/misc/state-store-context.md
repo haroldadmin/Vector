@@ -2,9 +2,8 @@
 
 Every `VectorViewModel` has a backing `StateHolder` and a `StateStore`. The `StateHolder` is responsible for holding the current state, and the `StateStore` is responsible for processing state access/mutation blocks.
 
-All state related actions are processed off the main thread, in a sequential manner using a Coroutine Actor. The coroutine context for this actor is by default defined as: `Dispatchers.Default + Job()`.
-
-If you wish to customize the state store coroutine context, you may do so by supplying your custom context in the ViewModel.
+All state related actions are processed off the main thread, in a sequential manner. The coroutine context for processing these actions can be customized using the ViewModel.
+Just pass in the desired context to the ViewModel's constructor.
 
 ```kotlin
 abstract class VectorViewModel<S : VectorState>(
