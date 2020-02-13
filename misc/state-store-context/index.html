@@ -457,8 +457,8 @@
                 
                 <h1 id="coroutine-context-for-the-state-store">Coroutine Context for the State Store<a class="headerlink" href="#coroutine-context-for-the-state-store" title="Permanent link">&para;</a></h1>
 <p>Every <code>VectorViewModel</code> has a backing <code>StateHolder</code> and a <code>StateStore</code>. The <code>StateHolder</code> is responsible for holding the current state, and the <code>StateStore</code> is responsible for processing state access/mutation blocks.</p>
-<p>All state related actions are processed off the main thread, in a sequential manner using a Coroutine Actor. The coroutine context for this actor is by default defined as: <code>Dispatchers.Default + Job()</code>.</p>
-<p>If you wish to customize the state store coroutine context, you may do so by supplying your custom context in the ViewModel.</p>
+<p>All state related actions are processed off the main thread, in a sequential manner. The coroutine context for processing these actions can be customized using the ViewModel.
+Just pass in the desired context to the ViewModel's constructor.</p>
 <div class="codehilite"><pre><span></span><span class="k">abstract</span> <span class="k">class</span> <span class="nc">VectorViewModel</span><span class="p">&lt;</span><span class="n">S</span> <span class="p">:</span> <span class="n">VectorState</span><span class="p">&gt;(</span>
     <span class="n">initialState</span><span class="p">:</span> <span class="n">S</span><span class="p">?,</span>
     <span class="n">stateStoreContext</span><span class="p">:</span> <span class="n">CoroutineContext</span> <span class="p">=</span> <span class="n">Dispatchers</span><span class="p">.</span><span class="n">Default</span> <span class="p">+</span> <span class="n">Job</span><span class="p">(),</span> <span class="c1">// &lt;- Change this parameter in your own implementations</span>

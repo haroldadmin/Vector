@@ -446,10 +446,11 @@
                 
                 <p><a href="../../../">vector</a> / <a href="../../">com.haroldadmin.vector</a> / <a href="../">VectorFragment</a> / <a href="./">viewScope</a></p>
 <h1 id="viewscope">viewScope<a class="headerlink" href="#viewscope" title="Permanent link">&para;</a></h1>
-<p><code>protected open val viewScope: CoroutineScope</code></p>
+<p><code>protected open val ~~viewScope~~: CoroutineScope</code>
+<strong>Deprecated:</strong> Use the AndroidX provided lifecycle scope extension instead</p>
 <p>A <a href="#">CoroutineScope</a> associated with the view-lifecycle of this fragment. The scope is cancelled
 when <a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onDestroyView()">onDestroyView</a> of this Fragment has been called, and created when <a href="https://developer.android.com/reference/androidx/fragment/app/Fragment.html#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)">onCreateView</a> is called.</p>
-<p>It delegates to the lifecycle-runtime library's <a href="#">androidx.lifecycle.lifecycleScope</a> extension</p>
+<p>This is deprecated, and simply delegates to the lifecycle library's <a href="#">androidx.lifecycle.lifecycleScope</a> property</p>
                 
                   
                 

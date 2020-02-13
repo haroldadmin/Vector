@@ -333,8 +333,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-presenter-class" class="md-nav__link">
-    The Presenter class
+  <a href="#the-view-class" class="md-nav__link">
+    The View class
   </a>
   
     <nav class="md-nav">
@@ -615,8 +615,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-presenter-class" class="md-nav__link">
-    The Presenter class
+  <a href="#the-view-class" class="md-nav__link">
+    The View class
   </a>
   
     <nav class="md-nav">
@@ -676,7 +676,7 @@
                 
                 <h1 id="basics">Basics<a class="headerlink" href="#basics" title="Permanent link">&para;</a></h1>
 <p>To demonstrate the usage of Vector, let us build an imaginary note taking app. We are going to build the screen where we show all the notes saved by our user.</p>
-<p>A screen written using Vector typically has three components: A presenter, a state class, and a ViewModel.</p>
+<p>A screen written using Vector typically has three components: A view (such as a fragment), a state class, and a ViewModel.</p>
 <h2 id="the-state-class">The State class<a class="headerlink" href="#the-state-class" title="Permanent link">&para;</a></h2>
 <p>The state class is a model for the UI state. It should have the following characteristics:</p>
 <ul>
@@ -707,11 +707,11 @@
 </pre></div>
 
 
-<p>Our ViewModel has a dependency on an <code>initialState</code> object. Therefore, this ViewModel can <strong>not</strong> be handled directly with the <code>ViewModelProviders</code> class in the AndroidX Lifecycle library. We shall see how to get a hold of this ViewModel in the section on the <a href="#getting-hold-of-the-viewmodel">presenter class</a>.</p>
+<p>Our ViewModel has a dependency on an <code>initialState</code> object. Therefore, this ViewModel can <strong>not</strong> be instantiated automatically with the <code>ViewModelProviders</code> class in the AndroidX Lifecycle library. We shall see how to get a hold of this ViewModel in the section on the <a href="#getting-hold-of-the-viewmodel">presenter class</a>.</p>
 <p>The <code>initialState</code> parameter represents the default state of UI. Our ViewModel needs this in order to be able to tell the presenter what to show the user when it first loads.</p>
 <h3 id="managing-state">Managing State<a class="headerlink" href="#managing-state" title="Permanent link">&para;</a></h3>
 <p>A <code>VectorViewModel</code> exposes a <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Kotlin Flow</a> of UI State to its owning Fragment/Activity. The owner can subscribe to this state flow, and render the UI according to whatever value is contained in it.</p>
-<p>From our ViewModel, whenever we produce a new state it should be pushed to this Flow, so that the UI can be informed that a new state has been created, and that it should re-render itself. When the ViewModel is first created, it sets the <code>initialState</code> object to the state flow.</p>
+<p>From our ViewModel, whenever we produce a new state it should be pushed to this Flow, so that the UI can be informed that a new state has been created, and that it should re-render itself. When the ViewModel is first created, it pushes the <code>initialState</code> object to the state flow.</p>
 <p>Our ViewModel is ready to get all the notes from our Repository, so let us fetch them as soon as the ViewModel is created.</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListViewModel</span><span class="p">(</span>
   <span class="n">initialState</span><span class="p">:</span> <span class="n">NotesListState</span>
@@ -747,7 +747,8 @@
 <p>So when our <code>setState</code> block has finished processing, our UI will be notified that it should show this list of notes to our user! 🎉🎉🎉</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Since state updates are processed asynchronously, you should not assume that you shall get the updated state immediately after the <code>setState</code> block.</p>
+<p>Since state updates are processed asynchronously, you should not assume that you shall get the updated state immediately after the <code>setState</code> block.
+To get access to the latest state within a ViewModel, <em>always</em> use <code>withState</code> method.</p>
 </div>
 <h4 id="accessing-state">Accessing State<a class="headerlink" href="#accessing-state" title="Permanent link">&para;</a></h4>
 <p>Let us also add the ability to filter notes. We need to fetch notes based on what filter is set. To know what filter is currently set, we need access to the current state. The correct way to do this is to use the <code>withState</code> method.</p>
@@ -787,8 +788,9 @@
 </pre></div>
 
 
-<h2 id="the-presenter-class">The Presenter class<a class="headerlink" href="#the-presenter-class" title="Permanent link">&para;</a></h2>
-<p>The presenter class serves as the UI for your application. Vector provides a simple <a href="../../components/vector-fragment/"><code>VectorFragment</code></a> component for this. It is a subclass of the AndroidX Fragment, and has a convenient <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/"><code>CoroutineScope</code></a> to launch coroutines. Let's use it to build our <code>NotesListFragment</code> class.</p>
+<h2 id="the-view-class">The View class<a class="headerlink" href="#the-view-class" title="Permanent link">&para;</a></h2>
+<p>The view class serves as the UI for your application. Vector provides a simple <a href="../../components/vector-fragment/"><code>VectorFragment</code></a> component for this. It is a subclass of the AndroidX Fragment, and has a convenient <code>renderState</code> to collect state updates and render the UI. 
+Let's use it to build our <code>NotesListFragment</code> class.</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span>
 </pre></div>
 
@@ -810,36 +812,24 @@
 <h3 id="observing-state">Observing state<a class="headerlink" href="#observing-state" title="Permanent link">&para;</a></h3>
 <p>Now that we have our ViewModel, we can start observing state changes. To do this, we need to subscribe to the state flow exposed by the ViewModel. Subscribing to a Flow requires a Coroutine Scope, and luckily <code>VectorFragment</code> provides us with one.</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
+
   <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">NotesListViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span><span class="p">()</span>
 
-  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onViewCreated</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">...</span>
-    <span class="n">viewScope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
-      <span class="n">viewModel</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">collect</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
-        <span class="n">recyclerViewAdapter</span><span class="p">.</span><span class="n">submitList</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">notes</span><span class="p">)</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
+  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreateView</span><span class="p">(</span><span class="n">inflater</span><span class="p">:</span> <span class="n">LayoutInflater</span><span class="p">,</span> <span class="n">container</span><span class="p">:</span> <span class="n">ViewGroup</span><span class="p">?,</span> <span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?):</span> <span class="n">View</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">val</span> <span class="py">root</span> <span class="p">=</span> <span class="n">inflater</span><span class="p">.</span><span class="n">inflate</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">fragment_message</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
 
-
-<p>The <code>viewScope</code> property is a Coroutine Scope which is tied to the Fragment's view-lifecycle.</p>
-<p>This action of subscribing to state changes can be done more concisely using the <code>renderState()</code> method in the <code>VectorFragment</code> class.</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NotesListFragment</span><span class="p">:</span> <span class="n">VectorFragment</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">private</span> <span class="k">val</span> <span class="py">viewModel</span><span class="p">:</span> <span class="n">NotesListViewModel</span> <span class="k">by</span> <span class="n">fragmentViewModel</span><span class="p">()</span>
-
-  <span class="k">override</span> <span class="k">fun</span> <span class="nf">onViewCreated</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">...</span>
     <span class="n">renderState</span><span class="p">(</span><span class="n">viewModel</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="p">-&gt;</span>
       <span class="n">recyclerViewAdapter</span><span class="p">.</span><span class="n">submitList</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">notes</span><span class="p">)</span>
     <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">root</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
 
-<p>Now whenever we get a new state object from our ViewModel, we automaticall update the user interface! 🎉🎉🎉</p>
+<p>The <code>renderState</code> block is lifecycle aware. State updates are rendered only while the View lifecycle is active.</p>
+<p>Now whenever we get a new state object from our ViewModel, we automatically update the user interface! 🎉🎉🎉</p>
 <h3 id="sending-actions-to-the-viewmodel">Sending Actions to the ViewModel<a class="headerlink" href="#sending-actions-to-the-viewmodel" title="Permanent link">&para;</a></h3>
 <p>We have established how a ViewModel communicates with the presenter, but not how a presenter communicates with the ViewModel. In MVI-speak, presenter communicates with the ViewModel through <code>Intents</code>, or <code>Actions</code>. We are <strong>not</strong> referring to the <code>android.content.Intent</code> class here.</p>
 <p>Vector does not need you to define any classes which specify your <code>Actions</code>. A simpler way to communicate actions to the ViewModel is to simply call methods on it.</p>
