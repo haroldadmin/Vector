@@ -16,10 +16,7 @@ class AboutFragment : VectorFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         renderState(AboutState()) { state ->
             ObjectAnimator
                 .ofFloat(binding.logo, View.ROTATION, 0f, 360f)
@@ -32,5 +29,7 @@ class AboutFragment : VectorFragment() {
 
             binding.debugInfo.text = getString(R.string.debugInformation, state.appVersion, state.libraryVersion)
         }
+
+        return binding.root
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.R
@@ -59,7 +60,7 @@ class AddEditEntityFragment : VectorFragment() {
                 appViewModel.updateNumberOfEntities()
             }
 
-            fragmentScope.launch {
+            lifecycleScope.launch {
                 name.debouncedTextChanges(200)
                     .collect { name ->
                         viewModel.setName(name.toString())
@@ -67,11 +68,6 @@ class AddEditEntityFragment : VectorFragment() {
             }
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         renderState(viewModel) { state ->
             when (state) {
                 is AddEditEntityState.AddEntity -> {
@@ -102,5 +98,7 @@ class AddEditEntityFragment : VectorFragment() {
                 }
             }
         }
+
+        return binding.root
     }
 }

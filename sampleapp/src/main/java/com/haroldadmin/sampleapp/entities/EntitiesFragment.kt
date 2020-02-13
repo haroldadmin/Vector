@@ -34,8 +34,13 @@ class EntitiesFragment : VectorFragment() {
     }
 
     private val entitiesAdapter = EntitiesAdapter(EntitiesDiffCallback()) { entity ->
-        findNavController()
-            .navigate(EntitiesFragmentDirections.editEntity(entity.id, entity.name, entity.counter))
+        findNavController().navigate(
+            EntitiesFragmentDirections.editEntity(
+                entity.id,
+                entity.name,
+                entity.counter
+            )
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -56,11 +61,6 @@ class EntitiesFragment : VectorFragment() {
             findNavController().navigate(EntitiesFragmentDirections.addEntity())
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         viewModel.getAllEntities()
 
         renderState(viewModel) { state ->
@@ -78,5 +78,7 @@ class EntitiesFragment : VectorFragment() {
             }
             appViewModel.updateNumberOfEntities()
         }
+
+        return binding.root
     }
 }
