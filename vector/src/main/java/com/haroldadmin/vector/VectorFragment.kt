@@ -74,7 +74,7 @@ abstract class VectorFragment : Fragment() {
         viewModel: VectorViewModel<S>,
         crossinline renderer: suspend CoroutineScope.(S) -> Unit
     ) {
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect { state ->
                 renderer(state)
             }
