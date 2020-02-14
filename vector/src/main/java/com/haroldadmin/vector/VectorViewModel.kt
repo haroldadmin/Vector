@@ -79,7 +79,10 @@ abstract class VectorViewModel<S : VectorState>(
     /**
      * Dispatch the given action the [stateStore]. This action shall be processed as soon as all existing
      * state reducers have been processed. The state parameter supplied to this action should be the
-     * latest value at the time of processing of this action
+     * latest value at the time of processing of this action.
+     *
+     * These actions are treated as side effects. A new coroutine is launched for each such action, so that the state
+     * processor does not get blocked if a particular action takes too long to finish.
      *
      * @param action The action to be performed with the current state
      *

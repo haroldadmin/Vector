@@ -37,16 +37,20 @@ interface StateProcessor<S : VectorState> : CoroutineScope {
 
     /**
      * Offer a [SetStateAction] to this processor. This action will be processed as soon as
-     * possible, before all existing [GetStateAction], if any.
+     * possible, before all existing [GetStateAction] waiting in the queue, if any.
      *
      * @param reducer The action to be offered
      */
     fun offerSetAction(reducer: suspend S.() -> S)
 
     /**
-     * Offer a [GetStateAction] to this processor. This action will be processed after any existing
-     * [GetStateAction] current waiting in this processor. The state parameter supplied to this action
+     * Offer a [GetStateAction] to this processor. The state parameter supplied to this action
      * shall be the latest state value at the time of processing this action.
+     *
+     * These actions are treated as side effects. When such an action is received, a separate coroutine is launched
+     * to process it. This means that when there are multiple such actions waiting in the queue, they will be launched
+     * in order, but their completion depends on how long it takes to process them. They will be processed in the
+     * coroutine context of their state processor.
      */
     fun offerGetAction(action: suspend (S) -> Unit)
 

@@ -1,5 +1,6 @@
 package com.haroldadmin.vector.state
 
+import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.extensions.awaitCompletion
 import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.CompletableDeferred
@@ -8,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.ClosedSendChannelException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -21,7 +23,12 @@ internal class SelectBasedStateProcessorTest {
     @Before
     fun setup() {
         holder = StateHolderFactory.create(CountingState(), systemOutLogger())
-        processor = SelectBasedStateProcessor(true, holder, systemOutLogger(), Dispatchers.Default + Job())
+        processor = SelectBasedStateProcessor(
+            isLazy = true,
+            stateHolder = holder,
+            logger = systemOutLogger(),
+            coroutineContext = Dispatchers.Unconfined + Job()
+        )
     }
 
     @After
@@ -109,7 +116,12 @@ internal class SelectBasedStateProcessorTest {
 
         processor.start()
 
-        awaitAll(incrementActionsSourceJob, decrementActionsSourceJob, additionJobsCompletable, subtractionJobsCompletable)
+        awaitAll(
+            incrementActionsSourceJob,
+            decrementActionsSourceJob,
+            additionJobsCompletable,
+            subtractionJobsCompletable
+        )
 
         assert(holder.state.count == 0)
     }
@@ -125,5 +137,25 @@ internal class SelectBasedStateProcessorTest {
     fun `clear operation should be idempotent`() = runBlocking {
         processor.start()
         repeat(10) { processor.clearProcessor() }
+    }
+
+    @Test
+    fun `should not wait for get-state actions to complete before processing the next action`() = runBlocking {
+        val initialCount = holder.state.count + 1
+        processor.start()
+
+        processor.offerGetAction {
+            delay(1000L)
+        }
+
+        awaitCompletion<Unit> {
+            processor.offerSetAction {
+                copy(count = initialCount + 1).also { complete(Unit) }
+            }
+        }
+
+        assert(holder.state.count == initialCount + 1) {
+            "Expected count = ${initialCount + 1}, actual: ${holder.state.count}"
+        }
     }
 }

@@ -91,7 +91,9 @@ internal class SelectBasedStateProcessor<S : VectorState>(
                     stateHolder.stateObservable.offer(newState)
                 }
                 getStateChannel.onReceive { action ->
-                    action.invoke(stateHolder.state)
+                    launch {
+                        action.invoke(stateHolder.state)
+                    }
                 }
             }
         }
