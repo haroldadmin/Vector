@@ -465,7 +465,9 @@
 <p><code>protected fun withState(action: suspend (</code><a href="../#S"><code>S</code></a><code>) -&gt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a></p>
 <p>Dispatch the given action the <a href="../state-store/">stateStore</a>. This action shall be processed as soon as all existing
 state reducers have been processed. The state parameter supplied to this action should be the
-latest value at the time of processing of this action</p>
+latest value at the time of processing of this action.</p>
+<p>These actions are treated as side effects. A new coroutine is launched for each such action, so that the state
+processor does not get blocked if a particular action takes too long to finish.</p>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <p><code>action</code> - The action to be performed with the current state</p>
                 

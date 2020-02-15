@@ -498,11 +498,11 @@ A <a href="#">GetStateAction</a> is given the latest state value as it's paramet
 </tr>
 <tr>
 <td><a href="offer-get-action/">offerGetAction</a></td>
-<td><code>abstract fun offerGetAction(action: suspend (</code><a href="./#S"><code>S</code></a><code>) -&gt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><br>Offer a <a href="#">GetStateAction</a> to this processor. This action will be processed after any existing <a href="#">GetStateAction</a> current waiting in this processor. The state parameter supplied to this action shall be the latest state value at the time of processing this action.</td>
+<td><code>abstract fun offerGetAction(action: suspend (</code><a href="./#S"><code>S</code></a><code>) -&gt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><br>Offer a <a href="#">GetStateAction</a> to this processor. The state parameter supplied to this action shall be the latest state value at the time of processing this action.</td>
 </tr>
 <tr>
 <td><a href="offer-set-action/">offerSetAction</a></td>
-<td><code>abstract fun offerSetAction(reducer: suspend</code><a href="./#S"><code>S</code></a><code>.() -&gt;</code><a href="./#S"><code>S</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><br>Offer a <a href="#">SetStateAction</a> to this processor. This action will be processed as soon as possible, before all existing <a href="#">GetStateAction</a>, if any.</td>
+<td><code>abstract fun offerSetAction(reducer: suspend</code><a href="./#S"><code>S</code></a><code>.() -&gt;</code><a href="./#S"><code>S</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><br>Offer a <a href="#">SetStateAction</a> to this processor. This action will be processed as soon as possible, before all existing <a href="#">GetStateAction</a> waiting in the queue, if any.</td>
 </tr>
 </tbody>
 </table>

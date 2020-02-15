@@ -447,9 +447,12 @@
                 <p><a href="../../../">vector</a> / <a href="../../">com.haroldadmin.vector.state</a> / <a href="../">StateProcessor</a> / <a href="./">offerGetAction</a></p>
 <h1 id="offergetaction">offerGetAction<a class="headerlink" href="#offergetaction" title="Permanent link">&para;</a></h1>
 <p><code>abstract fun offerGetAction(action: suspend (</code><a href="../#S"><code>S</code></a><code>) -&gt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a></p>
-<p>Offer a <a href="#">GetStateAction</a> to this processor. This action will be processed after any existing
-<a href="#">GetStateAction</a> current waiting in this processor. The state parameter supplied to this action
+<p>Offer a <a href="#">GetStateAction</a> to this processor. The state parameter supplied to this action
 shall be the latest state value at the time of processing this action.</p>
+<p>These actions are treated as side effects. When such an action is received, a separate coroutine is launched
+to process it. This means that when there are multiple such actions waiting in the queue, they will be launched
+in order, but their completion depends on how long it takes to process them. They will be processed in the
+coroutine context of their state processor.</p>
                 
                   
                 

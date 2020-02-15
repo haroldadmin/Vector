@@ -464,7 +464,7 @@
 <h1 id="offersetaction">offerSetAction<a class="headerlink" href="#offersetaction" title="Permanent link">&para;</a></h1>
 <p><code>abstract fun offerSetAction(reducer: suspend</code><a href="../#S"><code>S</code></a><code>.() -&gt;</code><a href="../#S"><code>S</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><code>Unit</code></a></p>
 <p>Offer a <a href="#">SetStateAction</a> to this processor. This action will be processed as soon as
-possible, before all existing <a href="#">GetStateAction</a>, if any.</p>
+possible, before all existing <a href="#">GetStateAction</a> waiting in the queue, if any.</p>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <p><code>reducer</code> - The action to be offered</p>
                 
