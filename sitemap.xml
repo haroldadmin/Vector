@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://haroldadmin.github.io/vector/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/introduction/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/usage/basics/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/usage/advanced/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/components/vector-state/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/components/vector-fragment/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/components/vector-viewmodel/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/components/saved-state-vectorviewmodel/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/components/logging/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/misc/automatic-viewmodel-creation/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/misc/state-store-context/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://haroldadmin.github.io/vector/api/vector/</loc>
-     <lastmod>2020-02-15</lastmod>
+     <lastmod>2020-02-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
