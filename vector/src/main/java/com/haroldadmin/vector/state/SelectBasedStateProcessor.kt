@@ -54,16 +54,30 @@ internal class SelectBasedStateProcessor<S : VectorState>(
 
     /**
      * Enqueues the given [reducer] to an internal queue
+     *
+     * If the state processor has been cleared before this reducer is offered, then it is ignored and not added
+     * to the queue to be processed
      */
     override fun offerSetAction(reducer: suspend S.() -> S) {
-        setStateChannel.offer(reducer)
+        if (!setStateChannel.isClosedForSend) {
+            // TODO Look for a solution to the case where the channel could be closed between the check and this offer
+            //  statement
+            setStateChannel.offer(reducer)
+        }
     }
 
     /**
      * Enqueues the given [action] to an internal queue
+     *
+     * If the state processor has been cleared before this action is offered, then it is ignored and not added
+     * to the queue to be processed.
      */
     override fun offerGetAction(action: suspend (S) -> Unit) {
-        getStateChannel.offer(action)
+        if (!getStateChannel.isClosedForSend) {
+            // TODO Look for a solution to the case where the channel could be closed between the check and this offer
+            //  statement
+            getStateChannel.offer(action)
+        }
     }
 
     /**

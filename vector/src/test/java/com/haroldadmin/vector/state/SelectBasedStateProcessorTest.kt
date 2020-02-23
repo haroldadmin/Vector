@@ -126,11 +126,24 @@ internal class SelectBasedStateProcessorTest {
         assert(holder.state.count == 0)
     }
 
-    @Test(expected = ClosedSendChannelException::class)
-    fun `should not accept jobs after it is cleared`() = runBlocking {
+    @Test()
+    fun `jobs sent after processor is cleared should be ignored`() = runBlocking {
         processor.start()
         processor.clearProcessor()
-        processor.offerGetAction { Unit }
+        var count = 0
+        processor.offerGetAction {
+            count++
+        }
+
+        processor.offerSetAction {
+            count++
+            this
+        }
+
+        assert(count == 0) {
+            """Count value changed when it should not have been. Expected 0, got $count
+                |State Processor is not ignoring jobs sent to it after it has been cleared""".trimMargin()
+        }
     }
 
     @Test
