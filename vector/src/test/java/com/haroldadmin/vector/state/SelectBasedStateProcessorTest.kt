@@ -171,4 +171,17 @@ internal class SelectBasedStateProcessorTest {
             "Expected count = ${initialCount + 1}, actual: ${holder.state.count}"
         }
     }
+
+    @Test
+    fun `should not access state from StateHolder if it has been cancelled`() = runBlocking {
+        holder.clearHolder()
+        processor.start()
+        processor.offerGetAction { state ->
+            // No-op
+        }
+        processor.offerSetAction {
+            copy(count = count + 1)
+        }
+        // If there are no errors, test is successful
+    }
 }

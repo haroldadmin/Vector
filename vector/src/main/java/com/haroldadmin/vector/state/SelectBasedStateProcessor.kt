@@ -100,13 +100,19 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     internal fun start() = launch {
         while (isActive) {
             select<Unit> {
-                setStateChannel.onReceive { action ->
-                    val newState = action.invoke(stateHolder.state)
-                    stateHolder.stateObservable.offer(newState)
+                setStateChannel.onReceive { reducer ->
+                    stateHolder.stateObservable.valueOrNull?.let { state ->
+                        val newState = state.reducer()
+                        if (!stateHolder.stateObservable.isClosedForSend) {
+                            stateHolder.stateObservable.offer(newState)
+                        }
+                    }
                 }
                 getStateChannel.onReceive { action ->
                     launch {
-                        action.invoke(stateHolder.state)
+                        stateHolder.stateObservable.valueOrNull?.let { state ->
+                            action.invoke(stateHolder.state)
+                        }
                     }
                 }
             }
