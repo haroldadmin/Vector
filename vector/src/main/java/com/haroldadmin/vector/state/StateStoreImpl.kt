@@ -15,6 +15,8 @@ internal class StateStoreImpl<S : VectorState> (
 
     override fun clear() {
         logger.logv { "Clearing State Store" }
+        // TODO Clear processor before clearing the state holder to prevent the processor from sending updates
+        //  to a closed state channel
         stateHolder.clearHolder()
         stateProcessor.clearProcessor()
     }

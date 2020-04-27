@@ -86,6 +86,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * Repeated invocations have no effect.
      */
     override fun clearProcessor() {
+        // TODO Move the cancel and close calls inside the if block
         if (isActive && !setStateChannel.isClosedForSend && !getStateChannel.isClosedForSend) {
             logger.logd { "Clearing StateProcessor $this" }
         }
@@ -101,6 +102,8 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         while (isActive) {
             select<Unit> {
                 setStateChannel.onReceive { reducer ->
+                    // TODO Change to value instead of valueOrNull since StateHolder is always guaranteed to have
+                    //  a state
                     stateHolder.stateObservable.valueOrNull?.let { state ->
                         val newState = state.reducer()
                         if (!stateHolder.stateObservable.isClosedForSend) {
@@ -110,6 +113,8 @@ internal class SelectBasedStateProcessor<S : VectorState>(
                 }
                 getStateChannel.onReceive { action ->
                     launch {
+                        // TODO Change to value instead of valueOrNull since StateHolder is always guaranteed to have
+                        //  a state
                         stateHolder.stateObservable.valueOrNull?.let { state ->
                             action.invoke(stateHolder.state)
                         }
