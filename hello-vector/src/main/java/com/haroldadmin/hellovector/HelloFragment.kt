@@ -26,8 +26,6 @@ class HelloFragment : VectorFragment() {
             root.messageTextView.text = state.message
         }
 
-        viewModel.getMessage()
-
         return root
     }
 }

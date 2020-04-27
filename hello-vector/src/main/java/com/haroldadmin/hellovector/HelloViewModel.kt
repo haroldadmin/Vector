@@ -21,6 +21,10 @@ class HelloViewModel(
         const val defaultDelay = 1000L
     }
 
+    init {
+        getMessage()
+    }
+
     fun getMessage(delayDuration: Long = defaultDelay) = viewModelScope.launch {
         setStateAndPersist { copy(message = HelloState.loadingMessage) }
         delay(delayDuration)
