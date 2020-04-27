@@ -59,7 +59,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * to the queue to be processed
      */
     override fun offerSetAction(reducer: suspend S.() -> S) {
-        if (!setStateChannel.isClosedForSend) {
+        if (isActive && !setStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
             //  statement
             setStateChannel.offer(reducer)
@@ -73,7 +73,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * to the queue to be processed.
      */
     override fun offerGetAction(action: suspend (S) -> Unit) {
-        if (!getStateChannel.isClosedForSend) {
+        if (isActive && !getStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
             //  statement
             getStateChannel.offer(action)
