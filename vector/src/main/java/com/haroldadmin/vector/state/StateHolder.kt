@@ -25,6 +25,12 @@ interface StateHolder<S : VectorState> {
         get() = stateObservable.value
 
     /**
+     * A convenient way to check if this StateHolder has been cleared or not
+     */
+    val isCleared: Boolean
+        get() = stateObservable.isClosedForSend
+
+    /**
      * This method is expected to be called when this state holder is no longer being used
      */
     fun clearHolder()
