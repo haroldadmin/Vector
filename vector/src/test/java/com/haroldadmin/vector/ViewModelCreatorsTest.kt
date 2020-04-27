@@ -3,6 +3,7 @@ package com.haroldadmin.vector
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.SavedStateHandle
+import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.state.CountingState
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Before
@@ -69,6 +70,19 @@ internal class ViewModelCreatorsTest {
     }
 
     @Test
+    fun `ViewModel with state and coroutine context params creation using constructor`() {
+        with(activity) {
+            constructorCreator.create(
+                TwoParamViewModelAlt::class,
+                CountingState::class,
+                activityViewModelOwner(),
+                this,
+                testScope.coroutineContext
+            ).create(TwoParamViewModelAlt::class.java)
+        }
+    }
+
+    @Test
     fun `ViewModel with three params creation using constructor`() {
         with(activity) {
             constructorCreator.create(
@@ -107,6 +121,19 @@ internal class ViewModelCreatorsTest {
         }
     }
 
+    @Test(expected = NoSuitableViewModelConstructorException::class)
+    fun `ViewModel with unsupported params creation using constructor`() {
+        with(activity) {
+            constructorCreator.create(
+                InvalidParamsViewModel::class,
+                CountingState::class,
+                activityViewModelOwner(),
+                this,
+                testScope.coroutineContext
+            ).create(InvalidParamsViewModel::class.java)
+        }
+    }
+
     class ZeroParamViewModel : VectorViewModel<CountingState>(CountingState())
 
     class OneParamViewModel(
@@ -117,6 +144,11 @@ internal class ViewModelCreatorsTest {
         initialState: CountingState,
         savedStateHandle: SavedStateHandle
     ) : SavedStateVectorViewModel<CountingState>(initialState = initialState, savedStateHandle = savedStateHandle)
+
+    class TwoParamViewModelAlt(
+        initialState: CountingState,
+        coroutineContext: CoroutineContext
+    ) : VectorViewModel<CountingState>(initialState, coroutineContext)
 
     class ThreeParamViewModel(
         initialState: CountingState,
@@ -130,6 +162,11 @@ internal class ViewModelCreatorsTest {
         savedStateHandle: SavedStateHandle,
         ignore: Unit = Unit
     ) : SavedStateVectorViewModel<CountingState>(initialState, stateStoreContext, savedStateHandle)
+
+    class InvalidParamsViewModel(
+        initialState: CountingState,
+        ignore: Unit
+    ) : VectorViewModel<CountingState>(initialState)
 
     class ViewModelWithFactory(
         initialState: CountingState

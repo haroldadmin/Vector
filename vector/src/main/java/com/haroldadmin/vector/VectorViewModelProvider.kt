@@ -96,10 +96,12 @@ object VectorViewModelProvider {
 internal class UnInstantiableViewModelException :
     IllegalArgumentException(
         """Your VectorViewModel should have one of the following constructors:
-        |1. ViewModel(initialState)
-        |2. ViewModel(initialState, savedStateHandle)
-        |3. ViewModel(initialState, stateStoreContext, logger)
-        |4. ViewModel(initialState, stateStoreContext, logger, savedStateHandle)
+        |1. ViewModel()
+        |2. ViewModel(initialState)
+        |3. ViewModel(initialState, stateStoreContext)
+        |4. ViewModel(initialState, savedStateHandle)
+        |5. ViewModel(initialState, stateStoreContext, logger)
+        |6. ViewModel(initialState, stateStoreContext, savedStateHandle)
         |
         |Or it should implement a VectorViewModelFactory in its companion object.
     """.trimMargin()
