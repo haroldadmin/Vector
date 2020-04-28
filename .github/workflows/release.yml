@@ -6,6 +6,35 @@ on:
       - 'v*'
 
 jobs:
+  build:
+    name:Generate Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+          uses: actions/setup-python@v1
+          with:
+            python-version: '3.7'
+            architecture: 'x64'
+
+      - name: Install python dependencies
+        run: |
+          pip3 install --upgrade pip
+          pip3 install -r requirements.txt
+
+      - name: Generate API Reference
+          run: python3 ./generateApiReference.py
+
+      - name: Build MkDocs
+        run: mkdocs build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2.4.0
+        env:
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./site
+
   apk:
     name: Generate APKs
     runs-on: ubuntu-latest
