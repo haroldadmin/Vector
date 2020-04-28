@@ -1,9 +1,9 @@
-name: Generate Release APK
+name: Generate sample apps' APKs and documentation
 
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 
 jobs:
   build:
