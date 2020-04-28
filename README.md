@@ -2,7 +2,7 @@
 
 ![logo](docs/images/logo-full-coloured.svg)
 
-[![Build Status](https://github.com/haroldadmin/vector/workflows/Android%20CI/badge.svg)](https://github.com/haroldadmin/Vector/actions)
+![Build and Test](https://github.com/haroldadmin/Vector/workflows/Build%20and%20Test/badge.svg)
 
 Vector is an Android library to help implement the MVI architecture pattern. 
 
@@ -102,6 +102,9 @@ dependencies {
 }
 ```
 
+Find the latest **stable release** version on the [Releases](https://github.com/haroldadmin/Vector/releases) page.
+
+Latest release (stable/unstable):
 [![Release](https://jitpack.io/v/haroldadmin/Vector.svg)](https://jitpack.io/#haroldadmin/Vector)
 
 ## Contributing
