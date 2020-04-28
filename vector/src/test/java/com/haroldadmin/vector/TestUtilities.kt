@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import com.haroldadmin.vector.state.CountingState
+import com.haroldadmin.vector.state.StateHolder
+import com.haroldadmin.vector.state.StateProcessor
+import com.haroldadmin.vector.state.StateStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
@@ -95,3 +98,35 @@ internal class TestViewModelWithMultipleParams(
 
 internal class TestActivity : AppCompatActivity()
 internal class TestFragment : Fragment()
+
+// Testing utility to access a VectorViewModel's state store through reflection
+internal fun <T: VectorState> VectorViewModel<T>.reflectedStateStore(): StateStore<T> {
+    val stateStoreField = this::class.java.getDeclaredField("stateStore")
+    stateStoreField.isAccessible = true
+    @Suppress("UNCHECKED_CAST")
+    val stateStore =  stateStoreField.get(this) as StateStore<T>
+    stateStoreField.isAccessible = false
+    return stateStore
+}
+
+// Testing utility to access a VectorViewModel's state holder through reflection
+internal fun <T: VectorState> VectorViewModel<T>.reflectedStateHolder(): StateHolder<T> {
+    val stateStore = reflectedStateStore()
+    val stateHolderField = stateStore::class.java.getDeclaredField("stateHolder")
+    stateHolderField.isAccessible = true
+    @Suppress("UNCHECKED_CAST")
+    val stateHolder = stateHolderField.get(this) as StateHolder<T>
+    stateHolderField.isAccessible = false
+    return stateHolder
+}
+
+// Testing utility to access a VectorViewModel's state processor through reflection
+internal fun <T: VectorState> VectorViewModel<T>.stateProcessor(): StateProcessor<T> {
+    val stateStore = reflectedStateStore()
+    val stateProcessorField = stateStore::class.java.getDeclaredField("stateProcessor")
+    stateProcessorField.isAccessible = true
+    @Suppress("UNCHECKED_CAST")
+    val stateProcessor = stateProcessorField.get(this) as StateProcessor<T>
+    stateProcessorField.isAccessible = false
+    return stateProcessor
+}

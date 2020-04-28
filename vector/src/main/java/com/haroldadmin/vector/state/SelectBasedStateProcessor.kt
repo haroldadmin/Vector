@@ -4,6 +4,7 @@ import com.haroldadmin.vector.VectorState
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.logd
 import com.haroldadmin.vector.loggers.logv
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.isActive
@@ -99,23 +100,50 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      */
     internal fun start() = launch {
         while (isActive) {
-            select<Unit> {
-                setStateChannel.onReceive { reducer ->
-                    if (!stateHolder.isCleared) {
+            selectJob()
+        }
+    }
+
+    /**
+     * A testing utility to process all state updates and reducers from both channels, and surface any errors to the
+     * caller. Callers are expected to call [kotlinx.coroutines.Deferred.await] on the result returned by this method.
+     *
+     * After a processor is drained, it does not mean all jobs of the [getStateChannel] have finished execution. It
+     * means that a coroutine has been launched to process all those jobs.
+     *
+     * The [async] coroutine builder is used here instead of [launch] because [launch] does not surface its errors
+     * to its callers. Sending exceptions to the calling code is important here since it is a test utility
+     */
+    internal fun drainAsync() = async {
+        while (isActive && (!setStateChannel.isEmpty || !getStateChannel.isEmpty)) {
+            selectJob()
+        }
+    }
+
+    /**
+     * Waits for values from [setStateChannel] and [getStateChannel] simultaneously, prioritizing set-state
+     * jobs over get-state jobs. State reducers are processed immediately and the new state produced by them is
+     * sent to the [StateHolder]. State actions are processed in a separate coroutine, so that the [select] statement
+     * does not block on long-running actions
+     */
+    private suspend fun selectJob() {
+        select<Unit> {
+            setStateChannel.onReceive { reducer ->
+                if (!stateHolder.isCleared) {
                     val newState = stateHolder.state.reducer()
-                        stateHolder.stateObservable.offer(newState)
-                    }
+                    stateHolder.stateObservable.offer(newState)
                 }
-                getStateChannel.onReceive { action ->
-                    if (!stateHolder.isCleared) {
-                        launch {
-                            action.invoke(stateHolder.state)
-                        }
+            }
+            getStateChannel.onReceive { action ->
+                if (!stateHolder.isCleared) {
+                    launch {
+                        action.invoke(stateHolder.state)
                     }
                 }
             }
         }
     }
+
 }
 
 private typealias reducer<S> = suspend S.() -> S

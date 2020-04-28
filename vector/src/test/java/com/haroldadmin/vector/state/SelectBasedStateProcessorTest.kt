@@ -3,13 +3,16 @@ package com.haroldadmin.vector.state
 import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.extensions.awaitCompletion
 import com.haroldadmin.vector.loggers.systemOutLogger
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.ClosedSendChannelException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -39,12 +42,10 @@ internal class SelectBasedStateProcessorTest {
 
     @Test
     fun `when new state is set, it should store it to state holder`() = runBlocking {
-        processor.start()
-        awaitCompletion<Unit> {
-            processor.offerSetAction {
-                copy(count = 42).also { complete(Unit) }
-            }
+        processor.offerSetAction {
+            copy(count = 42)
         }
+        processor.drainAsync().await()
         assert(holder.state.count == 42)
     }
 
@@ -53,19 +54,18 @@ internal class SelectBasedStateProcessorTest {
         val reducerValue = "reducer-first"
         val actionValue = "action-first"
 
-        val valueSetFirst = awaitCompletion<String> {
-            // Processor is started in lazy mode, jobs are not being processed yet. They are just being enqueued.
-            processor.offerGetAction {
-                complete(actionValue)
-            }
-            processor.offerSetAction {
-                val newState = copy(count = 42)
-                complete(reducerValue)
-                newState
-            }
-            processor.start()
+        val valueHolder = CompletableDeferred<String>()
+        processor.offerGetAction {
+            valueHolder.complete(actionValue)
         }
+        processor.offerSetAction {
+            val newState = copy(count = 42)
+            valueHolder.complete(reducerValue)
+            newState
+        }
+        processor.drainAsync().await()
 
+        val valueSetFirst = valueHolder.await()
         assert(valueSetFirst == reducerValue)
     }
 
@@ -74,20 +74,20 @@ internal class SelectBasedStateProcessorTest {
         val secondReducerValue = "reducer-second"
         val secondActionValue = "action-second"
 
-        val valueSetFirst = awaitCompletion<String> {
+        val valueHolder = CompletableDeferred<String>()
+        processor.offerSetAction {
+            processor.offerGetAction {
+                valueHolder.complete(secondActionValue)
+            }
             processor.offerSetAction {
-                processor.offerGetAction {
-                    complete(secondActionValue)
-                }
-                processor.offerSetAction {
-                    complete(secondReducerValue)
-                    this
-                }
+                valueHolder.complete(secondReducerValue)
                 this
             }
-            processor.start()
+            this
         }
+        processor.drainAsync().await()
 
+        val valueSetFirst = valueHolder.await()
         assert(valueSetFirst == secondReducerValue)
     }
 
@@ -117,8 +117,6 @@ internal class SelectBasedStateProcessorTest {
         processor.start()
 
         awaitAll(
-            incrementActionsSourceJob,
-            decrementActionsSourceJob,
             additionJobsCompletable,
             subtractionJobsCompletable
         )
@@ -126,7 +124,7 @@ internal class SelectBasedStateProcessorTest {
         assert(holder.state.count == 0)
     }
 
-    @Test()
+    @Test
     fun `jobs sent after processor is cleared should be ignored`() = runBlocking {
         processor.start()
         processor.clearProcessor()
@@ -175,13 +173,26 @@ internal class SelectBasedStateProcessorTest {
     @Test
     fun `should not access state from StateHolder if it has been cancelled`() = runBlocking {
         holder.clearHolder()
-        processor.start()
-        processor.offerGetAction { state ->
+        processor.offerGetAction {
             // No-op
         }
         processor.offerSetAction {
             copy(count = count + 1)
         }
+        processor.drainAsync().await()
         // If there are no errors, test is successful
+    }
+
+    @Test(expected = CancellationException::class)
+    fun `should not drain after StateProcessor is cleared`() = runBlocking {
+        processor.clearProcessor()
+        processor.offerSetAction {
+            copy(count = count + 1)
+        }
+        // Draining the processor after it is cleared should throw JobCancellationException
+        processor.drainAsync().await()
+        assert(holder.state.count == 1) {
+            "State reducer was processed by drainAsync after the StateProcessor was cleared"
+        }
     }
 }
