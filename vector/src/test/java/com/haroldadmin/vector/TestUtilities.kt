@@ -100,17 +100,17 @@ internal class TestActivity : AppCompatActivity()
 internal class TestFragment : Fragment()
 
 // Testing utility to access a VectorViewModel's state store through reflection
-internal fun <T: VectorState> VectorViewModel<T>.reflectedStateStore(): StateStore<T> {
+internal fun <T : VectorState> VectorViewModel<T>.reflectedStateStore(): StateStore<T> {
     val stateStoreField = this::class.java.getDeclaredField("stateStore")
     stateStoreField.isAccessible = true
     @Suppress("UNCHECKED_CAST")
-    val stateStore =  stateStoreField.get(this) as StateStore<T>
+    val stateStore = stateStoreField.get(this) as StateStore<T>
     stateStoreField.isAccessible = false
     return stateStore
 }
 
 // Testing utility to access a VectorViewModel's state holder through reflection
-internal fun <T: VectorState> VectorViewModel<T>.reflectedStateHolder(): StateHolder<T> {
+internal fun <T : VectorState> VectorViewModel<T>.reflectedStateHolder(): StateHolder<T> {
     val stateStore = reflectedStateStore()
     val stateHolderField = stateStore::class.java.getDeclaredField("stateHolder")
     stateHolderField.isAccessible = true
@@ -121,7 +121,7 @@ internal fun <T: VectorState> VectorViewModel<T>.reflectedStateHolder(): StateHo
 }
 
 // Testing utility to access a VectorViewModel's state processor through reflection
-internal fun <T: VectorState> VectorViewModel<T>.stateProcessor(): StateProcessor<T> {
+internal fun <T : VectorState> VectorViewModel<T>.stateProcessor(): StateProcessor<T> {
     val stateStore = reflectedStateStore()
     val stateProcessorField = stateStore::class.java.getDeclaredField("stateProcessor")
     stateProcessorField.isAccessible = true

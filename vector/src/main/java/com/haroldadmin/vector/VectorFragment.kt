@@ -5,7 +5,6 @@ import androidx.lifecycle.lifecycleScope
 import com.haroldadmin.vector.loggers.androidLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 /**
  * A Fragment which has a convenient fragmentScope property

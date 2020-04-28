@@ -71,7 +71,7 @@ internal class VectorFragmentTest {
             const val period = 100L
         }
 
-        val timer : Timer = fixedRateTimer(
+        val timer: Timer = fixedRateTimer(
                 name = "countdown",
                 daemon = true,
                 initialDelay = initialDelay,

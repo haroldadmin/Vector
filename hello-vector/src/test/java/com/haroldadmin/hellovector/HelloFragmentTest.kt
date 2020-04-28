@@ -24,8 +24,6 @@ class HelloFragmentTest {
                     "Expected loading text, found ${view.text}"
                 }
             }
-
         }
     }
-
 }

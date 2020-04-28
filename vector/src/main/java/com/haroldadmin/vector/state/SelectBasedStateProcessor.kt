@@ -143,7 +143,6 @@ internal class SelectBasedStateProcessor<S : VectorState>(
             }
         }
     }
-
 }
 
 private typealias reducer<S> = suspend S.() -> S

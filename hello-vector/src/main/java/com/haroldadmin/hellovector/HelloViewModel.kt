@@ -30,5 +30,4 @@ class HelloViewModel(
         delay(delayDuration)
         setStateAndPersist { copy(message = HelloState.helloMessage) }
     }
-
 }
