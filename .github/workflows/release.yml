@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Set up Python
-          uses: actions/setup-python@v1
-          with:
-            python-version: '3.7'
-            architecture: 'x64'
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
 
       - name: Install python dependencies
         run: |
@@ -23,7 +23,7 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Generate API Reference
-          run: python3 ./generateApiReference.py
+        run: python3 ./generateApiReference.py
 
       - name: Build MkDocs
         run: mkdocs build
@@ -45,6 +45,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
       - name: Build Hello-Vector APK
         run: ./gradlew :hello-vector:assembleDebug
 
