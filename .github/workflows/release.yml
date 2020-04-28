@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name:Generate Documentation
+    name: Generate Documentation
     runs-on: ubuntu-latest
 
     steps:
