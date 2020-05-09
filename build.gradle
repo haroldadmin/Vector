@@ -3,14 +3,14 @@ buildscript {
             "compileSdk" : 29,
             "minSdk"     : 15,
             "targetSdk"  : 29,
-            "kotlin"     : "1.3.71",
+            "kotlin"     : "1.3.72",
             "agp"        : "3.6.3",
             "versionCode": 13,
             "versionName": "0.6.2"
     ]
 
     ext.versions = [
-            "coroutines"        : "1.3.5",
+            "coroutines"        : "1.3.6",
             "appCompat"         : "1.1.0",
             "lifecycle"         : "2.2.0",
             "coreTest"          : "2.0.0",
