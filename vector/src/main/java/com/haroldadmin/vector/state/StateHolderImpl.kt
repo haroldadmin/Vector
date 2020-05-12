@@ -4,6 +4,7 @@ import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.VectorState
 import com.haroldadmin.vector.loggers.logv
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * The default implementation of [StateHolder]
@@ -17,10 +18,13 @@ internal class StateHolderImpl<S : VectorState>(
     private val logger: Logger
 ) : StateHolder<S> {
 
-    override val stateObservable = ConflatedBroadcastChannel(initialState)
+    override val stateObservable: MutableStateFlow<S> = MutableStateFlow(initialState)
+
+    override fun updateState(state: S) {
+        stateObservable.value = state
+    }
 
     override fun clearHolder() {
         logger.logv { "Clearing State Holder" }
-        stateObservable.close()
     }
 }

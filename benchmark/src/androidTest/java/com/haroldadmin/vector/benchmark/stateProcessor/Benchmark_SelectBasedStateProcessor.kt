@@ -77,7 +77,7 @@ internal class Benchmark_SelectBasedStateProcessor<S : VectorState>(
                 select<Unit> {
                     setStateChannel.onReceive { action ->
                         val newState = action.reducer(stateHolder.state)
-                        stateHolder.stateObservable.offer(newState)
+                        stateHolder.updateState(newState)
                     }
                     getStateChannel.onReceive { action ->
                         action.block(stateHolder.state)

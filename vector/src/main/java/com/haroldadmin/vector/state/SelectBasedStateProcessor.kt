@@ -129,16 +129,12 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     private suspend fun selectJob() {
         select<Unit> {
             setStateChannel.onReceive { reducer ->
-                if (!stateHolder.isCleared) {
-                    val newState = stateHolder.state.reducer()
-                    stateHolder.stateObservable.offer(newState)
-                }
+                val newState = stateHolder.state.reducer()
+                stateHolder.updateState(newState)
             }
             getStateChannel.onReceive { action ->
-                if (!stateHolder.isCleared) {
-                    launch {
-                        action.invoke(stateHolder.state)
-                    }
+                launch {
+                    action.invoke(stateHolder.state)
                 }
             }
         }

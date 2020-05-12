@@ -21,9 +21,6 @@ internal class Benchmark_StateProcessorActor<S : VectorState>(
     private val currentState: S
         get() = stateHolder.state
 
-    private val stateChannel: ConflatedBroadcastChannel<S>
-        get() = stateHolder.stateObservable
-
     private val routingActor = actor<Benchmark_Action<S>>(
         context = coroutineContext,
         capacity = Channel.UNLIMITED
@@ -65,7 +62,7 @@ internal class Benchmark_StateProcessorActor<S : VectorState>(
                 is Benchmark_SetStateAction -> {
                     logger.logv { "Processing Set-State action" }
                     val newState = sentAction.reducer.invoke(currentState)
-                    stateChannel.offer(newState)
+                    stateHolder.updateState(newState)
                 }
 
                 is Benchmark_GetStateAction -> {
