@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,13 +13,13 @@ import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.databinding.FragmentEntitiesBinding
 import com.haroldadmin.sampleapp.utils.hide
 import com.haroldadmin.sampleapp.utils.show
-import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
+import com.haroldadmin.vector.renderState
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class EntitiesFragment : VectorFragment() {
+class EntitiesFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: EntitiesViewModel.Factory
     @Inject lateinit var appViewModelFactory: AppViewModel.Factory

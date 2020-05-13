@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import androidx.fragment.app.Fragment
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAboutBinding
 import com.haroldadmin.vector.VectorFragment
+import com.haroldadmin.vector.renderState
 
-class AboutFragment : VectorFragment() {
+class AboutFragment : Fragment() {
 
     private lateinit var binding: FragmentAboutBinding
 
