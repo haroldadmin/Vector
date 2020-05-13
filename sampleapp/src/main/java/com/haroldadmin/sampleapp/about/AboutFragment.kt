@@ -9,7 +9,6 @@ import android.view.animation.LinearInterpolator
 import androidx.fragment.app.Fragment
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAboutBinding
-import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.renderState
 
 class AboutFragment : Fragment() {
