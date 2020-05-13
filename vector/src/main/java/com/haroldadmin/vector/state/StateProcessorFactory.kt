@@ -24,7 +24,7 @@ internal object StateProcessorFactory {
         coroutineContext: CoroutineContext
     ): StateProcessor<S> {
         return SelectBasedStateProcessor(
-            isLazy = false,
+            shouldStartImmediately = true,
             stateHolder = stateHolder,
             logger = logger,
             coroutineContext = coroutineContext
