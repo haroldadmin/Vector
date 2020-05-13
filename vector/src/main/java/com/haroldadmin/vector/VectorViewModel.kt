@@ -46,7 +46,7 @@ abstract class VectorViewModel<S : VectorState>(
     val state: Flow<S> by lazy {
         stateStore
             .stateObservable
-            .asFlow()
+            .asFlow<S>()
             .onEach {
                 logger.logd { "State: $it" }
             }
