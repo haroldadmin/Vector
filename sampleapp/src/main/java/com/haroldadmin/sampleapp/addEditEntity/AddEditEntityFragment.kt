@@ -12,7 +12,6 @@ import com.haroldadmin.sampleapp.AppViewModel
 import com.haroldadmin.sampleapp.R
 import com.haroldadmin.sampleapp.databinding.FragmentAddEntityBinding
 import com.haroldadmin.sampleapp.utils.debouncedTextChanges
-import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
 import com.haroldadmin.vector.renderState
