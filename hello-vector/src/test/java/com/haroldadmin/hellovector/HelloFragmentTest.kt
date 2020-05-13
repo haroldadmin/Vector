@@ -16,7 +16,7 @@ import org.robolectric.annotation.Config
 class HelloFragmentTest {
 
     @Test
-//    @Ignore("Test passes on local device, but fails on CI for some reason")
+    @Ignore("Test passes on local device, but fails on CI for some reason")
     fun shouldFetchMessageWhenLaunched() {
         val scenario = launchFragmentInContainer<HelloFragment>()
         scenario.onFragment { fragment ->
