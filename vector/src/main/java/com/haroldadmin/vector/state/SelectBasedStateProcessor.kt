@@ -4,9 +4,10 @@ import com.haroldadmin.vector.VectorState
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.logd
 import com.haroldadmin.vector.loggers.logv
-import kotlinx.coroutines.async
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
@@ -21,17 +22,23 @@ import kotlin.coroutines.CoroutineContext
  *
  * Benchmarks suggest that this implementation is about 50% faster than the Actors based implementation.
  *
- * @param isLazy if true, jobs sent to this processor begin processing only after [start] is called, or immediately after creation otherwise
+ * @param shouldStartImmediately if true, jobs sent to this processor begin processing immediately after creation, or
+ * only after [start] is called otherwise
  * @param stateHolder the [StateHolder] where this processor can store and read the current state
  * @param logger a [Logger] to log miscellaneous information
  * @param coroutineContext The [CoroutineContext] under which this processor will execute jobs sent to it
  */
 internal class SelectBasedStateProcessor<S : VectorState>(
-    isLazy: Boolean = false,
+    shouldStartImmediately: Boolean = false,
     private val stateHolder: StateHolder<S>,
     private val logger: Logger,
-    override val coroutineContext: CoroutineContext
+    coroutineContext: CoroutineContext
 ) : StateProcessor<S> {
+
+    /**
+     * [CoroutineScope] for managing coroutines in this state processor
+     */
+    val processorScope = CoroutineScope(coroutineContext)
 
     /**
      * Queue for state reducers.
@@ -45,11 +52,17 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      **/
     private val getStateChannel: Channel<action<S>> = Channel(Channel.UNLIMITED)
 
+    /**
+     * A convenience utility to check if any of the queues contain jobs to be processed
+     */
+    private val hasMoreJobs: Boolean
+        get() = !setStateChannel.isEmpty || !getStateChannel.isEmpty
+
     init {
-        if (isLazy) {
-            logger.logv { "Starting in Lazy mode. Call start() to begin processing actions and reducers" }
-        } else {
+        if (shouldStartImmediately) {
             start()
+        } else {
+            logger.logv { "Starting in Lazy mode. Call start() to begin processing actions and reducers" }
         }
     }
 
@@ -60,7 +73,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * to the queue to be processed
      */
     override fun offerSetAction(reducer: suspend S.() -> S) {
-        if (isActive && !setStateChannel.isClosedForSend) {
+        if (processorScope.isActive && !setStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
             //  statement
             setStateChannel.offer(reducer)
@@ -74,7 +87,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * to the queue to be processed.
      */
     override fun offerGetAction(action: suspend (S) -> Unit) {
-        if (isActive && !getStateChannel.isClosedForSend) {
+        if (processorScope.isActive && !getStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
             //  statement
             getStateChannel.offer(action)
@@ -87,9 +100,9 @@ internal class SelectBasedStateProcessor<S : VectorState>(
      * Repeated invocations have no effect.
      */
     override fun clearProcessor() {
-        if (isActive) {
+        if (processorScope.isActive) {
             logger.logd { "Clearing StateProcessor $this" }
-            this.cancel()
+            processorScope.cancel()
             setStateChannel.close()
             getStateChannel.close()
         }
@@ -97,36 +110,42 @@ internal class SelectBasedStateProcessor<S : VectorState>(
 
     /**
      * Launches a coroutine to start processing jobs sent to it.
+     *
+     * Jobs are processed continuously until the [processorScope] is cancelled using [clearProcessor]
      */
-    internal fun start() = launch {
+    internal fun start() = processorScope.launch {
         while (isActive) {
             selectJob()
         }
     }
 
     /**
-     * A testing utility to process all state updates and reducers from both channels, and surface any errors to the
-     * caller. Callers are expected to call [kotlinx.coroutines.Deferred.await] on the result returned by this method.
+     * A testing/benchmarking utility to process all state updates and reducers from both channels, and surface any
+     * errors to the caller. This method should only be used if all the jobs to be processed have been already
+     * enqueued to the state processor.
      *
-     * After a processor is drained, it does not mean all jobs of the [getStateChannel] have finished execution. It
-     * means that a coroutine has been launched to process all those jobs.
-     *
-     * The [async] coroutine builder is used here instead of [launch] because [launch] does not surface its errors
-     * to its callers. Sending exceptions to the calling code is important here since it is a test utility
+     * After the processor is drained, it means that all state-reducers have been processed, and that all launched
+     * coroutines for state-actions have finished execution.
      */
-    internal fun drainAsync() = async {
-        while (isActive && (!setStateChannel.isEmpty || !getStateChannel.isEmpty)) {
-            selectJob()
-        }
+    internal suspend fun drain() {
+        do {
+            coroutineScope {
+                // Process all jobs currently in the queues
+                while (hasMoreJobs && processorScope.isActive) {
+                    selectJob(sideEffectScope = this)
+                }
+            }
+        } while (hasMoreJobs && processorScope.isActive) // Nested jobs could have filled queues again, so repeat the process
     }
 
     /**
      * Waits for values from [setStateChannel] and [getStateChannel] simultaneously, prioritizing set-state
      * jobs over get-state jobs. State reducers are processed immediately and the new state produced by them is
      * sent to the [StateHolder]. State actions are processed in a separate coroutine, so that the [select] statement
-     * does not block on long-running actions
+     * does not block on long-running actions. The coroutine for processing the state-action is launched in
+     * [sideEffectScope].
      */
-    private suspend fun selectJob() {
+    private suspend fun selectJob(sideEffectScope: CoroutineScope = processorScope) {
         select<Unit> {
             setStateChannel.onReceive { reducer ->
                 if (!stateHolder.isCleared) {
@@ -136,7 +155,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
             }
             getStateChannel.onReceive { action ->
                 if (!stateHolder.isCleared) {
-                    launch {
+                    sideEffectScope.launch {
                         action.invoke(stateHolder.state)
                     }
                 }
@@ -144,7 +163,3 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         }
     }
 }
-
-private typealias reducer<S> = suspend S.() -> S
-
-private typealias action<S> = suspend (S) -> Unit

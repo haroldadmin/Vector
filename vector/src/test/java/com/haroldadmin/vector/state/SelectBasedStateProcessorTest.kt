@@ -1,5 +1,6 @@
 package com.haroldadmin.vector.state
 
+import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.extensions.awaitCompletion
 import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.CancellationException
@@ -10,6 +11,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.yield
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +25,7 @@ internal class SelectBasedStateProcessorTest {
     fun setup() {
         holder = StateHolderFactory.create(CountingState(), systemOutLogger())
         processor = SelectBasedStateProcessor(
-            isLazy = true,
+            shouldStartImmediately = false,
             stateHolder = holder,
             logger = systemOutLogger(),
             coroutineContext = Dispatchers.Unconfined + Job()
@@ -41,7 +43,7 @@ internal class SelectBasedStateProcessorTest {
         processor.offerSetAction {
             copy(count = 42)
         }
-        processor.drainAsync().await()
+        processor.drain()
         assert(holder.state.count == 42)
     }
 
@@ -59,7 +61,7 @@ internal class SelectBasedStateProcessorTest {
             valueHolder.complete(reducerValue)
             newState
         }
-        processor.drainAsync().await()
+        processor.drain()
 
         val valueSetFirst = valueHolder.await()
         assert(valueSetFirst == reducerValue)
@@ -81,7 +83,7 @@ internal class SelectBasedStateProcessorTest {
             }
             this
         }
-        processor.drainAsync().await()
+        processor.drain()
 
         val valueSetFirst = valueHolder.await()
         assert(valueSetFirst == secondReducerValue)
@@ -99,14 +101,16 @@ internal class SelectBasedStateProcessorTest {
                 processor.offerSetAction {
                     copy(count = count + 1).also { if (i == iterations - 1) additionJobsCompletable.complete(Unit) }
                 }
+                yield()
             }
         }
 
         val decrementActionsSourceJob = async {
-            repeat(iterations) { i ->
+            repeat(2 * iterations) { i ->
                 processor.offerSetAction {
-                    copy(count = count - 1).also { if (i == iterations - 1) subtractionJobsCompletable.complete(Unit) }
+                    copy(count = count - 1).also { if (i == (2 * iterations) - 1) subtractionJobsCompletable.complete(Unit) }
                 }
+                yield()
             }
         }
 
@@ -117,7 +121,7 @@ internal class SelectBasedStateProcessorTest {
             subtractionJobsCompletable
         )
 
-        assert(holder.state.count == 0)
+        assert(holder.state.count == -iterations)
     }
 
     @Test
@@ -175,19 +179,19 @@ internal class SelectBasedStateProcessorTest {
         processor.offerSetAction {
             copy(count = count + 1)
         }
-        processor.drainAsync().await()
+        processor.drain()
         // If there are no errors, test is successful
     }
 
-    @Test(expected = CancellationException::class)
+    @Test
     fun `should not drain after StateProcessor is cleared`() = runBlocking {
         processor.clearProcessor()
         processor.offerSetAction {
             copy(count = count + 1)
         }
         // Draining the processor after it is cleared should throw JobCancellationException
-        processor.drainAsync().await()
-        assert(holder.state.count == 1) {
+        processor.drain()
+        assert(holder.state.count == 0) {
             "State reducer was processed by drainAsync after the StateProcessor was cleared"
         }
     }
