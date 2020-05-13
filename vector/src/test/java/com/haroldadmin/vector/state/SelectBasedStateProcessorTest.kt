@@ -1,6 +1,5 @@
 package com.haroldadmin.vector.state
 
-import com.haroldadmin.vector.Vector
 import com.haroldadmin.vector.extensions.awaitCompletion
 import com.haroldadmin.vector.loggers.systemOutLogger
 import kotlinx.coroutines.CompletableDeferred
