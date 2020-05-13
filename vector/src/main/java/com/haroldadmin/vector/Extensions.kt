@@ -47,7 +47,7 @@ inline fun <S : VectorState> withState(
  * @param renderer The method which updates the UI state
  */
 @Suppress("unused")
-inline fun <S: VectorState> Fragment.renderState(state: S, renderer: (S) -> Unit) {
+inline fun <S : VectorState> Fragment.renderState(state: S, renderer: (S) -> Unit) {
     renderer(state)
 }
 
@@ -66,7 +66,7 @@ inline fun <S: VectorState> Fragment.renderState(state: S, renderer: (S) -> Unit
  * render the UI
  * @param renderer The method which updates the UI
  */
-inline fun <S: VectorState> Fragment.renderState(
+inline fun <S : VectorState> Fragment.renderState(
     viewModel: VectorViewModel<S>,
     crossinline renderer: suspend (S) -> Unit
 ) {
@@ -76,7 +76,6 @@ inline fun <S: VectorState> Fragment.renderState(
             renderer(state)
         }
     }
-
 }
 
 /**

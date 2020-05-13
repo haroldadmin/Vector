@@ -103,4 +103,3 @@ abstract class VectorFragment : Fragment() {
 
     protected open val logger by lazy { androidLogger(this::class.java.simpleName) }
 }
-
