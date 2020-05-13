@@ -10,6 +10,13 @@ import kotlinx.coroutines.flow.collect
  * A Fragment which has a convenient fragmentScope property
  * to easily launch coroutines in it.
  */
+@Deprecated(
+    message = "All the utilities provided by this class can be accessed through extension methods instead",
+    replaceWith = ReplaceWith(
+        expression = "Fragment",
+        imports = ["androidx.fragment.app.Fragment"]
+    )
+)
 abstract class VectorFragment : Fragment() {
 
     /**
@@ -50,6 +57,13 @@ abstract class VectorFragment : Fragment() {
      * @param state The state instance using which the UI should be rendered
      * @param renderer The method which updates the UI state
      */
+    @Deprecated(
+        message = "Use the renderState extension method instead",
+        replaceWith = ReplaceWith(
+            "renderState",
+            imports = ["com.haroldadmin.vector.renderState"]
+        )
+    )
     protected inline fun <reified S : VectorState> renderState(state: S, renderer: (S) -> Unit) {
         renderer(state)
     }
@@ -69,6 +83,13 @@ abstract class VectorFragment : Fragment() {
      * render the UI
      * @param renderer The method which updates the UI
      */
+    @Deprecated(
+        message = "Use the renderState extension method instead",
+        replaceWith = ReplaceWith(
+            "renderState",
+            imports = ["com.haroldadmin.vector.renderState"]
+        )
+    )
     protected inline fun <S : VectorState> renderState(
         viewModel: VectorViewModel<S>,
         crossinline renderer: suspend CoroutineScope.(S) -> Unit
@@ -82,3 +103,4 @@ abstract class VectorFragment : Fragment() {
 
     protected open val logger by lazy { androidLogger(this::class.java.simpleName) }
 }
+

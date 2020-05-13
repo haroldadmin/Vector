@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.haroldadmin.vector.VectorFragment
+import androidx.fragment.app.Fragment
 import com.haroldadmin.vector.fragmentViewModel
+import com.haroldadmin.vector.renderState
 import kotlinx.android.synthetic.main.fragment_message.view.messageButton
 import kotlinx.android.synthetic.main.fragment_message.view.messageTextView
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
-class HelloFragment : VectorFragment() {
+class HelloFragment : Fragment() {
 
     private val viewModel: HelloViewModel by fragmentViewModel()
 

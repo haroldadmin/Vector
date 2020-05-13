@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.haroldadmin.sampleapp.AppViewModel
@@ -14,12 +15,13 @@ import com.haroldadmin.sampleapp.utils.debouncedTextChanges
 import com.haroldadmin.vector.VectorFragment
 import com.haroldadmin.vector.activityViewModel
 import com.haroldadmin.vector.fragmentViewModel
+import com.haroldadmin.vector.renderState
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AddEditEntityFragment : VectorFragment() {
+class AddEditEntityFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: AddEditEntityViewModel.Factory
     @Inject lateinit var appViewModelFactory: AppViewModel.Factory
