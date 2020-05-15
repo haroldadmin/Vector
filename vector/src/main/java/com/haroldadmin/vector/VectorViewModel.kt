@@ -4,11 +4,13 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
+import com.haroldadmin.vector.loggers.logd
 import com.haroldadmin.vector.loggers.logv
 import com.haroldadmin.vector.state.StateStoreFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -40,7 +42,11 @@ abstract class VectorViewModel<S : VectorState>(
     /**
      * A [kotlinx.coroutines.flow.Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
      */
-    val state: Flow<S> = stateStore.stateObservable
+    val state: Flow<S> = stateStore
+        .stateObservable
+        .onEach { state ->
+            logger.logd { "New state: $state" }
+        }
 
     /**
      * Access the current value of state stored in the [stateStore].
