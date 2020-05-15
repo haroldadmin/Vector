@@ -2,6 +2,7 @@ package com.haroldadmin.vector.state
 
 import com.haroldadmin.vector.VectorState
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Holds the current state value and provides access to it. A [ConflatedBroadcastChannel] is used
@@ -13,10 +14,12 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 interface StateHolder<S : VectorState> {
 
     /**
-     * A [ConflatedBroadcastChannel] to expose the state as an observable entity.
-     * This channel is conflated, so only the latest state value is present in it
+     * A [StateFlow] to expose the state as an observable entity.
+     * This flow is conflated, so only the latest state value is present in it
+     *
+     * To be notified of every state update, use the [kotlinx.coroutines.flow.buffer] operator.
      */
-    val stateObservable: ConflatedBroadcastChannel<S>
+    val stateObservable: StateFlow<S>
 
     /**
      * A convenient way to access the current state value in the [stateObservable]
@@ -25,10 +28,9 @@ interface StateHolder<S : VectorState> {
         get() = stateObservable.value
 
     /**
-     * A convenient way to check if this StateHolder has been cleared or not
+     * Updates the state contained in this state holder
      */
-    val isCleared: Boolean
-        get() = stateObservable.isClosedForSend
+    fun updateState(newState: S)
 
     /**
      * This method is expected to be called when this state holder is no longer being used

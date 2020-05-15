@@ -10,7 +10,6 @@ import com.haroldadmin.vector.state.StateStoreFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 
@@ -43,14 +42,11 @@ abstract class VectorViewModel<S : VectorState>(
     /**
      * A [kotlinx.coroutines.flow.Flow] of [VectorState] which can be observed by external classes to respond to changes in state.
      */
-    val state: Flow<S> by lazy {
-        stateStore
-            .stateObservable
-            .asFlow()
-            .onEach {
-                logger.logd { "State: $it" }
-            }
-    }
+    val state: Flow<S> = stateStore
+        .stateObservable
+        .onEach { state ->
+            logger.logd { "New state: $state" }
+        }
 
     /**
      * Access the current value of state stored in the [stateStore].
