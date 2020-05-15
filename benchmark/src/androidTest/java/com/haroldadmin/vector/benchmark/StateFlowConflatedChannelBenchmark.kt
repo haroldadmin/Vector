@@ -36,5 +36,4 @@ class StateFlowConflatedChannelBenchmark {
             flow.value = newState
         }
     }
-
 }

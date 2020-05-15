@@ -47,7 +47,7 @@ class StateHolderTest {
         val numberOfUpdates = 10
         // Fast producer
         launch {
-            for(i in 1..10) {
+            for (i in 1..10) {
                 val currentState = stateHolder.state
                 val newState = currentState.copy(count = i)
                 stateHolder.updateState(newState)
