@@ -5,6 +5,7 @@ import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.logd
 import com.haroldadmin.vector.loggers.logv
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
@@ -38,7 +39,7 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     /**
      * [CoroutineScope] for managing coroutines in this state processor
      */
-    val processorScope = CoroutineScope(coroutineContext)
+    private val processorScope = CoroutineScope(coroutineContext)
 
     /**
      * Queue for state reducers.
@@ -62,16 +63,10 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         if (shouldStartImmediately) {
             start()
         } else {
-            logger.logv { "Starting in Lazy mode. Call start() to begin processing actions and reducers" }
+            logger.logv { "Starting in Lazy mode. Call start()/drain() to begin processing actions and reducers" }
         }
     }
 
-    /**
-     * Enqueues the given [reducer] to an internal queue
-     *
-     * If the state processor has been cleared before this reducer is offered, then it is ignored and not added
-     * to the queue to be processed
-     */
     override fun offerSetAction(reducer: suspend S.() -> S) {
         if (processorScope.isActive && !setStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
@@ -80,12 +75,6 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         }
     }
 
-    /**
-     * Enqueues the given [action] to an internal queue
-     *
-     * If the state processor has been cleared before this action is offered, then it is ignored and not added
-     * to the queue to be processed.
-     */
     override fun offerGetAction(action: suspend (S) -> Unit) {
         if (processorScope.isActive && !getStateChannel.isClosedForSend) {
             // TODO Look for a solution to the case where the channel could be closed between the check and this offer
@@ -94,11 +83,6 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         }
     }
 
-    /**
-     * Cancels this processor's coroutine scope and stops processing of jobs.
-     *
-     * Repeated invocations have no effect.
-     */
     override fun clearProcessor() {
         if (processorScope.isActive) {
             logger.logd { "Clearing StateProcessor $this" }
@@ -108,26 +92,15 @@ internal class SelectBasedStateProcessor<S : VectorState>(
         }
     }
 
-    /**
-     * Launches a coroutine to start processing jobs sent to it.
-     *
-     * Jobs are processed continuously until the [processorScope] is cancelled using [clearProcessor]
-     */
-    internal fun start() = processorScope.launch {
-        while (isActive) {
-            selectJob()
+    override fun start() {
+        processorScope.launch {
+            while (isActive) {
+                selectJob()
+            }
         }
     }
 
-    /**
-     * A testing/benchmarking utility to process all state updates and reducers from both channels, and surface any
-     * errors to the caller. This method should only be used if all the jobs to be processed have been already
-     * enqueued to the state processor.
-     *
-     * After the processor is drained, it means that all state-reducers have been processed, and that all launched
-     * coroutines for state-actions have finished execution.
-     */
-    internal suspend fun drain() {
+    override suspend fun drain() {
         do {
             coroutineScope {
                 // Process all jobs currently in the queues

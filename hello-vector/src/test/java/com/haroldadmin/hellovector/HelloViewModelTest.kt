@@ -1,47 +1,37 @@
 package com.haroldadmin.hellovector
 
 import androidx.lifecycle.SavedStateHandle
+import com.haroldadmin.vector.test.VectorTestRule
 import com.haroldadmin.vector.withState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import java.util.concurrent.Executors
-import kotlin.coroutines.CoroutineContext
 
-@ExperimentalCoroutinesApi
 class HelloViewModelTest {
 
+    @get:Rule
+    val vectorTestRule = VectorTestRule()
+
     private lateinit var viewModel: HelloViewModel
-    private lateinit var testContext: CoroutineContext
 
     @Before
     fun setup() {
-        val mainThreadSurrogate = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-        testContext = mainThreadSurrogate + Job()
-        Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = HelloViewModel(HelloState(), testContext, SavedStateHandle())
+        viewModel = HelloViewModel(HelloState(), savedStateHandle = SavedStateHandle())
     }
 
     @Test
-    fun `should fetch message when initialized`() = runBlocking(testContext) {
+    fun `should fetch message when initialized`() = runBlocking {
         val expectedMessage = "Hello, World!"
-        viewModel.getMessage(delayDuration = 0).join()
+
+        viewModel.getMessage(delayDuration = 1000)
+
+        vectorTestRule.awaitCompletion(viewModel)
+
         withState(viewModel) { state ->
             assert(state.message == expectedMessage) {
                 "Expected $expectedMessage, got ${state.message}"
             }
         }
-    }
-
-    @After
-    fun cleanup() {
-        Dispatchers.resetMain()
     }
 }

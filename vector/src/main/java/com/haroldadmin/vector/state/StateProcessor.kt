@@ -31,10 +31,29 @@ interface StateProcessor<S : VectorState> {
      */
     fun offerGetAction(action: action<S>)
 
+
     /**
-     * Cleanup any resources held by this processor.
+     * Launches a coroutine to start processing jobs sent to it. Jobs are continuously processed until the
+     * StateProcessor is cleared
+     */
+    fun start()
+
+    /**
+     * Cancels this processor's coroutine scope and stops processing of jobs.
+     *
+     * This operation should be idempotent in its implementation
      */
     fun clearProcessor()
+
+    /**
+     * A testing/benchmarking utility to process all pre-enqueued state updates and reducers from both channels, and
+     * surface any errors to the caller. This method should only be used if all the jobs to be processed have been
+     * already enqueued to the state processor.
+     *
+     * After the processor is drained, it means that all state-reducers have been processed, and that all launched
+     * coroutines for state-actions have finished execution.
+     */
+    suspend fun drain()
 }
 
 internal typealias reducer<S> = suspend S.() -> S
