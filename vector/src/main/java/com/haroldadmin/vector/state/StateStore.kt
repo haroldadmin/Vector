@@ -9,8 +9,8 @@ import com.haroldadmin.vector.VectorState
  * @param stateProcessor The delegate to handle [StateProcessor] functions
  */
 abstract class StateStore<S : VectorState>(
-    protected open val stateHolder: StateHolder<S>,
-    protected open val stateProcessor: StateProcessor<S>
+    internal open val stateHolder: StateHolder<S>,
+    internal open val stateProcessor: StateProcessor<S>
 ) : StateHolder<S> by stateHolder, StateProcessor<S> by stateProcessor {
 
     /**

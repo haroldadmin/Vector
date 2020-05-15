@@ -69,6 +69,7 @@ dependencies {
     implementation libs.constraintLayout
     implementation libs.vmSavedState
 
+    testImplementation project(path: ":vector-test")
     testImplementation libs.junit
     testImplementation libs.coroutinesTest
     testImplementation libs.mockk

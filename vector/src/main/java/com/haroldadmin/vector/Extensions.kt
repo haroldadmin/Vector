@@ -2,6 +2,7 @@ package com.haroldadmin.vector
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.collect
 
@@ -91,4 +92,14 @@ internal inline fun <T> ConflatedBroadcastChannel<T>.compute(crossinline newValu
     val newValue = newValueProvider.invoke(this.value)
     this.offer(newValue)
     return true
+}
+
+/**
+ * Joins on all the children jobs of this parent Job.
+ *
+ * Useful for waiting until all the children of a coroutine scope have finished execution, without waiting for
+ * the coroutine scope itself to close.
+ */
+internal suspend fun Job.joinChildren() {
+    children.forEach { it.join() }
 }

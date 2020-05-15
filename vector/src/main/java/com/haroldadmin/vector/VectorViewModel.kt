@@ -2,6 +2,7 @@ package com.haroldadmin.vector
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.haroldadmin.vector.loggers.Logger
 import com.haroldadmin.vector.loggers.androidLogger
 import com.haroldadmin.vector.loggers.logd
@@ -66,7 +67,6 @@ abstract class VectorViewModel<S : VectorState>(
      * the state store, but not necessarily immediately
      *
      * @param action The state reducer to create a new state from the current state
-     *
      */
     protected fun setState(action: suspend S.() -> S) {
         stateStore.offerSetAction(action)
@@ -81,10 +81,20 @@ abstract class VectorViewModel<S : VectorState>(
      * processor does not get blocked if a particular action takes too long to finish.
      *
      * @param action The action to be performed with the current state
-     *
      */
     protected fun withState(action: suspend (S) -> Unit) {
         stateStore.offerGetAction(action)
+    }
+
+    /**
+     * A testing utility to wait until all the coroutines launched in this ViewModel have finished executing, as well
+     * as it's [com.haroldadmin.vector.state.StateProcessor] has been drained.
+     */
+    internal suspend fun drain() {
+        logger.logv { "Draining viewModelScope" }
+        viewModelScope.coroutineContext[Job]?.joinChildren()
+        logger.logv { "Draining state processor" }
+        stateStore.stateProcessor.drain()
     }
 
     /**
