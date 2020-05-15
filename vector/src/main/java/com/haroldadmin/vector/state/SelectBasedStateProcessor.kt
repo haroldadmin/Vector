@@ -148,16 +148,12 @@ internal class SelectBasedStateProcessor<S : VectorState>(
     private suspend fun selectJob(sideEffectScope: CoroutineScope = processorScope) {
         select<Unit> {
             setStateChannel.onReceive { reducer ->
-                if (!stateHolder.isCleared) {
-                    val newState = stateHolder.state.reducer()
-                    stateHolder.stateObservable.offer(newState)
-                }
+                val newState = stateHolder.state.reducer()
+                stateHolder.updateState(newState)
             }
             getStateChannel.onReceive { action ->
-                if (!stateHolder.isCleared) {
-                    sideEffectScope.launch {
-                        action.invoke(stateHolder.state)
-                    }
+                sideEffectScope.launch {
+                    action.invoke(stateHolder.state)
                 }
             }
         }

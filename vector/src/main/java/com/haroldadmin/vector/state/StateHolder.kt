@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.StateFlow
 interface StateHolder<S : VectorState> {
 
     /**
-     * A [ConflatedBroadcastChannel] to expose the state as an observable entity.
-     * This channel is conflated, so only the latest state value is present in it
+     * A [StateFlow] to expose the state as an observable entity.
+     * This flow is conflated, so only the latest state value is present in it
+     *
+     * To be notified of every state update, use the [kotlinx.coroutines.flow.buffer] operator.
      */
     val stateObservable: StateFlow<S>
 
@@ -26,9 +28,12 @@ interface StateHolder<S : VectorState> {
         get() = stateObservable.value
 
     /**
+     * Updates the state contained in this state holder
+     */
+    fun updateState(newState: S)
+
+    /**
      * This method is expected to be called when this state holder is no longer being used
      */
     fun clearHolder()
-
-    fun updateState(state: S)
 }
